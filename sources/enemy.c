@@ -111,7 +111,7 @@ EnemyGroup getEnemyGroup(EnemyGroup enemyList)
 void present_enemy(Display d)
 {
     EnemyGroup enemyList = getEnemyGroup(NULL);
-    for(int i=0; i<enemyList->numberOfEnemies; ++i)
+    for(int i=1; i<=enemyList->numberOfEnemies; ++i)
     {
         drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, 100, 100);
     }
