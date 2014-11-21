@@ -34,7 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C9772AE1A1F7F740062517C /* TestGPV1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestGPV1; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C9772AE1A1F7F740062517C /* GroupProject_V1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GroupProject_V1; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9772B81A1F821A0062517C /* actionQueueDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = actionQueueDataStructure.h; path = includes/actionQueueDataStructure.h; sourceTree = "<group>"; };
 		4C9772B91A1F821A0062517C /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = debug.h; path = includes/debug.h; sourceTree = "<group>"; };
 		4C9772BA1A1F821A0062517C /* Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Display.h; path = includes/Display.h; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 		4C9772AF1A1F7F740062517C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4C9772AE1A1F7F740062517C /* TestGPV1 */,
+				4C9772AE1A1F7F740062517C /* GroupProject_V1 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,9 +135,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4C9772AD1A1F7F740062517C /* TestGPV1 */ = {
+		4C9772AD1A1F7F740062517C /* GroupProject_V1 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C9772B51A1F7F740062517C /* Build configuration list for PBXNativeTarget "TestGPV1" */;
+			buildConfigurationList = 4C9772B51A1F7F740062517C /* Build configuration list for PBXNativeTarget "GroupProject_V1" */;
 			buildPhases = (
 				4C9772AA1A1F7F740062517C /* Sources */,
 				4C9772AB1A1F7F740062517C /* Frameworks */,
@@ -147,9 +147,9 @@
 			);
 			dependencies = (
 			);
-			name = TestGPV1;
+			name = GroupProject_V1;
 			productName = TestGPV1;
-			productReference = 4C9772AE1A1F7F740062517C /* TestGPV1 */;
+			productReference = 4C9772AE1A1F7F740062517C /* GroupProject_V1 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -166,7 +166,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4C9772A91A1F7F740062517C /* Build configuration list for PBXProject "TestGPV1" */;
+			buildConfigurationList = 4C9772A91A1F7F740062517C /* Build configuration list for PBXProject "GroupProject_V1" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -178,7 +178,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4C9772AD1A1F7F740062517C /* TestGPV1 */,
+				4C9772AD1A1F7F740062517C /* GroupProject_V1 */,
 			);
 		};
 /* End PBXProject section */
@@ -284,7 +284,7 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GroupProject_V1;
 			};
 			name = Debug;
 		};
@@ -295,14 +295,14 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GroupProject_V1;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4C9772A91A1F7F740062517C /* Build configuration list for PBXProject "TestGPV1" */ = {
+		4C9772A91A1F7F740062517C /* Build configuration list for PBXProject "GroupProject_V1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C9772B31A1F7F740062517C /* Debug */,
@@ -311,7 +311,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C9772B51A1F7F740062517C /* Build configuration list for PBXNativeTarget "TestGPV1" */ = {
+		4C9772B51A1F7F740062517C /* Build configuration list for PBXNativeTarget "GroupProject_V1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C9772B61A1F7F740062517C /* Debug */,
