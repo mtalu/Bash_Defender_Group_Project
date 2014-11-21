@@ -43,6 +43,7 @@ int main()
         //parse("cat t1                                             ");
         present_enemy(d);
         present_tower(d);
+        checkActQueue();
         
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
