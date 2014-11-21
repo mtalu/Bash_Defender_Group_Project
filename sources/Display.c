@@ -156,7 +156,7 @@ void displayInfoWindow(Display d) {
 }
 
 void updateInfoWindow( char *outputString) {
-    static char * string;
+    static char * string = "type cat t1 for stats\n";
     if(outputString)
     {
         string = strdup2(outputString);
@@ -212,13 +212,14 @@ SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     SDL_Surface *textSurface;
     TTF_Font *font = getInfoWindowFont();
     SDL_Color fontColour = { 0xFF, 0xFF, 0xFF };
-    
-    textSurface = TTF_RenderText_Blended_Wrapped(font, outputString, fontColour, 60);
-    if(textSurface == NULL) {
-        fprintf(stderr, "getInfoWindowTextSurface() failed: ");
-    }
-    
-    return textSurface;
+
+        textSurface = TTF_RenderText_Blended_Wrapped(font, outputString, fontColour, 60);
+        if(textSurface == NULL) {
+            fprintf(stderr, "getInfoWindowTextSurface() failed: ");
+        }
+        
+        return textSurface;
+  
 }
 
 

@@ -1,3 +1,4 @@
+
 //
 //  paser.c
 //  The parser needs to accept a string from the text input
@@ -21,6 +22,10 @@ int parse(char *inputString)
 
     int numberOfChunks;
     char **commandArray = breakUpString(inputString, &numberOfChunks, " ");//array of strings, each elem holds a token from the input command
+    if(numberOfChunks<=1)
+    {
+        return 0;
+    }
 #if ENABLE_TESTING
     testCommandArray(commandArray, numberOfChunks);
 #endif

@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <string.h>
 void catTower(unsigned int towerIDtoCat) {
-    printf("tow id %d",towerIDtoCat);
        //Create output string with tower information and send to graphics module
     struct tower towerToCat = getStats(towerIDtoCat);
     
