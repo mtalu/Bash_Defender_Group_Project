@@ -156,11 +156,16 @@ void displayInfoWindow(Display d) {
 }
 
 void updateInfoWindow( char *outputString) {
+    static char * string;
+    if(outputString)
+    {
+        string = strdup2(outputString);
+    }
     Display d = getDisplayPointer(NULL);
     //Update information window with new tower information
     displayInfoWindow(d);
     
-  d->infoWindowTextSurface = getInfoWindowTextSurface(outputString);
+  d->infoWindowTextSurface = getInfoWindowTextSurface(string);
   d->infoWindowTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowTextSurface);
     
     //Query text dimensions so text doesn't strech to whole screen

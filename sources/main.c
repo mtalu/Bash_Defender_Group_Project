@@ -28,7 +28,7 @@ int main()
     char *pass, *clear, *inputCommand=NULL;
     pass = text;
     clear = empty;
-    
+    addGold(getGame(NULL),100);
     Display d = init_SDL();
  
     do{
@@ -39,6 +39,7 @@ int main()
         {
             parse(inputCommand);
         }
+        updateInfoWindow(NULL);
         //parse("cat t1                                             ");
         present_enemy(d);
         present_tower(d);
