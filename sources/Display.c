@@ -156,7 +156,7 @@ void displayInfoWindow(Display d) {
 }
 
 void updateInfoWindow( char *outputString) {
-    static char * string;
+    static char * string = "    TOWERS";
     if(outputString)
     {
         string = strdup2(outputString);
