@@ -13,54 +13,100 @@
 
 int main()
 {	
-	//testing();
-    
-    createPath();
-    createEnemyGroup();
-    createEnemy();
-    createTowerGroup();
-	createActionQueue();
-	createGame();
-	createTower();
-    
-    char text[128] = {'>', '>'};
-    char empty[128] = {'>', '>'};
-    char *pass, *clear, *inputCommand=NULL;
-    pass = text;
-    clear = empty;
-    addGold(getGame(NULL),100);
-    Display d = init_SDL();
- 
-    do{
-        startFrame(d);
-        displayInfoWindow(d);
-        terminal_window(d, pass, clear,inputCommand);
-        if(inputCommand)
-        {
-            parse(inputCommand);
-        }
-        updateInfoWindow(NULL);
-        //parse("cat t1                                             ");
-        present_enemy(d);
-        present_tower(d);
-        checkActQueue();
-        
-        endFrame(d);
-    } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
-    
-    //while(moveEnemy(1) != 1);
-    shutSDL(d);
+     testing();
+     createPath();
+     createEnemyGroup();
+     createEnemy();
+     createTowerGroup();
+ 	createActionQueue();
+ 	createGame();
+ 	createTower();
+
+     char text[128] = {'>', '>'};
+     char empty[128] = {'>', '>'};
+     char *pass, *clear, *inputCommand=NULL;
+     pass = text;
+     clear = empty;
+     addGold(getGame(NULL),100);
+     Display d = init_SDL();
+
+     do{
+         startFrame(d);
+         displayInfoWindow(d);
+         terminal_window(d, pass, clear,inputCommand);
+         if(inputCommand)
+         {
+             parse(inputCommand);
+         }
+         updateInfoWindow(NULL);
+         //parse("cat t1                                             ");
+         present_enemy(d);
+         present_tower(d);
+         checkActQueue();
+
+         endFrame(d);
+     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
+
+     //while(moveEnemy(1) != 1);
+     shutSDL(d);    
 
     return 0;
 }
 
+
+
+
 void testing()	{
-    //	testingGameStructure();
-	//testingActionQueue();
-	//parseToQueueTesting();
+    testingGameStructure();
+	testingActionQueue();
+	parseToQueueTesting();
     testEnemy();
 	testingTowerModule();
 	parseToTowerTesting();
+	towerToEnemyTesting();
+
+}
+
+void towerToEnemyTesting()	{
+
+	sput_start_testing();
+	sput_set_output_stream(NULL);
+
+	sput_enter_suite("testEnemyInRange(): tower detecting single enemy in range");
+	sput_run_test(testEnemyInRange);
+	sput_leave_suite();
+}
+
+void testEnemyInRange()	{
+
+    createPath();
+    createTowerGroup();
+	createActionQueue();
+	createGame();
+	createTower();
+	createEnemyGroup();
+	createEnemy();
+	setEnemyHealth(1,100);
+	setEnemyX(1,50);
+	setEnemyY(1,50);
+	setTowerY(1,400);
+	setTowerX(1,400);
+	setTowerRange(1,10);
+	sput_fail_unless(inRange(400,400,10,1)== 0, "Enemy 1 is out of range of tower 1");
+	fire();
+	sput_fail_unless(getEnemyHealth(1) == 100, "Out of range enemy 1 has full health after tower has fired");
+	setEnemyX(1,395);
+	setEnemyY(1,395);
+	sput_fail_unless(inRange(400,400,10,1)== 1, "Enemy 1 is in range of tower 1");
+	sput_fail_unless(getEnemyHealth(1) == 100, "Enemy 1 has full health");
+	fire();
+	sput_fail_unless(getEnemyHealth(1) == 100 - getTowerDamage(1),"In range enemy has reduced health from tower damage");
+	int i;
+	for(i = 0; i < 9; i++)	{
+	fire();
+	}
+	sput_fail_unless(isDead(1) == 1, "Enemy dead after being fired on 10 times");	
+	
 }
 
 void parseToTowerTesting()	{
@@ -73,7 +119,6 @@ void parseToTowerTesting()	{
 	sput_leave_suite();
 	
 	sput_finish_testing();
-
 
 }
 

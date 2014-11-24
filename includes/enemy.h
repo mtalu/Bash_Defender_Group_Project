@@ -6,14 +6,13 @@
 typedef struct enemy *Enemy;
 typedef struct enemyGroup *EnemyGroup;
 
-
+typedef enum BOOL {TRUE, FALSE} BOOL;
 void createEnemyGroup();
 void createEnemy();
 int getNumberOfEnemies();
 void Test_createEnemy();
 void initialiseEnemy(Enemy newEnemy);
 EnemyGroup getEnemyGroup(EnemyGroup enemyList);
-//void present_enemy(Display d);
 int getEnemyHealth();
 void freeEnemy(int enemyID);
 int moveEnemy(int enemyID);
@@ -28,6 +27,9 @@ void layPath(int **path);
 void createPath();
 int **getPathPointer(int **newPath);
 void testEnemy();
+int setEnemyX(int enemyID, int newX);
+int setEnemyY(int enemyID, int newY);
+int setEnemyHealth(int enemyID, int newHealth);
 void present_enemy(Display d);
 
 #endif

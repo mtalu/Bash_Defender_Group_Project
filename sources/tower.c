@@ -7,7 +7,7 @@
 #include "../includes/tower.h"
 #include "../includes/sput.h"
 #include "../includes/debug.h"
-/*
+
 struct tower {
 	int towerID;
     int x, y;
@@ -18,7 +18,8 @@ struct tower {
 	int AOEpower; //!not yet implemented
 	int firing;
     int targetPosition[2];
-};*/
+	int level;
+};
 
 void testingTowerModule()	{
 	sput_start_testing();
@@ -36,12 +37,17 @@ void testingTowerModule()	{
 
 }
 
+
 struct towerGroup	{
 
 	tower *listOfTowers;
 	unsigned int numOfTowers;
 	
 };
+
+int getTowerDamage(int towerID)	{
+	return getTowerGrp(NULL)->listOfTowers[towerID-1]->damage;
+}
 
 void createTowerGroup()	{
 
@@ -223,13 +229,17 @@ void populateTower(tower newTow, int id) {
     newTow->damage = 10;
     newTow->range = 10;
     newTow->firing = 0;
+	newTow->level = 1;
 }
 
-struct tower getStats(unsigned int towerID)
+void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange, unsigned int towerID)
 {
     TowerGroup towers = getTowerGrp(NULL);
-    tower t = towers->listOfTowers[towerID-1];
-    return *t;
+     *range = towers->listOfTowers[towerID-1]->range;
+     *damage = towers->listOfTowers[towerID-1]->damage;
+     *speed = towers->listOfTowers[towerID-1]->speed;
+     *AOEpower = towers->listOfTowers[towerID-1]->AOEpower;
+     *AOErange = towers->listOfTowers[towerID-1]->AOErange;
 }
 
 int getTowerX() {
@@ -246,6 +256,27 @@ int getTowerY() {
     return t->y;
 }
 
+int setTowerY(int towerID, int newY)	{
+
+	getTowerGrp(NULL)->listOfTowers[towerID-1]->y = newY;
+	return newY;
+	
+}
+
+int setTowerRange(int towerID, int newRange)	{
+
+	getTowerGrp(NULL)->listOfTowers[towerID-1]->range = newRange;
+	return newRange;
+
+}
+
+int setTowerX(int towerID,int newX)	{
+
+	getTowerGrp(NULL)->listOfTowers[towerID-1]->x = newX;
+	return newX;
+
+}
+
 int isFiring() {
     
     tower t = getTowerPointer(NULL);
@@ -255,8 +286,9 @@ int isFiring() {
 
 int firingX() {
     tower t = getTowerPointer(NULL);
-    
+
     return t->targetPosition[0];
+
 }
 
 int firingY() {
@@ -273,7 +305,7 @@ void freeTower(tower t) {
 void fire() {
   
 	int enemyID, towerID;
-	for(towerID = 1; towerID < getNumberOfTowers(); towerID++)	{ 
+	for(towerID = 1; towerID <= getNumberOfTowers(); towerID++)	{ 
 		for(enemyID = 1; enemyID <= getNumberOfEnemies(); enemyID++)	{
 			if(inRange(getTowerID(towerID)->x, getTowerID(towerID)->y, getTowerID(towerID)->range, enemyID) == 1) {
 				(getTowerID(towerID))->firing = 1;
@@ -306,6 +338,6 @@ void printTower(tower t) {
 
 void present_tower(Display d)
 {
-    drawTower(d, 80, 100, 80, 80);
+   drawTower(d, 80, 100, 80, 80);
 }
 

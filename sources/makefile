@@ -1,4 +1,4 @@
-CFLAGS = -O4 -Wall -pedantic -std=c99 
+CFLAGS = -O4 -Wall -pedantic -std=c99 -F /usr/local/lib/ -I /usr/local/include -lSDL2 -lSDL2_ttf -lSDL2_image
 #INCDIR = ../includes/
 #INCS = $(INCDIR)parser.h
 #		$(INCDIR)gameProperties.h	
@@ -15,13 +15,13 @@ SOURCES = Display.c Information_Window.c tower.c enemy.c actionQueueDataStructur
 #      		enemy2.c\
 #          	terminalwindow.c\
  
-LIBS = -framework SDL2 -lm -framework SDL2_ttf -framework SDL2_image
+#LIBS = -framework SDL2 -lm -framework SDL2_ttf -framework SDL2_image
 CC =clang 
 
 all: $(TARGET)
 
 $(TARGET) $(SOURCES): $(INCS)
-	$(CC) $(SOURCES) -o compiled/gameOut $(CFLAGS) $(LIBS)
+	$(CC) $(SOURCES) -o gameOut $(CFLAGS) $(LIBS)
 
 clean:
 	rm -f $(TARGET)

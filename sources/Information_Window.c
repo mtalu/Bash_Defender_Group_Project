@@ -16,19 +16,20 @@
 #include <string.h>
 void catTower(unsigned int towerIDtoCat) {
     printf("tow id %d",towerIDtoCat);
+    int iRange, iDamage, iSpeed, iAOEpower, iAOErange;
        //Create output string with tower information and send to graphics module
-    struct tower towerToCat = getStats(towerIDtoCat);
+    getStats(&iRange,&iDamage,&iSpeed,&iAOEpower,&iAOErange, towerIDtoCat);
     
     char outputString[200];
     
     char range[10], damage[10], speed[10], AOEdamage[10], AOErange[10];
     
     sprintf(outputString, "  TOWER %d\n\nRange: ", 1);
-    sprintf(range, "%d", towerToCat.range);
-    sprintf(damage, "%d", towerToCat.damage);
-    sprintf(speed, "%d", towerToCat.speed);
-    sprintf(AOEdamage, "%d", towerToCat.AOEpower);
-    sprintf(AOErange, "%d", towerToCat.AOErange);
+    sprintf(range, "%d", iRange);
+    sprintf(damage, "%d",iDamage);
+    sprintf(speed, "%d", iSpeed);
+    sprintf(AOEdamage, "%d",iAOEpower);
+    sprintf(AOErange, "%d", iAOErange);
 
     strcat(outputString, range);
     strcat(outputString, "\nDamage : ");
