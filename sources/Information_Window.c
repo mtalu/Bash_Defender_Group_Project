@@ -42,3 +42,4 @@ void catTower(unsigned int towerIDtoCat) {
     
     updateInfoWindow(outputString);
 }
+

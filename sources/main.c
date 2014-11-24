@@ -13,7 +13,7 @@
 
 int main()
 {	
-	//testing();
+	testing();
     
     createPath();
     createEnemyGroup();
@@ -30,8 +30,9 @@ int main()
     clear = empty;
     addGold(getGame(NULL),100);
     Display d = init_SDL();
- 
+    int steps=0;
     do{
+        ++steps;
         startFrame(d);
         displayInfoWindow(d);
         terminal_window(d, pass, clear,inputCommand);
@@ -40,10 +41,18 @@ int main()
             parse(inputCommand);
         }
         updateInfoWindow(NULL);
-        //parse("cat t1                                             ");
+
         present_enemy(d);
         present_tower(d);
         checkActQueue();
+        for(int i=1; i<=getNumberOfEnemies(); ++i)
+        {
+            int move = moveEnemy(i);
+           
+        }
+        if(steps%30 == 0){
+            createEnemy();
+        }
         
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
@@ -57,10 +66,11 @@ int main()
 void testing()	{
     //	testingGameStructure();
 	//testingActionQueue();
-	//parseToQueueTesting();
-    testEnemy();
-	testingTowerModule();
-	parseToTowerTesting();
+	parseToQueueTesting();
+    //testEnemy();
+	//testingTowerModule();
+	//parseToTowerTesting();
+    testValidParses();
 }
 
 void parseToTowerTesting()	{
@@ -122,16 +132,34 @@ void testValidParses()	{
 	createTowerGroup();
 	createPath();
 	createTower();
-	parse("upgrade r t1");
+    printf("\n135\n\n");
+    sput_fail_unless(parse("upgrade r t1")== 1, "upgrade r t1 is valid command");
 	sput_fail_unless(getFirstCommand(getQueue(NULL)) == upgrade, "First command in queue: upgrade");
 	sput_fail_unless(getFirstOption(getQueue(NULL)) == range, "First option in queue: range");
-	parse("upgrade p t1");
+    printf("\n139\n\n");
+    sput_fail_unless(parse("upgrade p t1")== 1, "upgrade p t1 is valid command");
 	sput_fail_unless(getLastCommand(getQueue(NULL)) == upgrade, "Last comand in queue: upgrade");
 	sput_fail_unless(getLastOption(getQueue(NULL)) == power, "Last option in queue: power");
-	parse("upgrade s t1");
+    printf("\n143\n\n");
+    sput_fail_unless(parse("upgrade s t1")== 1, "upgrade s t1 is valid command");
 	sput_fail_unless(getLastCommand(getQueue(NULL)) == upgrade, "Last comand in queue: upgrade");
 	sput_fail_unless(getLastOption(getQueue(NULL)) == speed, "Last option in queue: speed");
 	sput_fail_unless(getFirstCommand(getQueue(NULL)) == upgrade, "First command in queue: upgrade");
 	sput_fail_unless(getFirstOption(getQueue(NULL)) == range, "First option in queue: range");
+    printf("\n149\n\n");
+    sput_fail_unless(parse("  ??D--") == 0, "  ??D-- is invalid command");
+    printf("\n151\n\n");
+    sput_fail_unless(parse("upgrade r r1") == 0, "upgrade r r1 is invalid command");
+    printf("\n153\n\n");
+    sput_fail_unless(parse("upgrade r t") == 0, "upgrade r t is invalid command");
+    printf("\n155\n\n");
+    sput_fail_unless(parse("upgrade t") == 0, "upgrade t is invalid command");
+    printf("\n157\n\n");
+    sput_fail_unless(parse("cat t") == 0, "cat t is invalid command");
+    printf("\n159\n\n");
+
+
+
 	free(getQueue(NULL));
 }
+

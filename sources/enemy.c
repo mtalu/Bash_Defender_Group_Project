@@ -84,7 +84,7 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->pathProgress = 0;
     newEnemy->x = p[0][0];
     newEnemy->y = p[0][1];
-    newEnemy->health = 100;
+    newEnemy->health = 1;
     newEnemy->speed = 4;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
@@ -112,7 +112,10 @@ void present_enemy(Display d)
     EnemyGroup enemyList = getEnemyGroup(NULL);
     for(int i=1; i<=enemyList->numberOfEnemies; ++i)
     {
-        drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, 100, 100);
+        if(!isDead(i))
+        {
+            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, 100, 100);
+        }
     }
 }
 
