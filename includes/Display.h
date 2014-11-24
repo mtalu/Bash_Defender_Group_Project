@@ -46,6 +46,7 @@ void drawEnemy(Display d, int x, int y, int w, int h);
 //check
 void check_load_images(SDL_Surface *surface, char *pic_name);
 
+TTF_Font *getInfoWindowFont(TTF_Font *font);
 
 
 #include <stdio.h>

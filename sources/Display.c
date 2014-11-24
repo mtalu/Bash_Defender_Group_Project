@@ -72,6 +72,18 @@ Display init_SDL(){
     d->infoWindowRect = (SDL_Rect){INFO_WINDOW_X, INFO_WINDOW_Y, INFO_WINDOW_WIDTH, INFO_WINDOW_HEIGHT};
     
     getDisplayPointer(d);//store display ptr
+    
+    TTF_Font *font;
+    font = TTF_OpenFont("OpenSans-Regular.ttf", 10);
+    if (font == NULL) {
+        fprintf(stderr, "TTF_OpenFont() Failed: ");
+    }
+    //improves quality of font
+    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
+    
+    getInfoWindowFont(font);//stores font ptr
+
+    
 
     return d;
 }
@@ -147,7 +159,7 @@ void shutSDL(Display d){
 
 //Functions prototypes for functions only used internally by info window
 void initTTF(void);
-TTF_Font *getInfoWindowFont(void);
+TTF_Font *getInfoWindowFont(TTF_Font *font);
 SDL_Surface *getInfoWindowTextSurface(char *outputString);
 
 void displayInfoWindow(Display d) {
@@ -191,26 +203,23 @@ void sendTextToInfoWindow(Display d, char *string) {
     SDL_RenderCopy(d->renderer, d->infoWindowTextTexture,  &(d->infoWindowTextureRect) , &(d->infoWindowRect) );
 }
 
-TTF_Font *getInfoWindowFont(void) {
+TTF_Font *getInfoWindowFont(TTF_Font *font)
+{
     //Load font to be used in information window
     
-    TTF_Font *font;
-    font = TTF_OpenFont("OpenSans-Regular.ttf", 10);
-    if (font == NULL) {
-        fprintf(stderr, "TTF_OpenFont() Failed: ");
-    }
-    
-    //improves quality of font
-    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
-    
-    return font;
+    static TTF_Font *storedFont;
+	if(font != NULL)	{
+		storedFont = font;
+	}
+
+    return storedFont;
 }
 
 SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     //Create text surface to be displayed in information window
     
     SDL_Surface *textSurface;
-    TTF_Font *font = getInfoWindowFont();
+    TTF_Font *font = getInfoWindowFont(NULL);
     SDL_Color fontColour = { 0xFF, 0xFF, 0xFF };
     
     textSurface = TTF_RenderText_Blended_Wrapped(font, outputString, fontColour, 60);
@@ -338,7 +347,7 @@ void display_text(Display d, char *pass)
     dstrect.x = 50;
     dstrect.y = 450;
     
-    text = TTF_RenderText_Solid(getInfoWindowFont(), pass, text_color);
+    text = TTF_RenderText_Solid(getInfoWindowFont(NULL), pass, text_color);
     newtexture = SDL_CreateTextureFromSurface(d->renderer, text);
     //SDL_LockTexture(newtexture, NULL, text->pixels, &text->pitch);
     if(newtexture == NULL)
