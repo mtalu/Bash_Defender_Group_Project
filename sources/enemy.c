@@ -25,9 +25,8 @@ struct enemyGroup {
 void createEnemyGroup()
 {
 	EnemyGroup enemyList = (EnemyGroup) malloc(sizeof(*enemyList));
-    enemyList = enemyList -1;//now enemy ID is same as its element int the enemy array
 	getEnemyGroup(enemyList);
-	enemyList->enemyArray=NULL;
+	enemyList->enemyArray=malloc(sizeof(Enemy));
 	enemyList->numberOfEnemies = 0;
 }
 
@@ -36,7 +35,7 @@ void createEnemy()
     EnemyGroup enemyList =  getEnemyGroup(NULL);
     ++(enemyList->numberOfEnemies);
     
-    enemyList->enemyArray = (Enemy*)realloc(enemyList->enemyArray, (enemyList->numberOfEnemies)*(sizeof(Enemy)));
+    enemyList->enemyArray = (Enemy*)realloc(enemyList->enemyArray, (enemyList->numberOfEnemies+1)*(sizeof(Enemy)));
 
     if(enemyList->enemyArray==NULL)
     {
