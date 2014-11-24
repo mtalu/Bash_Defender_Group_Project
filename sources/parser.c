@@ -1,4 +1,3 @@
-
 //
 //  paser.c
 //  The parser needs to accept a string from the text input
@@ -18,18 +17,22 @@
 
 int parse(char *inputString)
 {
-    printf("testing %s\n", inputString);
+    size_t len = 1+strlen(inputString);//gets the size of s
+    if(len<(sizeof(char)*3))
+    {
+        actionUsageError();
+    }
 
     int numberOfChunks;
     char **commandArray = breakUpString(inputString, &numberOfChunks, " ");//array of strings, each elem holds a token from the input command
-    if(numberOfChunks<=1)
+    if(numberOfChunks<2|| numberOfChunks>3)
     {
-        return 0;
+        return 0;//no valid commands with less than 2 strings or more than 3
     }
 #if ENABLE_TESTING
     testCommandArray(commandArray, numberOfChunks);
 #endif
-    //enumerated type commandType can describe each of the possible commands(see parser.h)
+    //enumerated type commandType can describe each of the possible commands(see actionQueue.h)
     
     commandType action = getAction(commandArray[0]);//the first string in the command should contain the action
     
@@ -41,19 +44,24 @@ int parse(char *inputString)
 #if ENABLE_TESTING
     testGetAction(action);
 #endif
+    int parseReturns=0;
     /**** Now we deal with each possible command separately as they all have different syntax ****/
     switch (action)
     {
         case upgrade :
-            parseUpgrade(commandArray, numberOfChunks);
-            return 1;
+            if(numberOfChunks<3)
+            {
+                actionUsageError();
+                return 0;
+            }
+            parseReturns = parseUpgrade(commandArray, numberOfChunks);
+            return parseReturns;
         case cat:
-            printf("testing %s\n ", inputString);
-            parseCat(commandArray[1]);
-            return 1;
+            parseReturns = parseCat(commandArray[1]);
+            return parseReturns;
         case man:
-            parseMan(commandArray[1]);
-            return 1;
+            parseReturns = parseMan(commandArray[1]);
+            return parseReturns;
         case execute:
         case set:
         default:
@@ -68,30 +76,37 @@ int parse(char *inputString)
 }
 
 
-void parseMan(char * inputStringCommandMan)
+int parseMan(char * inputStringCommandMan)
 {
     commandType commandToMan = getAction(inputStringCommandMan);
     
     //man(commandToMan);
+    return 0;
     
     
 }
 
 
-void parseCat(char * inputStringTargeting)
+int parseCat(char * inputStringTargeting)
 {
     if(inputStringTargeting[0]=='t' || inputStringTargeting[0]=='T')
     {
         unsigned int targetTower = getTargetTower(inputStringTargeting);
-        printf("testing %s\n ", inputStringTargeting);
-
-        catTower(targetTower);
+        if(targetTower!=0)
+        {
+            catTower(targetTower);
+            return 1;
+        }
+        else
+            return 0;
     }
+    else
+        return 0;
     //can we also cat other things eg enemies?
     
 }
 
-void parseUpgrade(char ** commandArray, int numberOfChunks)
+int parseUpgrade(char ** commandArray, int numberOfChunks)
 {
     
     upgradeStat statToUpgrade = getUpgradeStats(commandArray[1]);
@@ -101,22 +116,45 @@ void parseUpgrade(char ** commandArray, int numberOfChunks)
     
     int target = getTargetTower(commandArray[2]);
     
-    commandType action = upgrade;
-    pushToQueue(getQueue(NULL),action,statToUpgrade,target);
-    
+    if(target!=0 && statToUpgrade!=statError )
+    {
+        commandType action = upgrade;
+        pushToQueue(getQueue(NULL),action,statToUpgrade,target);
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 
 }
 
 
 unsigned int getTargetTower(const char * inputStringTargeting)
 {
-
-
-    unsigned int targetTower = (unsigned int)(inputStringTargeting[1]-'0');
     unsigned int numberOfTowers = getNumberOfTowers();//getNumberOfTowers(); this is func in tower.c
+
+    size_t len = strlen(inputStringTargeting);//gets the size of string
+    if( len<(2*sizeof(char)) )
+    {
+        fprintf(stderr,"*** ERROR: You must target a tower with this command ***\n");
+        fprintf(stderr,"to target a tower enter t followed by a number 1 - %d \n",numberOfTowers);
+        return 0;
+    }
+    if (inputStringTargeting[0]!='t' && inputStringTargeting[0]!='T')
+    {
+        fprintf(stderr,"*** ERROR: You must target a tower with this command ***\n");
+        fprintf(stderr,"to target a tower enter t followed by a number 1 - %d \n",numberOfTowers);
+        return 0;
+    }
+    
+    unsigned int targetTower = (unsigned int)(inputStringTargeting[1]-'0');
+    
     if(targetTower > numberOfTowers)
     {
-        targetTowerError(numberOfTowers, targetTower);
+        fprintf(stderr,"*** ERROR: target tower does not exist ***\n");
+        fprintf(stderr,"You have only %d towers you entered t%d\n",
+                numberOfTowers,targetTower);
         return 0;
     }
 #if ENABLE_TESTING
@@ -129,15 +167,6 @@ unsigned int getTargetTower(const char * inputStringTargeting)
     return targetTower;
 }
 
-void targetTowerError(unsigned int numberOfTowers, unsigned int targetTower)
-{
-    fprintf(stderr,"*** ERROR: target tower does not exist ***\n");
-    fprintf(stderr,"You have only %d towers you entered t%d\n",
-            numberOfTowers,targetTower);
-    
-
-
-}
 
 upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 {
@@ -250,7 +279,7 @@ commandType getAction( const char * inputAction )
     
     if(action==commandError)//if it is still set to ERROR then the user made a mistake
     {
-        actionUsageError(action, validActions, numberOfActions);
+        actionUsageError();
     }
     free(validActions);//free the mallocd array
     return action;
@@ -259,18 +288,27 @@ commandType getAction( const char * inputAction )
 
 
 /* if there was a syntax error in the users command call this function which will print usage advice to the terminal window*/
-void actionUsageError( commandType action, const char ** validActions, int numberOfActions)
+void actionUsageError()
 {
-    if(action==commandError)//if it is still set to ERROR then the user made a mistake
+    const char **validActions;
+    int numberOfActions=5;//have 5 action commands at this time: upgrade, execute, set, man, cat
+    validActions=(const char **)malloc(numberOfActions*sizeof(char*));//array of $[numberOfActions] strings
+    validActions[0]="upgrade";
+    validActions[1]="execute";
+    validActions[2]="set";
+    validActions[3]="man";
+    validActions[4]="cat";
+    
+    fprintf(stderr,"*** Action not recognised ***\n");
+    fprintf(stderr,"Possible commands: \n");
+    for(int i=0; i<numberOfActions; ++i)
     {
-        fprintf(stderr,"*** Action not recognised ***\n");
-        fprintf(stderr,"Possible commands: \n");
-        for(int i=0; i<numberOfActions; ++i)
-        {
-            fprintf(stderr,"%s\n",validActions[i]);
-        }
-        fprintf(stderr,"\nType man [COMMAND] for usage\n");//we advise them on usage
-    }//error messages will need to be passed back to the terminal to be printed. hopefully can do this by setting up a custom stream. For now will print to stderr.
+        fprintf(stderr,"%s\n",validActions[i]);
+    }
+    fprintf(stderr,"\nType man [COMMAND] for usage\n");//we advise them on usage
+    //error messages will need to be passed back to the terminal to be printed. hopefully can do this by setting up a custom stream. For now will print to stderr.
+    free(validActions);//free the mallocd array
+
 }
 
 
@@ -279,8 +317,8 @@ void actionUsageError( commandType action, const char ** validActions, int numbe
 char **breakUpString(const char * inputString, int *numberOfChunksPtr, const char * delimiter)
 {
     char    *stringChunk,                       //holds the chunks on the input string as we break it up
-    *inputStringDuplicate = strdup(inputString),//duplicate input string for editting
-    **commandArray = NULL;              //this will be an array to hold each of the chunk strings
+            *inputStringDuplicate = strdup(inputString),//duplicate input string for editting
+            **commandArray = NULL;              //this will be an array to hold each of the chunk strings
     int     numberOfChunks=0;
     
     //using http://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm

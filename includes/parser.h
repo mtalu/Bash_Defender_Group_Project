@@ -20,15 +20,14 @@ void freeCommandArray(char **commandArray,int numberOfChunks);
 char ** breakUpString(const char * inputString, int *numberOfChunksPtr, const char * delimiter);
 void testCommandArray(char ** commandArray, int numberOfChunks);
 void testGetAction(enum commandType action);
-void actionUsageError( commandType action, const char ** validActions, int numberOfActions);
+void actionUsageError();
 upgradeStat getUpgradeStats(const char * inputStringUpgradeStats);
-void parseUpgrade(char ** commandArray, int numberOfChunks);
+int parseUpgrade(char ** commandArray, int numberOfChunks);
 void testGetUpgradeStat(upgradeStat statToUpgrade);
 void upgrageStatUsageError( upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats);
 unsigned int getTargetTower(const char * inputStringTargeting);
-void parseCat(char * inputStringTargeting);
-void parseMan(char * inputStringCommandMan);
-void targetTowerError(unsigned int numberOfTowers, unsigned int targetTower);
+int parseCat(char * inputStringTargeting);
+int parseMan(char * inputStringCommandMan);
 
 
 

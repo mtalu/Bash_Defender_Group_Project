@@ -14,6 +14,7 @@ struct enemy {
     int health;
     int speed;
     int enemyID;
+	BOOL firedUpon;
     int dead;
 };
 
@@ -24,11 +25,10 @@ struct enemyGroup {
 
 void createEnemyGroup()
 {
-	EnemyGroup enemyList = (EnemyGroup) malloc(sizeof(*enemyList));
-    enemyList = enemyList -1;//now enemy ID is same as its element int the enemy array
-	getEnemyGroup(enemyList);
-	enemyList->enemyArray=NULL;
-	enemyList->numberOfEnemies = 0;
+    EnemyGroup enemyList = (EnemyGroup) malloc(sizeof(*enemyList));
+    getEnemyGroup(enemyList);
+    enemyList->enemyArray=malloc(sizeof(Enemy));
+    enemyList->numberOfEnemies = 0;
 }
 
 void createEnemy()
@@ -36,25 +36,22 @@ void createEnemy()
     EnemyGroup enemyList =  getEnemyGroup(NULL);
     ++(enemyList->numberOfEnemies);
     
-    enemyList->enemyArray = (Enemy*)realloc(enemyList->enemyArray, (enemyList->numberOfEnemies)*(sizeof(Enemy)));
+    enemyList->enemyArray = (Enemy*)realloc(enemyList->enemyArray, (enemyList->numberOfEnemies+1)*(sizeof(Enemy)));
 
     if(enemyList->enemyArray==NULL)
     {
-        printf("****ERROR realloc in createEnemy failed****\n");
-        exit(1);
+	printf("****ERROR realloc in createEnemy failed****\n");
+	exit(1);
     }
-                                            
     enemyList->enemyArray[enemyList->numberOfEnemies]=(Enemy)malloc(sizeof(struct enemy));
-    
+		        
     if( enemyList->enemyArray[enemyList->numberOfEnemies]==NULL)
     {
-        printf("****ERROR malloc in createEnemy failed****\n");
+	printf("****ERROR malloc in createEnemy failed****\n");
         exit(1);
     }
-    initialiseEnemy( enemyList->enemyArray[enemyList->numberOfEnemies]);
-    
+   initialiseEnemy( enemyList->enemyArray[enemyList->numberOfEnemies]);
 }
-
 int getNumberOfEnemies()
 {
     return getEnemyGroup(NULL)->numberOfEnemies;
@@ -85,14 +82,18 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->pathProgress = 0;
     newEnemy->x = p[0][0];
     newEnemy->y = p[0][1];
-    newEnemy->health = 100;
+    newEnemy->health = 1;
     newEnemy->speed = 4;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
-    
+	newEnemy->firedUpon = FALSE;    
 }
 
-                                            
+int setEnemyHealth(int enemyID, int newHealth)	{
+	getEnemyGroup(NULL)->enemyArray[enemyID]->health = newHealth;
+	return getEnemyGroup(NULL)->enemyArray[enemyID]->health;	
+}                      
+                      
 EnemyGroup getEnemyGroup(EnemyGroup enemyList)
 {
     
@@ -105,16 +106,17 @@ EnemyGroup getEnemyGroup(EnemyGroup enemyList)
     return e;
 }
 
-
-
-
 void present_enemy(Display d)
 {
     EnemyGroup enemyList = getEnemyGroup(NULL);
     for(int i=1; i<=enemyList->numberOfEnemies; ++i)
     {
-        drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, 100, 100);
+        if(!isDead(i))
+        {
+            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, 100, 100);
+        }
     }
+
 }
 
 int getEnemyHealth(int enemyIndex)
@@ -139,6 +141,27 @@ int moveEnemy(int enemyID )
     return 0;
   }
   return 1;
+}
+
+int setEnemyX(int enemyID, int newX)	{
+
+	Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+	e->x = newX;
+	return e->x;
+}
+
+int setEnemyY(int enemyID, int newY)	{
+
+	Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+	e->y = newY;
+	return e->y;
+}
+
+BOOL getFiredUpon(int enemyID)	{
+
+	Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+	return e->firedUpon;
+
 }
 
 int isDead(int enemyID)
@@ -166,9 +189,11 @@ int inRange(int tX, int tY, int tRange, int enemyID)
     int distanceBetweenTowerAndEnemy = (int)sqrt( pow((double)(e->x-tX),2) +
                                               pow((double)(e->y-tY),2)    );
     if(distanceBetweenTowerAndEnemy<tRange){
+		e->firedUpon = TRUE;
         return 1;
     }
     else {
+		e->firedUpon = FALSE;
         return 0;
     }
 

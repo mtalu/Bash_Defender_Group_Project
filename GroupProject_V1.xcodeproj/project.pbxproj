@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C9772D21A1F822C0062517C /* actionQueueDataStructure.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772C21A1F822C0062517C /* actionQueueDataStructure.c */; };
-		4C9772D31A1F822C0062517C /* Display.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772C41A1F822C0062517C /* Display.c */; };
-		4C9772D41A1F822C0062517C /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772C61A1F822C0062517C /* enemy.c */; };
-		4C9772D51A1F822C0062517C /* gameProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772C91A1F822C0062517C /* gameProperties.c */; };
-		4C9772D61A1F822C0062517C /* Information_Window.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772CB1A1F822C0062517C /* Information_Window.c */; };
-		4C9772D71A1F822C0062517C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772CC1A1F822C0062517C /* main.c */; };
-		4C9772D81A1F822C0062517C /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772CD1A1F822C0062517C /* makefile */; };
-		4C9772D91A1F822C0062517C /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772CF1A1F822C0062517C /* parser.c */; };
-		4C9772DA1A1F822C0062517C /* tower.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C9772D01A1F822C0062517C /* tower.c */; };
-		4C9772DE1A1F82690062517C /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9772DB1A1F82690062517C /* SDL2_image.framework */; };
-		4C9772DF1A1F82690062517C /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9772DC1A1F82690062517C /* SDL2_ttf.framework */; };
-		4C9772E01A1F82690062517C /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9772DD1A1F82690062517C /* SDL2.framework */; };
+		4C901BA21A23A0AF00AD6C48 /* actionQueueDataStructure.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B921A23A0AF00AD6C48 /* actionQueueDataStructure.c */; };
+		4C901BA31A23A0AF00AD6C48 /* Display.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B931A23A0AF00AD6C48 /* Display.c */; };
+		4C901BA41A23A0AF00AD6C48 /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B951A23A0AF00AD6C48 /* enemy.c */; };
+		4C901BA51A23A0AF00AD6C48 /* gameProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B991A23A0AF00AD6C48 /* gameProperties.c */; };
+		4C901BA61A23A0AF00AD6C48 /* Information_Window.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B9B1A23A0AF00AD6C48 /* Information_Window.c */; };
+		4C901BA71A23A0AF00AD6C48 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B9C1A23A0AF00AD6C48 /* main.c */; };
+		4C901BA81A23A0AF00AD6C48 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B9D1A23A0AF00AD6C48 /* makefile */; };
+		4C901BA91A23A0AF00AD6C48 /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901B9F1A23A0AF00AD6C48 /* parser.c */; };
+		4C901BAA1A23A0AF00AD6C48 /* tower.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C901BA01A23A0AF00AD6C48 /* tower.c */; };
+		4C901BAE1A23A11600AD6C48 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C901BAB1A23A11600AD6C48 /* SDL2_image.framework */; };
+		4C901BAF1A23A11600AD6C48 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C901BAC1A23A11600AD6C48 /* SDL2_ttf.framework */; };
+		4C901BB01A23A11600AD6C48 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C901BAD1A23A11600AD6C48 /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,36 +34,36 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C901B881A23A09900AD6C48 /* actionQueueDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = actionQueueDataStructure.h; path = includes/actionQueueDataStructure.h; sourceTree = "<group>"; };
+		4C901B891A23A09900AD6C48 /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = debug.h; path = includes/debug.h; sourceTree = "<group>"; };
+		4C901B8A1A23A09900AD6C48 /* Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Display.h; path = includes/Display.h; sourceTree = "<group>"; };
+		4C901B8B1A23A09900AD6C48 /* enemy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = enemy.h; path = includes/enemy.h; sourceTree = "<group>"; };
+		4C901B8C1A23A09900AD6C48 /* gameProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gameProperties.h; path = includes/gameProperties.h; sourceTree = "<group>"; };
+		4C901B8D1A23A09900AD6C48 /* Information_Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Information_Window.h; path = includes/Information_Window.h; sourceTree = "<group>"; };
+		4C901B8E1A23A09900AD6C48 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = main.h; path = includes/main.h; sourceTree = "<group>"; };
+		4C901B8F1A23A09900AD6C48 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = parser.h; path = includes/parser.h; sourceTree = "<group>"; };
+		4C901B901A23A09900AD6C48 /* sput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sput.h; path = includes/sput.h; sourceTree = "<group>"; };
+		4C901B911A23A09900AD6C48 /* tower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tower.h; path = includes/tower.h; sourceTree = "<group>"; };
+		4C901B921A23A0AF00AD6C48 /* actionQueueDataStructure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = actionQueueDataStructure.c; path = sources/actionQueueDataStructure.c; sourceTree = "<group>"; };
+		4C901B931A23A0AF00AD6C48 /* Display.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Display.c; path = sources/Display.c; sourceTree = "<group>"; };
+		4C901B941A23A0AF00AD6C48 /* enemy */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = enemy; path = sources/enemy; sourceTree = "<group>"; };
+		4C901B951A23A0AF00AD6C48 /* enemy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enemy.c; path = sources/enemy.c; sourceTree = "<group>"; };
+		4C901B961A23A0AF00AD6C48 /* enemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = enemy.png; path = sources/enemy.png; sourceTree = "<group>"; };
+		4C901B971A23A0AF00AD6C48 /* FreeSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeSans.ttf; path = sources/FreeSans.ttf; sourceTree = "<group>"; };
+		4C901B981A23A0AF00AD6C48 /* gameOut */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = gameOut; path = sources/gameOut; sourceTree = "<group>"; };
+		4C901B991A23A0AF00AD6C48 /* gameProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gameProperties.c; path = sources/gameProperties.c; sourceTree = "<group>"; };
+		4C901B9A1A23A0AF00AD6C48 /* info_window_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_window_background.png; path = sources/info_window_background.png; sourceTree = "<group>"; };
+		4C901B9B1A23A0AF00AD6C48 /* Information_Window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Information_Window.c; path = sources/Information_Window.c; sourceTree = "<group>"; };
+		4C901B9C1A23A0AF00AD6C48 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = sources/main.c; sourceTree = "<group>"; };
+		4C901B9D1A23A0AF00AD6C48 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = sources/makefile; sourceTree = "<group>"; };
+		4C901B9E1A23A0AF00AD6C48 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "sources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		4C901B9F1A23A0AF00AD6C48 /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parser.c; path = sources/parser.c; sourceTree = "<group>"; };
+		4C901BA01A23A0AF00AD6C48 /* tower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tower.c; path = sources/tower.c; sourceTree = "<group>"; };
+		4C901BA11A23A0AF00AD6C48 /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = sources/tower.png; sourceTree = "<group>"; };
+		4C901BAB1A23A11600AD6C48 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		4C901BAC1A23A11600AD6C48 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
+		4C901BAD1A23A11600AD6C48 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		4C9772AE1A1F7F740062517C /* GroupProject_V1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GroupProject_V1; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C9772B81A1F821A0062517C /* actionQueueDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = actionQueueDataStructure.h; path = includes/actionQueueDataStructure.h; sourceTree = "<group>"; };
-		4C9772B91A1F821A0062517C /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = debug.h; path = includes/debug.h; sourceTree = "<group>"; };
-		4C9772BA1A1F821A0062517C /* Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Display.h; path = includes/Display.h; sourceTree = "<group>"; };
-		4C9772BB1A1F821A0062517C /* enemy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = enemy.h; path = includes/enemy.h; sourceTree = "<group>"; };
-		4C9772BC1A1F821A0062517C /* gameProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gameProperties.h; path = includes/gameProperties.h; sourceTree = "<group>"; };
-		4C9772BD1A1F821A0062517C /* Information_Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Information_Window.h; path = includes/Information_Window.h; sourceTree = "<group>"; };
-		4C9772BE1A1F821A0062517C /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = main.h; path = includes/main.h; sourceTree = "<group>"; };
-		4C9772BF1A1F821A0062517C /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = parser.h; path = includes/parser.h; sourceTree = "<group>"; };
-		4C9772C01A1F821A0062517C /* sput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sput.h; path = includes/sput.h; sourceTree = "<group>"; };
-		4C9772C11A1F821A0062517C /* tower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tower.h; path = includes/tower.h; sourceTree = "<group>"; };
-		4C9772C21A1F822C0062517C /* actionQueueDataStructure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = actionQueueDataStructure.c; path = sources/actionQueueDataStructure.c; sourceTree = "<group>"; };
-		4C9772C31A1F822C0062517C /* compiled */ = {isa = PBXFileReference; lastKnownFileType = folder; name = compiled; path = sources/compiled; sourceTree = "<group>"; };
-		4C9772C41A1F822C0062517C /* Display.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Display.c; path = sources/Display.c; sourceTree = "<group>"; };
-		4C9772C51A1F822C0062517C /* enemy */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = enemy; path = sources/enemy; sourceTree = "<group>"; };
-		4C9772C61A1F822C0062517C /* enemy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enemy.c; path = sources/enemy.c; sourceTree = "<group>"; };
-		4C9772C71A1F822C0062517C /* enemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = enemy.png; path = sources/enemy.png; sourceTree = "<group>"; };
-		4C9772C81A1F822C0062517C /* FreeSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeSans.ttf; path = sources/FreeSans.ttf; sourceTree = "<group>"; };
-		4C9772C91A1F822C0062517C /* gameProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gameProperties.c; path = sources/gameProperties.c; sourceTree = "<group>"; };
-		4C9772CA1A1F822C0062517C /* info_window_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_window_background.png; path = sources/info_window_background.png; sourceTree = "<group>"; };
-		4C9772CB1A1F822C0062517C /* Information_Window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Information_Window.c; path = sources/Information_Window.c; sourceTree = "<group>"; };
-		4C9772CC1A1F822C0062517C /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = sources/main.c; sourceTree = "<group>"; };
-		4C9772CD1A1F822C0062517C /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = sources/makefile; sourceTree = "<group>"; };
-		4C9772CE1A1F822C0062517C /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "sources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
-		4C9772CF1A1F822C0062517C /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parser.c; path = sources/parser.c; sourceTree = "<group>"; };
-		4C9772D01A1F822C0062517C /* tower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tower.c; path = sources/tower.c; sourceTree = "<group>"; };
-		4C9772D11A1F822C0062517C /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = sources/tower.png; sourceTree = "<group>"; };
-		4C9772DB1A1F82690062517C /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
-		4C9772DC1A1F82690062517C /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
-		4C9772DD1A1F82690062517C /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,9 +71,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C9772DE1A1F82690062517C /* SDL2_image.framework in Frameworks */,
-				4C9772DF1A1F82690062517C /* SDL2_ttf.framework in Frameworks */,
-				4C9772E01A1F82690062517C /* SDL2.framework in Frameworks */,
+				4C901BAE1A23A11600AD6C48 /* SDL2_image.framework in Frameworks */,
+				4C901BAF1A23A11600AD6C48 /* SDL2_ttf.framework in Frameworks */,
+				4C901BB01A23A11600AD6C48 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,37 +83,37 @@
 		4C9772A51A1F7F740062517C = {
 			isa = PBXGroup;
 			children = (
-				4C9772DB1A1F82690062517C /* SDL2_image.framework */,
-				4C9772DC1A1F82690062517C /* SDL2_ttf.framework */,
-				4C9772DD1A1F82690062517C /* SDL2.framework */,
+				4C901BAB1A23A11600AD6C48 /* SDL2_image.framework */,
+				4C901BAC1A23A11600AD6C48 /* SDL2_ttf.framework */,
+				4C901BAD1A23A11600AD6C48 /* SDL2.framework */,
+				4C901B921A23A0AF00AD6C48 /* actionQueueDataStructure.c */,
+				4C901B931A23A0AF00AD6C48 /* Display.c */,
+				4C901B941A23A0AF00AD6C48 /* enemy */,
+				4C901B951A23A0AF00AD6C48 /* enemy.c */,
+				4C901B961A23A0AF00AD6C48 /* enemy.png */,
+				4C901B971A23A0AF00AD6C48 /* FreeSans.ttf */,
+				4C901B981A23A0AF00AD6C48 /* gameOut */,
+				4C901B991A23A0AF00AD6C48 /* gameProperties.c */,
+				4C901B9A1A23A0AF00AD6C48 /* info_window_background.png */,
+				4C901B9B1A23A0AF00AD6C48 /* Information_Window.c */,
+				4C901B9C1A23A0AF00AD6C48 /* main.c */,
+				4C901B9D1A23A0AF00AD6C48 /* makefile */,
+				4C901B9E1A23A0AF00AD6C48 /* OpenSans-Regular.ttf */,
+				4C901B9F1A23A0AF00AD6C48 /* parser.c */,
+				4C901BA01A23A0AF00AD6C48 /* tower.c */,
+				4C901BA11A23A0AF00AD6C48 /* tower.png */,
+				4C901B881A23A09900AD6C48 /* actionQueueDataStructure.h */,
+				4C901B891A23A09900AD6C48 /* debug.h */,
+				4C901B8A1A23A09900AD6C48 /* Display.h */,
+				4C901B8B1A23A09900AD6C48 /* enemy.h */,
+				4C901B8C1A23A09900AD6C48 /* gameProperties.h */,
+				4C901B8D1A23A09900AD6C48 /* Information_Window.h */,
+				4C901B8E1A23A09900AD6C48 /* main.h */,
+				4C901B8F1A23A09900AD6C48 /* parser.h */,
+				4C901B901A23A09900AD6C48 /* sput.h */,
+				4C901B911A23A09900AD6C48 /* tower.h */,
 				4C9772B01A1F7F740062517C /* TestGPV1 */,
 				4C9772AF1A1F7F740062517C /* Products */,
-				4C9772B81A1F821A0062517C /* actionQueueDataStructure.h */,
-				4C9772B91A1F821A0062517C /* debug.h */,
-				4C9772BA1A1F821A0062517C /* Display.h */,
-				4C9772BB1A1F821A0062517C /* enemy.h */,
-				4C9772C21A1F822C0062517C /* actionQueueDataStructure.c */,
-				4C9772C31A1F822C0062517C /* compiled */,
-				4C9772C41A1F822C0062517C /* Display.c */,
-				4C9772C51A1F822C0062517C /* enemy */,
-				4C9772C61A1F822C0062517C /* enemy.c */,
-				4C9772C71A1F822C0062517C /* enemy.png */,
-				4C9772C81A1F822C0062517C /* FreeSans.ttf */,
-				4C9772C91A1F822C0062517C /* gameProperties.c */,
-				4C9772CA1A1F822C0062517C /* info_window_background.png */,
-				4C9772CB1A1F822C0062517C /* Information_Window.c */,
-				4C9772CC1A1F822C0062517C /* main.c */,
-				4C9772CD1A1F822C0062517C /* makefile */,
-				4C9772CE1A1F822C0062517C /* OpenSans-Regular.ttf */,
-				4C9772CF1A1F822C0062517C /* parser.c */,
-				4C9772D01A1F822C0062517C /* tower.c */,
-				4C9772D11A1F822C0062517C /* tower.png */,
-				4C9772BC1A1F821A0062517C /* gameProperties.h */,
-				4C9772BD1A1F821A0062517C /* Information_Window.h */,
-				4C9772BE1A1F821A0062517C /* main.h */,
-				4C9772BF1A1F821A0062517C /* parser.h */,
-				4C9772C01A1F821A0062517C /* sput.h */,
-				4C9772C11A1F821A0062517C /* tower.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,15 +188,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C9772D51A1F822C0062517C /* gameProperties.c in Sources */,
-				4C9772D81A1F822C0062517C /* makefile in Sources */,
-				4C9772D41A1F822C0062517C /* enemy.c in Sources */,
-				4C9772DA1A1F822C0062517C /* tower.c in Sources */,
-				4C9772D71A1F822C0062517C /* main.c in Sources */,
-				4C9772D31A1F822C0062517C /* Display.c in Sources */,
-				4C9772D61A1F822C0062517C /* Information_Window.c in Sources */,
-				4C9772D91A1F822C0062517C /* parser.c in Sources */,
-				4C9772D21A1F822C0062517C /* actionQueueDataStructure.c in Sources */,
+				4C901BA51A23A0AF00AD6C48 /* gameProperties.c in Sources */,
+				4C901BA81A23A0AF00AD6C48 /* makefile in Sources */,
+				4C901BA41A23A0AF00AD6C48 /* enemy.c in Sources */,
+				4C901BAA1A23A0AF00AD6C48 /* tower.c in Sources */,
+				4C901BA71A23A0AF00AD6C48 /* main.c in Sources */,
+				4C901BA31A23A0AF00AD6C48 /* Display.c in Sources */,
+				4C901BA61A23A0AF00AD6C48 /* Information_Window.c in Sources */,
+				4C901BA91A23A0AF00AD6C48 /* parser.c in Sources */,
+				4C901BA21A23A0AF00AD6C48 /* actionQueueDataStructure.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

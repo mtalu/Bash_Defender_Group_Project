@@ -10,6 +10,7 @@
 #define TEST_Display_h
 
 #include <SDL2/SDL.h>
+//#include <SDL2/SDL_ttf.h>
 #include <SDL2_ttf/SDL_ttf.h>
 #include <SDL2_image/SDL_image.h>
 
@@ -46,6 +47,7 @@ void drawEnemy(Display d, int x, int y, int w, int h);
 //check
 void check_load_images(SDL_Surface *surface, char *pic_name);
 
+TTF_Font *getInfoWindowFont(TTF_Font *font);
 
 
 #include <stdio.h>

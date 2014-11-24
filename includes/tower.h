@@ -1,22 +1,10 @@
 #ifndef TEST_Header_h
 #define TEST_Header_h
 
+#include "../includes/Display.h"
 #include "../includes/enemy.h"
 #include "../includes/gameProperties.h"
 #include "../includes/actionQueueDataStructure.h"
-#include "../includes/Display.h"
-
-struct tower {
-	int towerID;
-    int x, y;
-    int damage;
-    int range;
-	int speed;
-    int AOErange; //! not yet implemented
-	int AOEpower; //!not yet implemented
-	int firing;
-    int targetPosition[2];
-};
 
 typedef struct tower *tower;
 typedef struct towerGroup *TowerGroup;
@@ -42,10 +30,13 @@ upgradeStat upgradeTowerStat(upgradeStat stat,int target);
 unsigned int getNumberOfTowers();
 void freeAllTowers();
 void present_tower(Display d);
-struct tower getStats(unsigned int towerID);
-
+int setTowerX(int towerID,int newX);
+int setTowerY(int towerID, int newY);
+int setTowerRange(int towerID, int newRange);
+int getTowerDamage(int towerID);
 void testingTowerModule();
 void testGetTower();
 void testUpgradeTowerStat();
+void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange, unsigned int towerID);
 #endif
 
