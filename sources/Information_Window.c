@@ -24,7 +24,7 @@ void catTower(unsigned int towerIDtoCat) {
     
     char range[10], damage[10], speed[10], AOEdamage[10], AOErange[10];
     
-    sprintf(outputString, "  TOWER %d\n\nRange: ", 1);
+    sprintf(outputString, "TOWER %d\n\nRange: ", 1);
     sprintf(range, "%d", iRange);
     sprintf(damage, "%d",iDamage);
     sprintf(speed, "%d", iSpeed);

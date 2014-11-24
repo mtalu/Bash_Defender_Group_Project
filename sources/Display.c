@@ -13,14 +13,12 @@
 #define SCREEN_HEIGHT 480
 
 //Information monitor dimensions
-#define INFO_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.2)
-#define INFO_WINDOW_WIDTH (SCREEN_WIDTH / 3.2)
+#define INFO_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.5)
+#define INFO_WINDOW_WIDTH (SCREEN_WIDTH / 3.5)
 #define INFO_WINDOW_X (SCREEN_WIDTH - INFO_WINDOW_WIDTH)
 #define INFO_WINDOW_Y (SCREEN_HEIGHT - INFO_WINDOW_HEIGHT)
-#define TEXT_BORDER 10
-#define TOWER_BORDER 20
-#define INFO_WINDOW_TEXTURE_X 0
-#define INFO_WINDOW_TEXTURE_Y 0
+#define TEXT_BORDER_X 15
+#define TEXT_BORDER_Y 15
 
 struct display {
     //Window objects
@@ -36,6 +34,8 @@ struct display {
     SDL_Texture *infoWindowTextTexture;
     SDL_Rect  infoWindowRect;
     SDL_Rect  infoWindowTextureRect;
+    TTF_Font *infoWindowFont;
+    SDL_Color infoWindowFontColour;
 
     //Tower objects
     SDL_Surface *towerSurface;
@@ -72,6 +72,10 @@ Display init_SDL(){
     d->infoWindowSurface = IMG_Load("info_monitor.png");
     d->infoWindowTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowSurface);
     d->infoWindowRect = (SDL_Rect){INFO_WINDOW_X, INFO_WINDOW_Y, INFO_WINDOW_WIDTH, INFO_WINDOW_HEIGHT};
+    d->infoWindowFont = TTF_OpenFont("OpenSans-Regular.ttf", 10);
+    if(d->infoWindowFont == NULL) crash("TTF_(OpenFont)");
+    d->infoWindowFontColour.r = 0x7c, d->infoWindowFontColour.g = 0xfc, d->infoWindowFontColour.b = 0x00;
+
     
     init_enemy(d, "enemy.png");
     init_tower(d, "tower.png");
@@ -82,6 +86,7 @@ Display init_SDL(){
     if (font == NULL) {
         fprintf(stderr, "TTF_OpenFont() Failed: ");
     }
+    
     TTF_SetFontHinting(font, TTF_HINTING_LIGHT); //improves quality of font
     
     getInfoWindowFont(font);//stores font ptr
@@ -158,6 +163,8 @@ void check_load_images(SDL_Surface *surface, char *pic_name){
 void shutSDL(Display d){
     SDL_DestroyWindow(d->window);
     SDL_Quit();
+    IMG_Quit();
+    TTF_Quit();
 }
 
 //End of tower and enemy graphics functions
@@ -172,23 +179,25 @@ void displayInfoWindow(Display d) {
 }
 
 void updateInfoWindow( char *outputString) {
-    static char * string = "    TOWERS";
-    if(outputString)
-    {
+    static char * string = "            TOWER MONITOR";
+    
+    if(outputString) {
         string = strdup2(outputString);
     }
+    
     Display d = getDisplayPointer(NULL);
+    
     //Update information window with new tower information
     displayInfoWindow(d);
     
-  d->infoWindowTextSurface = getInfoWindowTextSurface(string);
-  d->infoWindowTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowTextSurface);
+    d->infoWindowTextSurface = getInfoWindowTextSurface(string);
+    d->infoWindowTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowTextSurface);
     
     //Query text dimensions so text doesn't strech to whole screen
     int textW = 0;
     int textH = 0;
     SDL_QueryTexture(d->infoWindowTextTexture, NULL, NULL, &textW, &textH);
-    SDL_Rect dstrect = { INFO_WINDOW_X + TOWER_BORDER, INFO_WINDOW_Y + TOWER_BORDER, textW, textH};
+    SDL_Rect dstrect = {INFO_WINDOW_X + TEXT_BORDER_X, INFO_WINDOW_Y + TEXT_BORDER_Y, textW, textH};
     SDL_RenderCopy(d->renderer, d->infoWindowTextTexture, NULL, &dstrect);
 }
 
@@ -222,14 +231,12 @@ TTF_Font *getInfoWindowFont(TTF_Font *font)
 SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     //Create text surface to be displayed in information window
     
-    SDL_Surface *textSurface;
-    TTF_Font *font = getInfoWindowFont(NULL);
-    SDL_Color fontColour = { 0xFF, 0xFF, 0xFF };
+    Display d = getDisplayPointer(NULL);
     
-    textSurface = TTF_RenderText_Blended_Wrapped(font, outputString, fontColour, 60);
-    if(textSurface == NULL) {
-        fprintf(stderr, "getInfoWindowTextSurface() failed: ");
-    }
+    SDL_Surface *textSurface;
+    
+    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, INFO_WINDOW_WIDTH - TEXT_BORDER_X);
+    if(textSurface == NULL) crash("getInfoWindowTextSurface()");
     
     return textSurface;
 }

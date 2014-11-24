@@ -47,11 +47,9 @@
 		4C901B911A23A09900AD6C48 /* tower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tower.h; path = includes/tower.h; sourceTree = "<group>"; };
 		4C901B921A23A0AF00AD6C48 /* actionQueueDataStructure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = actionQueueDataStructure.c; path = sources/actionQueueDataStructure.c; sourceTree = "<group>"; };
 		4C901B931A23A0AF00AD6C48 /* Display.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Display.c; path = sources/Display.c; sourceTree = "<group>"; };
-		4C901B941A23A0AF00AD6C48 /* enemy */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = enemy; path = sources/enemy; sourceTree = "<group>"; };
 		4C901B951A23A0AF00AD6C48 /* enemy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enemy.c; path = sources/enemy.c; sourceTree = "<group>"; };
 		4C901B961A23A0AF00AD6C48 /* enemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = enemy.png; path = sources/enemy.png; sourceTree = "<group>"; };
 		4C901B971A23A0AF00AD6C48 /* FreeSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeSans.ttf; path = sources/FreeSans.ttf; sourceTree = "<group>"; };
-		4C901B981A23A0AF00AD6C48 /* gameOut */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = gameOut; path = sources/gameOut; sourceTree = "<group>"; };
 		4C901B991A23A0AF00AD6C48 /* gameProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gameProperties.c; path = sources/gameProperties.c; sourceTree = "<group>"; };
 		4C901B9A1A23A0AF00AD6C48 /* info_window_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_window_background.png; path = sources/info_window_background.png; sourceTree = "<group>"; };
 		4C901B9B1A23A0AF00AD6C48 /* Information_Window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Information_Window.c; path = sources/Information_Window.c; sourceTree = "<group>"; };
@@ -104,11 +102,9 @@
 				4C48673A1A23C2E10078A628 /* info_monitor.png */,
 				4C901B921A23A0AF00AD6C48 /* actionQueueDataStructure.c */,
 				4C901B931A23A0AF00AD6C48 /* Display.c */,
-				4C901B941A23A0AF00AD6C48 /* enemy */,
 				4C901B951A23A0AF00AD6C48 /* enemy.c */,
 				4C901B961A23A0AF00AD6C48 /* enemy.png */,
 				4C901B971A23A0AF00AD6C48 /* FreeSans.ttf */,
-				4C901B981A23A0AF00AD6C48 /* gameOut */,
 				4C901B991A23A0AF00AD6C48 /* gameProperties.c */,
 				4C901B9A1A23A0AF00AD6C48 /* info_window_background.png */,
 				4C901B9B1A23A0AF00AD6C48 /* Information_Window.c */,
