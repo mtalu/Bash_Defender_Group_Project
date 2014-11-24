@@ -13,7 +13,7 @@
 
 int main()
 {	
-	testing();
+	//testing();
     
     createPath();
     createEnemyGroup();
@@ -50,7 +50,7 @@ int main()
             int move = moveEnemy(i);
            
         }
-        if(steps%30 == 0){
+        if(steps%3000 == 0){
             createEnemy();
         }
         
@@ -76,7 +76,6 @@ void testing()	{
 	testingTowerModule();
 	parseToTowerTesting();
 	towerToEnemyTesting();
-    testValidParses();
 
 
 }
@@ -181,31 +180,31 @@ void testValidParses()	{
 	createTowerGroup();
 	createPath();
 	createTower();
-    printf("\n135\n\n");
+    //  printf("\n135\n\n");
     sput_fail_unless(parse("upgrade r t1")== 1, "upgrade r t1 is valid command");
 	sput_fail_unless(getFirstCommand(getQueue(NULL)) == upgrade, "First command in queue: upgrade");
 	sput_fail_unless(getFirstOption(getQueue(NULL)) == range, "First option in queue: range");
-    printf("\n139\n\n");
+    //printf("\n139\n\n");
     sput_fail_unless(parse("upgrade p t1")== 1, "upgrade p t1 is valid command");
 	sput_fail_unless(getLastCommand(getQueue(NULL)) == upgrade, "Last comand in queue: upgrade");
 	sput_fail_unless(getLastOption(getQueue(NULL)) == power, "Last option in queue: power");
-    printf("\n143\n\n");
+    //printf("\n143\n\n");
     sput_fail_unless(parse("upgrade s t1")== 1, "upgrade s t1 is valid command");
 	sput_fail_unless(getLastCommand(getQueue(NULL)) == upgrade, "Last comand in queue: upgrade");
 	sput_fail_unless(getLastOption(getQueue(NULL)) == speed, "Last option in queue: speed");
 	sput_fail_unless(getFirstCommand(getQueue(NULL)) == upgrade, "First command in queue: upgrade");
 	sput_fail_unless(getFirstOption(getQueue(NULL)) == range, "First option in queue: range");
-    printf("\n149\n\n");
+    //printf("\n149\n\n");
     sput_fail_unless(parse("  ??D--") == 0, "  ??D-- is invalid command");
-    printf("\n151\n\n");
+    //printf("\n151\n\n");
     sput_fail_unless(parse("upgrade r r1") == 0, "upgrade r r1 is invalid command");
-    printf("\n153\n\n");
+    //printf("\n153\n\n");
     sput_fail_unless(parse("upgrade r t") == 0, "upgrade r t is invalid command");
-    printf("\n155\n\n");
+    //printf("\n155\n\n");
     sput_fail_unless(parse("upgrade t") == 0, "upgrade t is invalid command");
-    printf("\n157\n\n");
+    //printf("\n157\n\n");
     sput_fail_unless(parse("cat t") == 0, "cat t is invalid command");
-    printf("\n159\n\n");
+    //printf("\n159\n\n");
 
 
 
