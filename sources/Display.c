@@ -1,89 +1,90 @@
 //
-//  Graphics.c
-//  TEST
+//  Display.c
+//
+//  All functions directly related to displaying the game
+//
 //
 
+#include "../includes/Display.h"
+#include "../includes/parser.h"
+
+//Window dimensions
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
-
-#define INFO_WINDOW_HEIGHT 155
-#define INFO_WINDOW_WIDTH 120
-#define INFO_WINDOW_X 0
-#define INFO_WINDOW_Y 0
+//Information monitor dimensions
+#define INFO_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.2)
+#define INFO_WINDOW_WIDTH (SCREEN_WIDTH / 3.2)
+#define INFO_WINDOW_X (SCREEN_WIDTH - INFO_WINDOW_WIDTH)
+#define INFO_WINDOW_Y (SCREEN_HEIGHT - INFO_WINDOW_HEIGHT)
 #define TEXT_BORDER 10
 #define TOWER_BORDER 20
 #define INFO_WINDOW_TEXTURE_X 0
 #define INFO_WINDOW_TEXTURE_Y 0
 
-
-#include "../includes/Display.h"
-#include "../includes/parser.h"
-
 struct display {
+    //Window objects
     SDL_Window  *window;
     SDL_Surface *background;
+    SDL_Renderer *renderer;
     Uint32 sky, red;
 
-    SDL_Texture *infoWindowTexture;
+    //Information monitor objects
     SDL_Surface *infoWindowSurface;
+    SDL_Texture *infoWindowTexture;
     SDL_Surface *infoWindowTextSurface;
     SDL_Texture *infoWindowTextTexture;
-    
     SDL_Rect  infoWindowRect;
     SDL_Rect  infoWindowTextureRect;
 
+    //Tower objects
     SDL_Surface *towerSurface;
     SDL_Rect     towerRect;
     SDL_Texture *towerTexture;
     
+    //Enemy objects
     SDL_Surface *enemySurface;
     SDL_Rect     enemyRect;
     SDL_Texture *enemyTexture;
 
     SDL_Event event;
-    SDL_Renderer *renderer;
 };
 
-Display init_SDL(){
+//Functions prototypes for functions only used internally
+void initTTF(void);
+TTF_Font *getInfoWindowFont(TTF_Font *font);
+SDL_Surface *getInfoWindowTextSurface(char *outputString);
+void crash(char *message);
 
-    SDL_Init(SDL_INIT_EVERYTHING);
+
+Display init_SDL(){
     
-    if (TTF_Init() != 0) {
-        fprintf(stderr, "TTF_Init() Failed: ");
-    }
-    
-    IMG_Init(0);
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0) crash("SDL_Init()");
+    if(TTF_Init() != 0) crash("TTF_Init()");
+    if(IMG_Init(0) != 0) crash("IMG_Init()");
     
     Display d = (Display)malloc(sizeof(struct display));
-
     d->window = SDL_CreateWindow("TOWER DEFENSE", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-    
     d->renderer = SDL_CreateRenderer(d->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    init_enemy(d, "enemy.png");
-    init_tower(d, "tower.png");
-
     
-    d->infoWindowSurface = IMG_Load("info_window_background.png");
-    check_load_images(d->enemySurface,"info_window_background.png");
-    
+    getDisplayPointer(d);//store display ptr
+
+    d->infoWindowSurface = IMG_Load("info_monitor.png");
     d->infoWindowTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowSurface);
     d->infoWindowRect = (SDL_Rect){INFO_WINDOW_X, INFO_WINDOW_Y, INFO_WINDOW_WIDTH, INFO_WINDOW_HEIGHT};
     
-    getDisplayPointer(d);//store display ptr
+    init_enemy(d, "enemy.png");
+    init_tower(d, "tower.png");
+    check_load_images(d->enemySurface,"info_window_background.png");
     
     TTF_Font *font;
     font = TTF_OpenFont("OpenSans-Regular.ttf", 10);
     if (font == NULL) {
         fprintf(stderr, "TTF_OpenFont() Failed: ");
     }
-    //improves quality of font
-    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
+    TTF_SetFontHinting(font, TTF_HINTING_LIGHT); //improves quality of font
     
     getInfoWindowFont(font);//stores font ptr
-
-    
 
     return d;
 }
@@ -99,6 +100,14 @@ Display getDisplayPointer(Display d)
     
 	return disp;
 }
+
+void crash(char *message) {
+    fprintf(stderr, "%s: %s\n", message, SDL_GetError());
+    SDL_Quit();
+}
+
+
+//Tower and enemy graphics functions
 
 //load an image for an enemy
 void init_enemy(Display d, char *pic_name){
@@ -151,20 +160,15 @@ void shutSDL(Display d){
     SDL_Quit();
 }
 
-
-
-//Info window dimensions //////////////mike
+//End of tower and enemy graphics functions
 
 
 
-//Functions prototypes for functions only used internally by info window
-void initTTF(void);
-TTF_Font *getInfoWindowFont(TTF_Font *font);
-SDL_Surface *getInfoWindowTextSurface(char *outputString);
+//Information window functions
 
 void displayInfoWindow(Display d) {
       //Display empty information window in top left corner of main window
-    SDL_RenderCopy(d->renderer, d->infoWindowTexture,NULL, &(d->infoWindowRect));
+    SDL_RenderCopy(d->renderer, d->infoWindowTexture, NULL, &(d->infoWindowRect));
 }
 
 void updateInfoWindow( char *outputString) {
@@ -229,12 +233,10 @@ SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     
     return textSurface;
 }
+//End of information window functions
 
 
-
-////////////////mike
-
-
+//Terminal functions
 int processEvents(Display d){
 
     int done = 0;
@@ -272,9 +274,6 @@ int processEvents(Display d){
     }
     return done;
 }
-
-
-// andy
 
 
 int terminal_window(Display d, char *pass, char *clear, char * inputCommand)
@@ -369,5 +368,5 @@ char *strdup2(char * s)
     
     return p ? memcpy(p, s, len) : NULL;//if p is non 0 ie malloc worked, then copy everything in s into p and return p. if p is NULL malloc didnt work so return NULL
 }
-
+//End of terminal functions
 
