@@ -9,12 +9,12 @@
 #include "../includes/debug.h"
 
 struct tower {
-	int towerID;
-    int x, y;
-    int damage;
-    int range;
-	int speed;
-    int AOErange; //! not yet implemented
+   int towerID;
+   int x, y;
+   int damage;
+   int range;
+   int speed;
+   int AOErange; //! not yet implemented
 	int AOEpower; //!not yet implemented
 	int firing;
     int targetPosition[2];
