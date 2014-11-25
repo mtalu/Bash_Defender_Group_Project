@@ -3,7 +3,9 @@
 #include <string.h>
 #include <time.h>
 
+
 #include "../includes/sput.h"
+#include "../includes/levelController.h"
 #include "../includes/tower.h"
 #include "./../includes/actionQueueDataStructure.h"
 #include "../includes/parser.h"
@@ -13,15 +15,11 @@
 
 int main()
 {	
-	//testing();
-    
-    createPath();
-    createEnemyGroup();
-    createEnemy();
-    createTowerGroup();
-	createActionQueue();
-	createGame();
-	createTower();
+
+    //testing();
+    initLevel();
+    //createEnemy();
+    //createTower();
     
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
