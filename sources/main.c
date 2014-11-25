@@ -20,7 +20,6 @@ int main()
     //testing();
     initLevel();
     createEnemy();
-    createTower();
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
     char *pass, *clear, *inputCommand=NULL;
@@ -43,6 +42,7 @@ int main()
         present_enemy(d);
         present_tower(d);
         checkActQueue();
+	fire();
         for(int i=1; i<=getNumberOfEnemies(); ++i)
         {
             int move = moveEnemy(i);

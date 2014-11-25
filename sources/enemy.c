@@ -203,8 +203,8 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->y = newEnemy->enemyPath->pathCoords[0][1];
     newEnemy->maxHealth = 100;
     newEnemy->health = newEnemy->maxHealth;
-    newEnemy->armour = 1;
-    newEnemy->speed = 4;
+    newEnemy->armour = 0;
+    newEnemy->speed = 2;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
 	  newEnemy->firedUpon = FALSE;    
