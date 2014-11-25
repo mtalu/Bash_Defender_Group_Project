@@ -46,7 +46,7 @@ struct towerGroup	{
 };
 
 int getTowerDamage(int towerID)	{
-	return getTowerGrp(NULL)->listOfTowers[towerID-1]->damage;
+	return getTowerGrp(NULL)->listOfTowers[towerID]->damage;
 }
 
 void createTowerGroup()	{
@@ -121,7 +121,7 @@ void initialiseNewTower(tower newTow, int TowerPositionX, int TowerPositionY )
     newTow->x = TowerPositionX;
     newTow->y = TowerPositionY;
     newTow->damage = 10;
-    newTow->range = 10;
+    newTow->range = 1000;
     newTow->firing = 0;
 	newTow->level = 1;
     newTow->speed = 10;
@@ -156,7 +156,7 @@ commandType checkActQueue()
         {
 			case upgrade:
             {
-					if( upgradeTowerStat(stat,target)!=-1 ) 	{
+					if( upgradeTowerStat(stat,target)!= -1 ) 	{
 						return upgrade;
 					}
                     else {
@@ -319,7 +319,7 @@ tower getTowerPointer(tower updatedT) {
  */
 tower getTowerID(int target)	{
 	int i;
-	for( i = 0; i < (getTowerGrp(NULL))->numOfTowers; i++)	{
+	for( i = 1; i <= (getTowerGrp(NULL))->numOfTowers; i++)	{
 		if((getTowerGrp(NULL))->listOfTowers[i]->towerID == target)	{
 				return getTowerGrp(NULL)->listOfTowers[i];
 		}
@@ -347,11 +347,11 @@ void populateTower(tower newTow, int id) {
 void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange, unsigned int towerID)
 {
     TowerGroup towers = getTowerGrp(NULL);
-     *range = towers->listOfTowers[towerID-1]->range;
-     *damage = towers->listOfTowers[towerID-1]->damage;
-     *speed = towers->listOfTowers[towerID-1]->speed;
-     *AOEpower = towers->listOfTowers[towerID-1]->AOEpower;
-     *AOErange = towers->listOfTowers[towerID-1]->AOErange;
+     *range = towers->listOfTowers[towerID]->range;
+     *damage = towers->listOfTowers[towerID]->damage;
+     *speed = towers->listOfTowers[towerID]->speed;
+     *AOEpower = towers->listOfTowers[towerID]->AOEpower;
+     *AOErange = towers->listOfTowers[towerID]->AOErange;
 }
 
 int getTowerX(int towerID)
@@ -368,21 +368,21 @@ int getTowerY(int towerID)
 
 int setTowerY(int towerID, int newY)	{
 
-	getTowerGrp(NULL)->listOfTowers[towerID-1]->y = newY;
+	getTowerGrp(NULL)->listOfTowers[towerID]->y = newY;
 	return newY;
 	
 }
 
 int setTowerRange(int towerID, int newRange)	{
 
-	getTowerGrp(NULL)->listOfTowers[towerID-1]->range = newRange;
+	getTowerGrp(NULL)->listOfTowers[towerID]->range = newRange;
 	return newRange;
 
 }
 
 int setTowerX(int towerID,int newX)	{
 
-	getTowerGrp(NULL)->listOfTowers[towerID-1]->x = newX;
+	getTowerGrp(NULL)->listOfTowers[towerID]->x = newX;
 	return newX;
 
 }
@@ -426,13 +426,6 @@ void fire() {
 			}
 		}
 	}
-//  if(inRange(t->x, t->y, t->range) == 1) {
-//      t->firing = 1;
-//      getTarget(&t->target[0]);
-//      damageEnemy (t->damage);
-//  } else {
-//      t->firing = 0;
-//  }
 }
 
 
@@ -454,6 +447,9 @@ void present_tower(Display d)
         for(int towerID=1; towerID<=TG->numOfTowers; ++towerID)
         {
             drawTower(d, getTowerX(towerID), getTowerY(towerID), 80, 80);
+	    if(TG->listOfTowers[towerID]->firing)	{
+           	drawLine(d,getTowerX(towerID), getTowerY(towerID), TG->listOfTowers[towerID]->targetPosition[0],TG->listOfTowers[towerID]->targetPosition[1]);     
+	    }
             // 80s for tow width and height - these are constant for now.
         }
 
