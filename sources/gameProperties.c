@@ -73,6 +73,12 @@ int lastAction(GameProperties Game)	{
 		return 0;
 }
 
+void damageHealth(int damage)	{
+
+	getGame(NULL)->health -= damage;
+
+}
+
 void testlastAction()	{
 
 	GameProperties newGame = createGame();
@@ -180,8 +186,8 @@ void TestGetGold()	{
 }
 
 
-int addGold(GameProperties game, int gold)	{
-	
+int addGold(int gold)	{
+	GameProperties game = getGame(NULL);
 	if(gold > 0)	{
 		game->gold+=gold;	
 		return 1;
@@ -194,9 +200,9 @@ void TestAddGold()	{
 
 	GameProperties testGame;
     testGame = createGame();
-	addGold(testGame,100);
+	addGold(100);
 	sput_fail_unless(getGold(testGame) == 100,"Adding Gold");
-	sput_fail_unless(addGold(testGame,-100) == 0,"Adding Negative Gold");
+	sput_fail_unless(addGold(-100) == 0,"Adding Negative Gold");
 	free(testGame);
 }
 

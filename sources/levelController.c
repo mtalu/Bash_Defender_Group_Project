@@ -14,7 +14,7 @@
 
 void initLevel()    {
 
-    createPath();
+    createLevelPaths();
     createTowerGroup();
     createActionQueue();
     createGame();
