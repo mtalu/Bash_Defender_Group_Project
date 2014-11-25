@@ -14,13 +14,13 @@
 
 
 int main()
+
 {	
 
     //testing();
     initLevel();
     createEnemy();
     createTower();
-    setTowerRange(1,10000);
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
     char *pass, *clear, *inputCommand=NULL;
@@ -32,14 +32,14 @@ int main()
     do{
         ++steps;
         startFrame(d);
-        displayInfoWindow(d);
         terminal_window(d, pass, clear,inputCommand);
         if(inputCommand)
         {
             parse(inputCommand);
         }
+        statsMonitor();
+        displayInfoWindow();
         updateInfoWindow(NULL);
-
         present_enemy(d);
         present_tower(d);
         checkActQueue();
@@ -48,7 +48,8 @@ int main()
             int move = moveEnemy(i);
            
         }
-        if(steps%300 == 0){
+        if(steps%3000 == 0)
+        {
             createEnemy();
 	    steps = 0;
         }
@@ -74,6 +75,8 @@ void testing()	{
 	testingTowerModule();
 	parseToTowerTesting();
 	towerToEnemyTesting();
+
+    testValidParses();
 
 
 }
@@ -187,6 +190,7 @@ void testValidParses()	{
 	sput_fail_unless(getLastCommand(getQueue(NULL)) == upgrade, "Last comand in queue: upgrade");
 	sput_fail_unless(getLastOption(getQueue(NULL)) == power, "Last option in queue: power");
     //printf("\n143\n\n");
+
     sput_fail_unless(parse("upgrade s t1")== 1, "upgrade s t1 is valid command");
 	sput_fail_unless(getLastCommand(getQueue(NULL)) == upgrade, "Last comand in queue: upgrade");
 	sput_fail_unless(getLastOption(getQueue(NULL)) == speed, "Last option in queue: speed");
@@ -203,6 +207,7 @@ void testValidParses()	{
     //printf("\n157\n\n");
     sput_fail_unless(parse("cat t") == 0, "cat t is invalid command");
     //printf("\n159\n\n");
+
 
 
 

@@ -37,6 +37,7 @@ int parse(char *inputString)
     testCommandArray(commandArray, numberOfChunks);
 #endif
     //enumerated type commandType can describe each of the possible commands(see actionQueue.h)
+
     commandType action = getAction(commandArray[0]);//the first string in the command should contain the action
     
     if(action==commandError)//if getAction returns commandError then the input is invalid
@@ -49,8 +50,6 @@ int parse(char *inputString)
     testGetAction(action);
 #endif
     int specificReturns=0;//stores return values of the different functions that execute the commands
-    
-
     /**** Now we deal with each possible command separately as they all have different syntax ****/
     switch (action)
     {
@@ -81,7 +80,6 @@ int parse(char *inputString)
         case execute:
         case set:
         default:
-
             fprintf(stderr,"\n***parsing not implemented yet returning***\n");
             freeCommandArray(commandArray, numberOfChunks);
             return 0;
@@ -89,7 +87,7 @@ int parse(char *inputString)
     
 }
 
-/* calls man printing functions 
+/* calls man printing functions
  returns 1 if ok
  returns 0 if error and prints message
  */
@@ -132,10 +130,9 @@ int parseMan(char * inputStringCommandMan)
     }
 }
 
-/*  Called when we read cat cmd. Gets target and prints to infoWindow
- returns 1 sucessful
- returns 0 if  not succesful
- */
+
+
+
 int parseCat(char * inputStringTargeting)
 {
     //looks for tower type target:
@@ -161,14 +158,11 @@ int parseCat(char * inputStringTargeting)
     gets stat and target and pushes to queue
     returns 1 if cmd was probably successfully pushed to queue
     returns 0 if definately not succesful or if target or stat call failed
-    
- */
+*/
+
 int parseUpgrade(char ** commandArray, int numberOfChunks)
 {
     upgradeStat statToUpgrade = getUpgradeStats(commandArray[1]);
-#if ENABLE_TESTING
-    testGetUpgradeStat(statToUpgrade);
-#endif
     
     int target = getTargetTower(commandArray[2]);
     
@@ -179,10 +173,7 @@ int parseUpgrade(char ** commandArray, int numberOfChunks)
             //push to queue returns number of items on queue
             return 1;
     }
-  
     return 0;
-   
-
 }
 
 /*  called on cat and upgrade commands with the target specifying token.
@@ -230,7 +221,6 @@ unsigned int getTargetTower(const char * inputStringTargeting)
 }
 
 /*Called when we read an upgrade command, tests the next token against the possible stats 
- 
  returns the corresponding upgradeStat Or
  returns statError  and calls the upgradeStatUsageError function
  */

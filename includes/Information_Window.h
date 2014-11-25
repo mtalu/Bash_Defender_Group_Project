@@ -17,5 +17,6 @@ void catTower(unsigned int towerIDtoCat);
 void manUpgrade();
 void manCat();
 void manMan();
+void statsMonitor();
 
 #endif

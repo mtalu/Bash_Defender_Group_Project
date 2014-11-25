@@ -10,8 +10,8 @@
 #define TEST_Display_h
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL2_image/SDL_image.h>
 
 #include <stdlib.h>
 
@@ -37,7 +37,7 @@ void shutSDL(Display d);
 //tower
 void init_tower(Display d, char *pic_name);
 void drawTower(Display d, int x, int y, int w, int h);
-
+void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target);
 //enemy
 void init_enemy(Display d, char *pic_name);
 void drawEnemy(Display d, int x, int y, int w, int h);
@@ -52,8 +52,10 @@ TTF_Font *getInfoWindowFont(TTF_Font *font);
 #include <stdio.h>
 #include "Information_Window.h"
 
-void displayInfoWindow(Display d);
+void displayInfoWindow();
+void displayStatsMonitor();
 void updateInfoWindow( char *outputString);
+void updateStatsMonitor(char *outputString);
 void sendTextToInfoWindow(Display d, char *string);
 char *strdup2(char * s);
 

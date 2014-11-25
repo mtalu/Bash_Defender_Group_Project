@@ -26,7 +26,8 @@ void catTower(unsigned int towerIDtoCat)
     
     char range[10], damage[10], speed[10], AOEdamage[10], AOErange[10];
     
-    sprintf(outputString, "  TOWER %d\n\nRange: ", 1);
+
+    sprintf(outputString, "TOWER %d\n\nRange: ", 1);
     sprintf(range, "%d", iRange);
     sprintf(damage, "%d",iDamage);
     sprintf(speed, "%d", iSpeed);
@@ -59,4 +60,20 @@ void manMan()
 {
     updateInfoWindow("GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n");
 }
+
+void statsMonitor() {
+    int iGold = 10;
+    
+    char outputString[200];
+    
+    char gold[10];
+    
+    sprintf(outputString, "        STATS MONITOR\n\nGold: ");
+    sprintf(gold, "%d", iGold);
+    
+    strcat(outputString, gold);
+    
+    updateStatsMonitor(outputString);
+}
+
 

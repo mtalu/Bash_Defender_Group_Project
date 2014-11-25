@@ -282,6 +282,7 @@ void populateTower(tower newTow, int id) {
 	newTow->level = 1;
     newTow->speed = 50;
 
+
 }
 
 void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange, unsigned int towerID)
