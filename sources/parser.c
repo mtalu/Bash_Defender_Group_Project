@@ -17,119 +17,172 @@
 
 int parse(char *inputString)
 {
-    size_t len = 1+strlen(inputString);//gets the size of s
-    if(len<(sizeof(char)*3))
+    size_t len = 1+strlen(inputString);//gets the size of inputString
+    if( len < 3*sizeof(char)  )
     {
         actionUsageError();
+        return 0;
     }
 
     int numberOfChunks;
     char **commandArray = breakUpString(inputString, &numberOfChunks, " ");//array of strings, each elem holds a token from the input command
-    if(numberOfChunks<2|| numberOfChunks>3)
+    int minNumberOfChunks = 2,//as of cat man and upgrade
+        maxNumberOfChunks = 3;//being implemented
+    if( numberOfChunks<minNumberOfChunks || maxNumberOfChunks>3)
     {
+        freeCommandArray(commandArray, numberOfChunks);
         return 0;//no valid commands with less than 2 strings or more than 3
     }
 #if ENABLE_TESTING
     testCommandArray(commandArray, numberOfChunks);
 #endif
     //enumerated type commandType can describe each of the possible commands(see actionQueue.h)
-    
+
     commandType action = getAction(commandArray[0]);//the first string in the command should contain the action
     
     if(action==commandError)//if getAction returns commandError then the input is invalid
     {                //Error messaging handled in getAction function
+        freeCommandArray(commandArray, numberOfChunks);
         return 0;
     }
     
 #if ENABLE_TESTING
     testGetAction(action);
 #endif
-    int parseReturns=0;
+    int specificReturns=0;//stores return values of the different functions that execute the commands
     /**** Now we deal with each possible command separately as they all have different syntax ****/
     switch (action)
     {
-        case upgrade :
+        case upgrade:
+        {
             if(numberOfChunks<3)
             {
                 actionUsageError();
+                freeCommandArray(commandArray, numberOfChunks);
                 return 0;
             }
-            parseReturns = parseUpgrade(commandArray, numberOfChunks);
-            return parseReturns;
+            specificReturns = parseUpgrade(commandArray, numberOfChunks);
+            freeCommandArray(commandArray, numberOfChunks);
+            return specificReturns;//0 for error
+        }
         case cat:
-            parseReturns = parseCat(commandArray[1]);
-            return parseReturns;
+        {
+            specificReturns = parseCat(commandArray[1]);
+            freeCommandArray(commandArray, numberOfChunks);
+            return specificReturns;//0 for error
+        }
         case man:
-            parseReturns = parseMan(commandArray[1]);
-            return parseReturns;
+        {
+            specificReturns = parseMan(commandArray[1]);
+            freeCommandArray(commandArray, numberOfChunks);
+            return specificReturns;//0 for error
+        }
         case execute:
         case set:
         default:
-
             fprintf(stderr,"\n***parsing not implemented yet returning***\n");
+            freeCommandArray(commandArray, numberOfChunks);
             return 0;
     }
     
-    
-    
-    freeCommandArray(commandArray, numberOfChunks);
 }
 
-
+/* calls man printing functions
+ returns 1 if ok
+ returns 0 if error and prints message
+ */
 int parseMan(char * inputStringCommandMan)
 {
     commandType commandToMan = getAction(inputStringCommandMan);
-    
-    //man(commandToMan);
-    return 0;
-    
-    
+    switch (commandToMan)
+    {
+        case upgrade:
+        {
+            manUpgrade();
+            return 1;
+        }
+        case cat:
+        {
+            manCat();
+            return 1;
+        }
+        case man:
+        {
+            //manMan();
+            return 1;//0 for error
+        }
+        case execute:
+        {
+            //manExecute();
+            return 1;
+        }
+        case set:
+        {
+            //manSet();
+            return 1;
+        }
+        default:
+            fprintf(stderr,"\n*** Man Command Error ***\n");
+            fprintf(stderr,"second command not recognised \n");
+            fprintf(stderr,"you entered: %s\n",inputStringCommandMan);
+            actionUsageError();
+            return 0;
+    }
 }
+
+
 
 
 int parseCat(char * inputStringTargeting)
 {
-    if(inputStringTargeting[0]=='t' || inputStringTargeting[0]=='T')
+    //looks for tower type target:
+    if( inputStringTargeting[0]=='t' || inputStringTargeting[0]=='T' )
     {
         unsigned int targetTower = getTargetTower(inputStringTargeting);
-        if(targetTower!=0)
+        if(targetTower)
         {
-            catTower(targetTower);
+            catTower(targetTower);//function in Information_Window.c
             return 1;
         }
         else
             return 0;
     }
+    //can we also cat other things eg enemies?
+    //for now
     else
         return 0;
-    //can we also cat other things eg enemies?
     
 }
 
+/*  Called when we read upgrade cmd.
+    gets stat and target and pushes to queue
+    returns 1 if cmd was probably successfully pushed to queue
+    returns 0 if definately not succesful or if target or stat call failed
+*/
+
 int parseUpgrade(char ** commandArray, int numberOfChunks)
 {
-    
     upgradeStat statToUpgrade = getUpgradeStats(commandArray[1]);
-#if ENABLE_TESTING
-    testGetUpgradeStat(statToUpgrade);
-#endif
     
     int target = getTargetTower(commandArray[2]);
     
     if(target!=0 && statToUpgrade!=statError )
     {
         commandType action = upgrade;
-        pushToQueue(getQueue(NULL),action,statToUpgrade,target);
-        return 1;
+        if(pushToQueue(getQueue(NULL),action,statToUpgrade,target)>=1)
+            //push to queue returns number of items on queue
+            return 1;
     }
-    else
-    {
-        return 0;
-    }
-
+    return 0;
 }
 
-
+/*  called on cat and upgrade commands with the target specifying token.
+    looks at the 2nd char in the string to find an int 1-9 to be the target.
+    Note, wont work for anything > 9, would just see 1.
+    Will print its own error message.
+    Returns TargetTowerID if sucessful
+    Returns 0 if error
+ */
 unsigned int getTargetTower(const char * inputStringTargeting)
 {
     unsigned int numberOfTowers = getNumberOfTowers();//getNumberOfTowers(); this is func in tower.c
@@ -137,7 +190,7 @@ unsigned int getTargetTower(const char * inputStringTargeting)
     size_t len = strlen(inputStringTargeting);//gets the size of string
     if( len<(2*sizeof(char)) )
     {
-        fprintf(stderr,"*** ERROR: You must target a tower with this command ***\n");
+        fprintf(stderr,"*** SYNTAX ERROR: You must target a tower with this command ***\n");
         fprintf(stderr,"to target a tower enter t followed by a number 1 - %d \n",numberOfTowers);
         return 0;
     }
@@ -167,7 +220,10 @@ unsigned int getTargetTower(const char * inputStringTargeting)
     return targetTower;
 }
 
-
+/*Called when we read an upgrade command, tests the next token against the possible stats 
+ returns the corresponding upgradeStat Or
+ returns statError  and calls the upgradeStatUsageError function
+ */
 upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 {
     /*first lets make an array of strings to hold all the possible action commands*/
@@ -208,7 +264,7 @@ upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
     
     if(statToUpgrade==statError)//if it is still set to ERROR then the user made a mistake
     {
-        upgrageStatUsageError(statToUpgrade, validUpgradeStats, numberOfStats);
+        upgrageStatUsageError(inputStringUpgradeStats, statToUpgrade, validUpgradeStats, numberOfStats);
     }
     free(validUpgradeStats);//free the mallocd array
     return statToUpgrade;
@@ -218,12 +274,13 @@ upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 
 
 /* if there was a syntax error in the users command call this function which will print usage advice to the terminal window*/
-void upgrageStatUsageError(upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats)
+void upgrageStatUsageError(const char * inputStringUpgradeStats, upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats)
 {
     if(statToUpgrade==statError)//if it is still set to ERROR then the user made a mistake
     {
         fprintf(stderr,"*** stat not recognised ***\n");
-        fprintf(stderr,"Possible stats: \n");
+        fprintf(stderr,"You entered: %s\n",inputStringUpgradeStats);
+        fprintf(stderr,"These are the possible stats: \n");
         for(int i=0; i<numberOfStats; ++i)
         {
             fprintf(stderr,"%s\n",validUpgradeStats[i]);
@@ -237,7 +294,9 @@ void upgrageStatUsageError(upgradeStat statToUpgrade, const char ** validUpgrade
 
 
 
-/* Takes the first string of the input command and tests it against the correct syntax to find which command they want to execute then returns that command as a enum commandType variable  */
+/* Takes the first string of the input command and tests it against the correct syntax to find which command they want to execute then returns that command as a enum commandType variable 
+    Returns commandType correspodning to the validated command 
+    or a commandError commandType*/
 commandType getAction( const char * inputAction )
 {
     /*first lets make an array of strings to hold all the possible action commands*/

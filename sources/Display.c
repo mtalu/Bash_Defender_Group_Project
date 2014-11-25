@@ -9,8 +9,8 @@
 #include "../includes/parser.h"
 
 //Window dimensions
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 940
+#define SCREEN_HEIGHT 780
 
 //Information monitor dimensions
 #define INFO_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.5)
@@ -82,7 +82,6 @@ Display init_SDL(){
     d->window = SDL_CreateWindow("TOWER DEFENSE", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     d->renderer = SDL_CreateRenderer(d->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     
-    getDisplayPointer(d);//store display ptr
 
     d->infoWindowSurface = IMG_Load("info_monitor.png");
     d->infoWindowTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowSurface);
@@ -101,16 +100,20 @@ Display init_SDL(){
     init_tower(d, "tower.png");
     check_load_images(d->enemySurface,"info_window_background.png");
     
+
+    getDisplayPointer(d);//store display ptr
+    
     TTF_Font *font;
     font = TTF_OpenFont("OpenSans-Regular.ttf", 10);
     if (font == NULL) {
         fprintf(stderr, "TTF_OpenFont() Failed: ");
     }
-    
-    TTF_SetFontHinting(font, TTF_HINTING_LIGHT); //improves quality of font
+    //improves quality of font
+    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
     
     getInfoWindowFont(font);//stores font ptr
 
+    
     return d;
 }
 
@@ -161,6 +164,7 @@ void drawTower(Display d, int x, int y, int w, int h){
 }
 
 void startFrame(Display d) {
+    //Display d = getDisplayPointer(NULL);
     SDL_SetRenderDrawColor(d->renderer, 0, 0, 255, 255);
     SDL_RenderClear(d->renderer);
 }
@@ -192,6 +196,11 @@ void shutSDL(Display d){
 
 
 //Information window functions
+
+//Functions prototypes for functions only used internally by info window
+void initTTF(void);
+TTF_Font *getInfoWindowFont(TTF_Font *font);
+SDL_Surface *getInfoWindowTextSurface(char *outputString);
 
 void displayInfoWindow() {
       //Display empty tower monitor in bottom right corner of screen
@@ -286,13 +295,16 @@ TTF_Font *getInfoWindowFont(TTF_Font *font)
     return storedFont;
 }
 
+
 SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     //Create text surface to be displayed in information window
     
     Display d = getDisplayPointer(NULL);
     
     SDL_Surface *textSurface;
-    
+    //TTF_Font *font = getInfoWindowFont(NULL);
+    //    SDL_Color fontColour = { 0xFF, 0xFF, 0xFF };
+
     textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, 130);
     if(textSurface == NULL) crash("getInfoWindowTextSurface()");
     
@@ -409,7 +421,7 @@ void display_text(Display d, char *pass)
     dstrect.x = 50;
     dstrect.y = 450;
     
-    text = TTF_RenderText_Solid(getInfoWindowFont(NULL), pass, text_color);
+    text = TTF_RenderText_Solid(d->infoWindowFont, pass, text_color);
     newtexture = SDL_CreateTextureFromSurface(d->renderer, text);
     //SDL_LockTexture(newtexture, NULL, text->pixels, &text->pitch);
     if(newtexture == NULL)
