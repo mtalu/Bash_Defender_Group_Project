@@ -53,9 +53,83 @@ void createTowerGroup()	{
 
 	TowerGroup Group = (TowerGroup) malloc(sizeof(*Group));
 	getTowerGrp(Group);
-	Group->listOfTowers=NULL;
+	Group->listOfTowers=malloc(sizeof(tower));
 	Group->numOfTowers = 0;
 }
+/* original create tower may be decomissioned in future
+    returns the number of towers if succesful 
+    returns 0 if something goes wrong
+ */
+tower createTower() {
+    getTowerGrp(NULL)->numOfTowers++; //!increased number of towers when one is created
+    getTowerGrp(NULL)->listOfTowers = realloc(getTowerGrp(NULL)->listOfTowers, (getTowerGrp(NULL)->numOfTowers+1)*sizeof(tower));
+    if(getTowerGrp(NULL)->listOfTowers==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower() \n towergroup array realloc failed\n");
+        return 0;
+    }
+    tower t = malloc(sizeof(*t));
+    if(t==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower()\n tower  malloc failed\n");
+        return 0;
+    }
+    getTowerGrp(NULL)->listOfTowers[getTowerGrp(NULL)->numOfTowers] = t;
+    
+    getTowerPointer(t);  //! Should no longer be used.  Functions should ID tower that they wish to target.
+    
+    populateTower(t,getTowerGrp(NULL)->numOfTowers); //! populating tower stats
+	
+
+    return t;
+	//return getTowerGrp(NULL)->numOfTowers;
+    
+}
+/* called when create tower command input by player. Places a tower at the specified x y.
+    returns total number of towers if succesful
+    returns 0 if failled
+ */
+int userCreateTower(int inputTowerPositionX, int inputTowerPositionY)
+{
+    TowerGroup TG = getTowerGrp(NULL);
+
+    TG->numOfTowers++; //!increased number of towers when one is created
+    TG->listOfTowers = realloc(TG->listOfTowers, (TG->numOfTowers+1)*sizeof(tower));
+    if(TG->listOfTowers==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower() \n towergroup array realloc failed\n");
+        return 0;
+    }
+    tower t = malloc(sizeof(*t));
+    if(t==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower()\n tower  malloc failed\n");
+        return 0;
+    }
+    TG->listOfTowers[TG->numOfTowers] = t;
+    initialiseNewTower(t, inputTowerPositionX, inputTowerPositionY);
+    
+    
+    return TG->numOfTowers;
+    
+}
+void initialiseNewTower(tower newTow, int TowerPositionX, int TowerPositionY )
+{
+    TowerGroup TG = getTowerGrp(NULL);
+    
+    newTow->towerID = TG->numOfTowers;//new tower ID is the same as the number of towers in the group
+    newTow->x = TowerPositionX;
+    newTow->y = TowerPositionY;
+    newTow->damage = 10;
+    newTow->range = 10;
+    newTow->firing = 0;
+	newTow->level = 1;
+    newTow->speed = 10;
+    newTow->AOEpower = 10;
+    newTow->AOErange = 10;
+    
+}
+
 
 /*
  * Must be called and created before towers are created.
@@ -145,6 +219,7 @@ int upgradeAOErange(int target)
 	}
 	return 0;
 }
+
 upgradeStat upgradeTowerStat(upgradeStat stat, int target)	{
 
 	switch(stat)	{
@@ -204,22 +279,6 @@ unsigned int getNumberOfTowers()	{
 	return ((getTowerGrp(NULL))->numOfTowers);
 }
 
-tower createTower() {
-	 	
-  		getTowerGrp(NULL)->numOfTowers++; //!increased number of towers when one is created
-		getTowerGrp(NULL)->listOfTowers = realloc(getTowerGrp(NULL)->listOfTowers, getTowerGrp(NULL)->numOfTowers*sizeof(tower));
-	  	tower t = malloc(sizeof(*t));
-   	 	getTowerGrp(NULL)->listOfTowers[getTowerGrp(NULL)->numOfTowers-1] = t;
-
-		getTowerPointer(t);  //! Should no longer be used.  Functions should ID tower that they wish to target.
-		
-   		populateTower(t,getTowerGrp(NULL)->numOfTowers); //! populating tower stats
-	
-   		return t;
-
-	return NULL;
-  
-}
 
 void freeAllTowers()	{
 
@@ -295,18 +354,16 @@ void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange,
      *AOErange = towers->listOfTowers[towerID-1]->AOErange;
 }
 
-int getTowerX() {
-  
-    tower t = getTowerPointer(NULL);
-    
-    return t->x;
+int getTowerX(int towerID)
+{
+    TowerGroup TG = getTowerGrp(NULL);
+    return TG->listOfTowers[towerID]->x;
 }
 
-int getTowerY() {
-  
-    tower t = getTowerPointer(NULL);
-    
-    return t->y;
+int getTowerY(int towerID)
+{
+    TowerGroup TG = getTowerGrp(NULL);
+    return TG->listOfTowers[towerID]->y;
 }
 
 int setTowerY(int towerID, int newY)	{
@@ -391,6 +448,16 @@ void printTower(tower t) {
 
 void present_tower(Display d)
 {
-   drawTower(d, 80, 100, 80, 80);
+    TowerGroup TG = getTowerGrp(NULL);
+    if(TG->numOfTowers>0)
+    {
+        for(int towerID=1; towerID<=TG->numOfTowers; ++towerID)
+        {
+            drawTower(d, getTowerX(towerID), getTowerY(towerID), 80, 80);
+            // 80s for tow width and height - these are constant for now.
+        }
+
+    }
+    
 }
 
