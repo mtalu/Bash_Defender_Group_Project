@@ -137,6 +137,13 @@ void crash(char *message) {
 
 //Tower and enemy graphics functions
 
+
+//damage line from X & Y to X & Y
+void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target){
+    SDL_SetRenderDrawColor(d->renderer, 0,0,0, 255);
+    SDL_RenderDrawLine(d->renderer, X_from, Y_from, X_target, Y_target);
+}
+
 //load an image for an enemy
 void init_enemy(Display d, char *pic_name){
     d->enemySurface = IMG_Load(pic_name);

@@ -3,7 +3,9 @@
 #include <string.h>
 #include <time.h>
 
+
 #include "../includes/sput.h"
+#include "../includes/levelController.h"
 #include "../includes/tower.h"
 #include "./../includes/actionQueueDataStructure.h"
 #include "../includes/parser.h"
@@ -12,17 +14,13 @@
 
 
 int main()
-{
-    
+
+{	
+
     //testing();
-    
-    createPath();
-    createEnemyGroup();
+    initLevel();
     createEnemy();
-    createTowerGroup();
-	createActionQueue();
-	createGame();
-	createTower();
+    createTower();
     
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
@@ -51,11 +49,11 @@ int main()
             int move = moveEnemy(i);
            
         }
-        if(steps%3000 == 0){
-
+        if(steps%3000 == 0)
+        {
             createEnemy();
+	    steps = 0;
         }
-        
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
     

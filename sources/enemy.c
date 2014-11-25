@@ -14,7 +14,7 @@ struct enemy {
     int health;
     int speed;
     int enemyID;
-	BOOL firedUpon;
+    BOOL firedUpon;
     int dead;
 };
 
