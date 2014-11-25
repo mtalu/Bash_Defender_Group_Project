@@ -193,8 +193,11 @@ void shutSDL(Display d){
 
 //Information window functions
 
-void displayInfoWindow(Display d) {
+void displayInfoWindow() {
       //Display empty tower monitor in bottom right corner of screen
+    
+    Display d = getDisplayPointer(NULL);
+    
     SDL_RenderCopy(d->renderer, d->infoWindowTexture, NULL, &(d->infoWindowRect));
 }
 
@@ -211,12 +214,14 @@ void updateInfoWindow( char *outputString) {
     
     if(outputString) {
         string = strdup2(outputString);
+        int ticks = SDL_GetTicks();
+        printf("\n%d", ticks);
     }
     
     Display d = getDisplayPointer(NULL);
     
     //Update information window with new tower information
-    displayInfoWindow(d);
+    displayInfoWindow();
     
     d->infoWindowTextSurface = getInfoWindowTextSurface(string);
     d->infoWindowTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowTextSurface);
@@ -262,9 +267,11 @@ void sendTextToInfoWindow(Display d, char *string) {
     int textW = 0;
     int textH = 0;
     SDL_QueryTexture(d->infoWindowTextTexture, NULL, NULL, &textW, &textH);
+    SDL_Rect dstrect = {INFO_WINDOW_X + TEXT_BORDER_X, INFO_WINDOW_Y + TEXT_BORDER_Y, textW, textH};
+    SDL_Rect srcrect = {0, 0, textW, textH};
 
-    displayInfoWindow(d);
-    SDL_RenderCopy(d->renderer, d->infoWindowTextTexture,  &(d->infoWindowTextureRect) , &(d->infoWindowRect) );
+    displayInfoWindow();
+    SDL_RenderCopy(d->renderer, d->infoWindowTextTexture,  &srcrect, &dstrect);
 }
 
 TTF_Font *getInfoWindowFont(TTF_Font *font)
@@ -286,7 +293,7 @@ SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     
     SDL_Surface *textSurface;
     
-    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, INFO_WINDOW_WIDTH - TEXT_BORDER_X);
+    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, 130);
     if(textSurface == NULL) crash("getInfoWindowTextSurface()");
     
     return textSurface;
@@ -359,7 +366,6 @@ int terminal_window(Display d, char *pass, char *clear, char * inputCommand)
             {
                 if(event->key.keysym.sym == SDLK_RETURN)
                 {
-                    printf("%s\n", pass);
                     if(strcmp(pass, clear) != 0)
                     {
                         display_text(d, pass);
@@ -367,7 +373,6 @@ int terminal_window(Display d, char *pass, char *clear, char * inputCommand)
                     // inputCommand = strdup2(pass);
                     
                     pass2 = pass + 2;
-                    printf("testing %s", pass2);
                     parse(pass2);
                     
                     strcpy(pass, clear);

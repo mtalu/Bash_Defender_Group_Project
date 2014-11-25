@@ -14,7 +14,7 @@
 int main()
 {
     
-    //testing();
+    testing();
     
     createPath();
     createEnemyGroup();
@@ -40,9 +40,9 @@ int main()
         {
             parse(inputCommand);
         }
-        updateInfoWindow(NULL);
         statsMonitor();
-
+        displayInfoWindow();
+        updateInfoWindow(NULL);
         present_enemy(d);
         present_tower(d);
         checkActQueue();
