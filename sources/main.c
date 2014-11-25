@@ -19,8 +19,8 @@ int main()
     //testing();
     initLevel();
     createEnemy();
-    //createTower();
-    
+    createTower();
+    setTowerRange(1,10000);
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
     char *pass, *clear, *inputCommand=NULL;
