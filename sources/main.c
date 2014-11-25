@@ -18,7 +18,7 @@ int main()
 
     //testing();
     initLevel();
-    //createEnemy();
+    createEnemy();
     //createTower();
     
     char text[128] = {'>', '>'};
@@ -48,10 +48,10 @@ int main()
             int move = moveEnemy(i);
            
         }
-        if(steps%3000 == 0){
+        if(steps%300 == 0){
             createEnemy();
+	    steps = 0;
         }
-        
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
     
