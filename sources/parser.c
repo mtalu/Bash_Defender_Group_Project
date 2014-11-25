@@ -25,7 +25,8 @@ int parse(char *inputString)
     }
 
     int numberOfChunks;
-    char **commandArray = breakUpString(inputString, &numberOfChunks, " ");//array of strings, each elem holds a token from the input command
+    char **commandArray = breakUpString(inputString, &numberOfChunks, " ");
+    //array of strings, each elem holds a token string from the input command
     int minNumberOfChunks = 2,//as of cat man and upgrade
         maxNumberOfChunks = 3;//being implemented
     if( numberOfChunks<minNumberOfChunks || maxNumberOfChunks>3)
@@ -96,7 +97,16 @@ int parse(char *inputString)
 
 int parseMktwr(char ** commandArray)
 {
-    return 0;
+    int inputTowerPositionX = (int)strtol(commandArray[1], NULL, 10),//http://www.cplusplus.com/reference/cstdlib/strtol/
+        inputTowerPositionY = (int)strtol(commandArray[2], NULL, 10);
+    
+    if(inputTowerPositionX==0 || inputTowerPositionY==0)
+    {
+        //syntax error
+        return 0;
+    }
+    
+    
 }
 /* calls man printing functions
  returns 1 if ok

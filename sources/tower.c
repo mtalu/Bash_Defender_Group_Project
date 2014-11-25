@@ -455,8 +455,8 @@ void present_tower(Display d)
         {
             drawTower(d, getTowerX(towerID), getTowerY(towerID), 80, 80);
             // 80s for tow width and height - these are constant for now.
+            
         }
-
     }
     
 }
