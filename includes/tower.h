@@ -11,6 +11,11 @@ typedef struct towerGroup *TowerGroup;
 
 tower createTower();
 int upgradeDmg(int target);
+int upgradeRange(int target);
+int upgradeSpeed(int target);
+int upgradeAOEpower(int target);
+int upgradeAOErange(int target);
+
 void createTowerGroup();
 TowerGroup getTowerGrp();
 tower getTowerID(int target);

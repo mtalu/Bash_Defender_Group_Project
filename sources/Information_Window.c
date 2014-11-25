@@ -14,7 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void catTower(unsigned int towerIDtoCat) {
+
+void catTower(unsigned int towerIDtoCat)
+{
     printf("tow id %d",towerIDtoCat);
     int iRange, iDamage, iSpeed, iAOEpower, iAOErange;
        //Create output string with tower information and send to graphics module
@@ -42,5 +44,19 @@ void catTower(unsigned int towerIDtoCat) {
     strcat(outputString, AOErange);
     
     updateInfoWindow(outputString);
+}
+
+void manUpgrade()
+{
+    updateInfoWindow("GENERAL COMMANDS MANUAL: upgrade\n type ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3");
+}
+
+void manCat()
+{
+    updateInfoWindow("GENERAL COMMANDS MANUAL: cat \n type ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n");
+}
+void manMan()
+{
+    updateInfoWindow("GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n");
 }
 

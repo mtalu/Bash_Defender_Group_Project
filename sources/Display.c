@@ -310,7 +310,6 @@ int terminal_window(Display d, char *pass, char *clear, char * inputCommand)
                     // inputCommand = strdup2(pass);
                     
                     pass2 = pass + 2;
-                    printf("testing %s", pass2);
                     parse(pass2);
                     
                     strcpy(pass, clear);

@@ -71,32 +71,37 @@ TowerGroup getTowerGrp(TowerGroup Group)	{
 	return newGroup;
 }
 
-commandType checkActQueue()	{
-
+commandType checkActQueue()
+{
 	commandType cmd;
 	upgradeStat stat;
 	int target;
-	if (popFromQueue(getQueue(NULL),&cmd,&stat,&target,getGame(NULL),10)) {
-		switch (cmd)	{
+	if (popFromQueue(getQueue(NULL),&cmd,&stat,&target,getGame(NULL),10))
+    {
+		switch (cmd)
+        {
 			case upgrade:
-					if(upgradeTowerStat(stat,target))	{
+            {
+					if( upgradeTowerStat(stat,target)!=-1 ) 	{
 						return upgrade;
-					} else {
+					}
+                    else {
 						return 0;
 					}
-					break;
+            }
 			case execute:
 					return execute;
 					break;
 			default:	
-					fprintf(stderr,"unrecognised command");
+					fprintf(stderr,"checkActQueue tower.c: unrecognised command\n");
 					break;
 		}
 	}
 	return 0;
 }
 
-int upgradeDmg(int target)	{
+int upgradeDmg(int target)
+{
 	
 	tower upgradeT;
 	if((upgradeT = getTowerID(target))!= NULL)	{
@@ -104,35 +109,80 @@ int upgradeDmg(int target)	{
 	}
 	return 0;
 }
-
-upgradeStat upgradeTowerStat(upgradeStat stat,int target)	{
+int upgradeRange(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->range++;
+	}
+	return 0;
+}
+int upgradeSpeed(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->speed++;
+	}
+	return 0;
+}
+int upgradeAOEpower(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->AOEpower++;
+	}
+	return 0;
+}
+int upgradeAOErange(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->AOErange++;
+	}
+	return 0;
+}
+upgradeStat upgradeTowerStat(upgradeStat stat, int target)	{
 
 	switch(stat)	{
 		case power:
+        {
 			if(upgradeDmg(target))	{
 				return power;
 			}
-			return 0;
-			break;
+        }
 		case range:
-
-			break;
+        {
+			if(upgradeRange(target))	{
+				return range;
+			}
+        }
 		case speed:
-
-			break;
+        {
+			if(upgradeSpeed(target))	{
+				return speed;
+			}
+        }
 		case AOErange:
-
-			break;
+        {
+			if(upgradeAOErange(target))	{
+				return AOErange;
+			}
+        }
 		case AOEpower:
-
-			break;
+        {
+			if(upgradeAOEpower(target))	{
+				return AOEpower;
+			}
+        }
 		default:
-			return 0;
-			fprintf(stderr,"unrecognised stat");
-			break;
-	}
+			fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
+            return statError;
 
-	return 0;
+	}
 }
 
 
@@ -230,6 +280,8 @@ void populateTower(tower newTow, int id) {
     newTow->range = 10;
     newTow->firing = 0;
 	newTow->level = 1;
+    newTow->speed = 50;
+
 }
 
 void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange, unsigned int towerID)
