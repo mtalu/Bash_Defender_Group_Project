@@ -35,7 +35,7 @@ int main()
     do{
         ++steps;
         startFrame(d);
-        terminal_window(d, pass, clear, inputCommand);
+        terminal_window(d, pass, clear,inputCommand);
         if(inputCommand)
         {
             parse(inputCommand);
