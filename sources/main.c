@@ -49,10 +49,10 @@ int main()
             int move = moveEnemy(i);
            
         }
-        if(steps%3000 == 0)
+        if(steps%100 == 0)
         {
+            userCreateTower(rand()%940, rand()%780);
             createEnemy();
-	    steps = 0;
         }
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));

@@ -10,6 +10,9 @@ typedef struct tower *tower;
 typedef struct towerGroup *TowerGroup;
 
 tower createTower();
+void initialiseNewTower(tower newTow, int TowerPositionX, int TowerPositionY );
+int userCreateTower(int inputTowerPositionX, int inputTowerPositionY);
+
 int upgradeDmg(int target);
 int upgradeRange(int target);
 int upgradeSpeed(int target);
@@ -22,8 +25,8 @@ tower getTowerID(int target);
 tower getTowerPointer(tower updatedT);
 void populateTower(tower newTow, int id);
 int getRange();
-int getTowerX();
-int getTowerY();
+int getTowerX(int towerID);
+int getTowerY(int towerID);
 int isFiring();
 int firingX();
 int firingY();

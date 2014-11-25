@@ -33,9 +33,7 @@ int parse(char *inputString)
         freeCommandArray(commandArray, numberOfChunks);
         return 0;//no valid commands with less than 2 strings or more than 3
     }
-#if ENABLE_TESTING
-    testCommandArray(commandArray, numberOfChunks);
-#endif
+
     //enumerated type commandType can describe each of the possible commands(see actionQueue.h)
 
     commandType action = getAction(commandArray[0]);//the first string in the command should contain the action
@@ -46,9 +44,7 @@ int parse(char *inputString)
         return 0;
     }
     
-#if ENABLE_TESTING
-    testGetAction(action);
-#endif
+
     int specificReturns=0;//stores return values of the different functions that execute the commands
     /**** Now we deal with each possible command separately as they all have different syntax ****/
     switch (action)
@@ -77,6 +73,17 @@ int parse(char *inputString)
             freeCommandArray(commandArray, numberOfChunks);
             return specificReturns;//0 for error
         }
+        case mktwr:
+        {
+            if(numberOfChunks<3)
+            {
+                freeCommandArray(commandArray, numberOfChunks);
+                return 0;
+            }
+            specificReturns = parseMktwr(commandArray);
+            freeCommandArray(commandArray, numberOfChunks);
+            return specificReturns;//0 for error
+        }
         case execute:
         case set:
         default:
@@ -87,6 +94,10 @@ int parse(char *inputString)
     
 }
 
+int parseMktwr(char ** commandArray)
+{
+    return 0;
+}
 /* calls man printing functions
  returns 1 if ok
  returns 0 if error and prints message
@@ -119,6 +130,10 @@ int parseMan(char * inputStringCommandMan)
         case set:
         {
             //manSet();
+            return 1;
+        }
+        case mktwr:
+        {
             return 1;
         }
         default:
@@ -210,13 +225,7 @@ unsigned int getTargetTower(const char * inputStringTargeting)
                 numberOfTowers,targetTower);
         return 0;
     }
-#if ENABLE_TESTING
-    printf(">>>>>>>>>>>In getTargetTower\n");
-    printf(">>>>>>>>>>>string: %s\n", inputStringTargeting);
-    printf(">>>>>>>>>>>char to return: %c\n", inputStringTargeting[1]);
-    printf(">>>>>>>>>>>int to return: %d\n", targetTower);
-#endif
-    
+
     return targetTower;
 }
 
@@ -301,13 +310,14 @@ commandType getAction( const char * inputAction )
 {
     /*first lets make an array of strings to hold all the possible action commands*/
     const char **validActions;
-    int numberOfActions=5;//have 5 action commands at this time: upgrade, execute, set, man, cat
+    int numberOfActions=6;//have 5 action commands at this time: upgrade, execute, set, man, cat
     validActions=(const char **)malloc(numberOfActions*sizeof(char*));//array of $[numberOfActions] strings
     validActions[0]="upgrade";
     validActions[1]="execute";
     validActions[2]="set";
     validActions[3]="man";
     validActions[4]="cat";
+    validActions[5]="mktwr";
     //now test the input string against all valid actions
     commandType action = commandError;
     for(int i=0; i<numberOfActions; ++i)
@@ -331,6 +341,9 @@ commandType getAction( const char * inputAction )
                 case 4:
                     action = cat;
                     return action;
+                case 5:
+                    action = mktwr;
+                    return action;
                 
             }
         }
@@ -350,13 +363,15 @@ commandType getAction( const char * inputAction )
 void actionUsageError()
 {
     const char **validActions;
-    int numberOfActions=5;//have 5 action commands at this time: upgrade, execute, set, man, cat
+    int numberOfActions=6;//have 5 action commands at this time: upgrade, execute, set, man, cat
     validActions=(const char **)malloc(numberOfActions*sizeof(char*));//array of $[numberOfActions] strings
     validActions[0]="upgrade";
     validActions[1]="execute";
     validActions[2]="set";
     validActions[3]="man";
     validActions[4]="cat";
+    validActions[5]="mktwr";
+
     
     fprintf(stderr,"*** Action not recognised ***\n");
     fprintf(stderr,"Possible commands: \n");
@@ -432,13 +447,14 @@ void testGetAction(commandType action)
 {
     /*first lets make an array of strings to hold all the possible action commands*/
     const char **validActions;
-    int numberOfActions=5;//have 5 action commands at this time: upgrade, execute, set, man, cat
+    int numberOfActions=6;//have 5 action commands at this time: upgrade, execute, set, man, cat
     validActions=(const char **)malloc(numberOfActions*sizeof(char*));//array of $[numberOfActions] strings
     validActions[0]="upgrade";
     validActions[1]="execute";
     validActions[2]="set";
     validActions[3]="man";
     validActions[4]="cat";
+    validActions[5]="mktwr";
     printf("****testGetAction****\n");
     printf("read action: %s\n", validActions[action]);
     free(validActions);//free the mallocd array
