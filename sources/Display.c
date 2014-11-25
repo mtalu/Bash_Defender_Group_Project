@@ -17,8 +17,15 @@
 #define INFO_WINDOW_WIDTH (SCREEN_WIDTH / 3.5)
 #define INFO_WINDOW_X (SCREEN_WIDTH - INFO_WINDOW_WIDTH)
 #define INFO_WINDOW_Y (SCREEN_HEIGHT - INFO_WINDOW_HEIGHT)
-#define TEXT_BORDER_X 15
-#define TEXT_BORDER_Y 15
+#define TEXT_BORDER_X 20
+#define TEXT_BORDER_Y 20
+
+//Stats monitor dimensions
+#define STATS_MONITOR_HEIGHT (SCREEN_HEIGHT / 3.5)
+#define STATS_MONITOR_WIDTH (SCREEN_WIDTH / 4)
+#define STATS_MONITOR_X 0
+#define STATS_MONITOR_Y 0
+
 
 struct display {
     //Window objects
@@ -36,6 +43,14 @@ struct display {
     SDL_Rect  infoWindowTextureRect;
     TTF_Font *infoWindowFont;
     SDL_Color infoWindowFontColour;
+    
+    //Stats monitor objects
+    SDL_Surface *statsMonitor;
+    SDL_Texture *statsMonitorTexture;
+    SDL_Surface *statsMonitorTextSurface;
+    SDL_Texture *statsMonitorTextTexture;
+    SDL_Rect statsMonitorRect;
+    SDL_Rect statsMonitorTextureRect;
 
     //Tower objects
     SDL_Surface *towerSurface;
@@ -75,6 +90,11 @@ Display init_SDL(){
     d->infoWindowFont = TTF_OpenFont("OpenSans-Regular.ttf", 10);
     if(d->infoWindowFont == NULL) crash("TTF_(OpenFont)");
     d->infoWindowFontColour.r = 0x7c, d->infoWindowFontColour.g = 0xfc, d->infoWindowFontColour.b = 0x00;
+    
+    d->statsMonitor = IMG_Load("stats_monitor.png");
+    d->statsMonitorTexture = SDL_CreateTextureFromSurface(d->renderer, d->statsMonitor);
+    d->statsMonitorRect = (SDL_Rect) {STATS_MONITOR_X, STATS_MONITOR_Y, STATS_MONITOR_WIDTH, STATS_MONITOR_HEIGHT};
+    
 
     
     init_enemy(d, "enemy.png");
@@ -174,12 +194,20 @@ void shutSDL(Display d){
 //Information window functions
 
 void displayInfoWindow(Display d) {
-      //Display empty information window in top left corner of main window
+      //Display empty tower monitor in bottom right corner of screen
     SDL_RenderCopy(d->renderer, d->infoWindowTexture, NULL, &(d->infoWindowRect));
 }
 
+void displayStatsMonitor() {
+    //Display empty stats window in top left corner of screen
+    
+    Display d = getDisplayPointer(NULL);
+    
+    SDL_RenderCopy(d->renderer, d->statsMonitorTexture, NULL, &(d->statsMonitorRect));
+}
+
 void updateInfoWindow( char *outputString) {
-    static char * string = "            TOWER MONITOR";
+    static char * string = "         TOWER MONITOR";
     
     if(outputString) {
         string = strdup2(outputString);
@@ -200,6 +228,29 @@ void updateInfoWindow( char *outputString) {
     SDL_Rect dstrect = {INFO_WINDOW_X + TEXT_BORDER_X, INFO_WINDOW_Y + TEXT_BORDER_Y, textW, textH};
     SDL_RenderCopy(d->renderer, d->infoWindowTextTexture, NULL, &dstrect);
 }
+
+void updateStatsMonitor( char *outputString) {
+    static char *string = "         STATS MONITOR";
+    
+    if(outputString) {
+        string = strdup2(outputString);
+    }
+    
+    Display d = getDisplayPointer(NULL);
+    
+    displayStatsMonitor();
+    
+    d->statsMonitorTextSurface = getInfoWindowTextSurface(string);
+    d->statsMonitorTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->statsMonitorTextSurface);
+    
+    //Query text dimensions so text doesn't strech to whole screen
+    int textW = 0;
+    int textH = 0;
+    SDL_QueryTexture(d->statsMonitorTextTexture, NULL, NULL, &textW, &textH);
+    SDL_Rect dstrect = {STATS_MONITOR_X + TEXT_BORDER_X, STATS_MONITOR_Y + TEXT_BORDER_Y, textW, textH};
+    SDL_RenderCopy(d->renderer, d->statsMonitorTextTexture, NULL, &dstrect);
+}
+
 
 void sendTextToInfoWindow(Display d, char *string) {
     //Display any text string in information window

@@ -63,6 +63,7 @@
 		4C901BAC1A23A11600AD6C48 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
 		4C901BAD1A23A11600AD6C48 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		4C9772AE1A1F7F740062517C /* GroupProject_V1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GroupProject_V1; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA84E761A2484B00001658A /* stats_monitor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_monitor.png; path = sources/stats_monitor.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +100,7 @@
 		4C4867381A23B6400078A628 /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				4CA84E761A2484B00001658A /* stats_monitor.png */,
 				4C48673A1A23C2E10078A628 /* info_monitor.png */,
 				4C901B921A23A0AF00AD6C48 /* actionQueueDataStructure.c */,
 				4C901B931A23A0AF00AD6C48 /* Display.c */,

@@ -14,5 +14,6 @@
 
 
 void catTower(unsigned int towerIDtoCat);
+void statsMonitor();
 
 #endif

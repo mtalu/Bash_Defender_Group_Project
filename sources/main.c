@@ -35,13 +35,13 @@ int main()
     do{
         ++steps;
         startFrame(d);
-        displayInfoWindow(d);
         terminal_window(d, pass, clear,inputCommand);
         if(inputCommand)
         {
             parse(inputCommand);
         }
         updateInfoWindow(NULL);
+        statsMonitor();
 
         present_enemy(d);
         present_tower(d);

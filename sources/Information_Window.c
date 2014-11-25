@@ -44,3 +44,19 @@ void catTower(unsigned int towerIDtoCat) {
     updateInfoWindow(outputString);
 }
 
+void statsMonitor() {
+    int iGold = 10;
+    
+    char outputString[200];
+    
+    char gold[10];
+    
+    sprintf(outputString, "        STATS MONITOR\n\nGold: ");
+    sprintf(gold, "%d", iGold);
+    
+    strcat(outputString, gold);
+    
+    updateStatsMonitor(outputString);
+}
+
+
