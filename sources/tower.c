@@ -263,7 +263,7 @@ upgradeStat upgradeTowerStat(upgradeStat stat, int target)	{
 
 void testUpgradeTowerStat()	{
 
-	createPath();
+	createLevelPaths();
 	createTowerGroup();
 	tower t1 = createTower();
 	tower t2 = createTower();
@@ -291,7 +291,7 @@ void freeAllTowers()	{
 
 void testGetTower()	{
 
-	createPath();
+	createLevelPaths();
 	createTowerGroup();
 	createTower();
 	sput_fail_unless(getNumberOfTowers() == 1, "Valid: Number of towers held in group is one.");
