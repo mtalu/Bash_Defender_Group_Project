@@ -60,40 +60,20 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
 char *getDefaultTowerString() {
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
-    char towers[4];
     
-    sprintf(outputString, "TOWER MONITOR\n\nActive Towers: ");
-    sprintf(towers, "%d", getNumberOfTowers());
-    
-    strcat(outputString, towers);
+    sprintf(outputString, "TOWER MONITOR\n\nActive Towers: %d", getNumberOfTowers());
     
     return outputString;
 }
 
 char *getTowerString(unsigned int targetTower) {
     
-    int iRange, iDamage, iSpeed, iAOEpower, iAOErange;
-    getStats(&iRange,&iDamage,&iSpeed,&iAOEpower,&iAOErange, targetTower);
+    int range, damage, speed, AOEpower, AOErange;
+    getStats(&range, &damage, &speed, &AOEpower, &AOErange, targetTower);
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
-    char range[4], damage[4], speed[4], AOEdamage[4], AOErange[4];
     
-    sprintf(outputString, "TOWER %d\n\nRange: ", targetTower);
-    sprintf(range, "%d", iRange);
-    sprintf(damage, "%d",iDamage);
-    sprintf(speed, "%d", iSpeed);
-    sprintf(AOEdamage, "%d",iAOEpower);
-    sprintf(AOErange, "%d", iAOErange);
-
-    strcat(outputString, range);
-    strcat(outputString, "\nDamage : ");
-    strcat(outputString, damage);
-    strcat(outputString, "\nSpeed: ");
-    strcat(outputString, speed);
-    strcat(outputString, "\nAOE damage: ");
-    strcat(outputString, AOEdamage);
-    strcat(outputString, "\nAOE range: ");
-    strcat(outputString, AOErange);
+    sprintf(outputString, "TOWER %d\n\nRange: %d\nDamage: %d\nAOE Speed: %d\nAOE Power: %d\nAOE Range: %d", targetTower, range, damage, speed, AOEpower, AOErange);
     
     return outputString;
 }
@@ -102,45 +82,16 @@ void statsMonitor() {
     
     GameProperties properties = getGame(NULL);
     
-    int iGold = getGold(properties);
-    int iWaveNumber = getWave(properties);
-    int iHealth = getHealth(properties);
+    int gold = getGold(properties);
+    int waveNumber = getWave(properties);
+    int health = getHealth(properties);
     
-    char outputString[200];
+    char *outputString = malloc(MAX_OUTPUT_STRING);
     
-    char gold[5], waveNumber[5], health[5];
-    
-    sprintf(outputString, "\n               STATS MONITOR\n\nGold: ");
-    sprintf(gold, "%d", iGold);
-    sprintf(waveNumber, "%d", iWaveNumber);
-    sprintf(health, "%d", iHealth);
-    
-    strcat(outputString, gold);
-    strcat(outputString, "\nWave Number: ");
-    strcat(outputString, waveNumber);
-    strcat(outputString, "\nHealth: ");
-    strcat(outputString, health);
+    sprintf(outputString, "\n               STATS MONITOR\n\nGold: %d\nWave Number: %d\nHealth: %d", gold, waveNumber, health);
     
     updateStatsMonitor(outputString);
 }
-
-/*void textToTowerMonitor(char *outputString) {
-    static char *string = NULL;
-    int time = SDL_GetTicks(), timeOfCallSet = 0;
-    static int timeOfCall = 0;
-    
-    if(!timeOfCallSet) {
-        timeOfCall = SDL_GetTicks();
-        string = outputString;
-    }
-    
-    if(time - timeOfCall > 10000) {
-        outputString = getDefaultTowerString();
-    }
-    
-    updateTowerMonitor(outputString);
-    
-}*/
 
 void manUpgrade()
 {

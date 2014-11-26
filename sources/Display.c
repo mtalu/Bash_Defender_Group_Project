@@ -237,15 +237,9 @@ void updateTowerMonitor(char *outputString) {
 void updateStatsMonitor(char *outputString) {
     Display d = getDisplayPointer(NULL);
     
-    static char *string = "           STATS MONITOR";
-    
-    if(outputString) {
-        string = strdup2(outputString);
-    }
-    
     displayStatsMonitor();
     
-    d->statsMonitorTextSurface = getInfoWindowTextSurface(string);
+    d->statsMonitorTextSurface = getInfoWindowTextSurface(outputString);
     d->statsMonitorTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->statsMonitorTextSurface);
     
     //Query text dimensions so text doesn't strech to whole screen
@@ -254,6 +248,7 @@ void updateStatsMonitor(char *outputString) {
     SDL_QueryTexture(d->statsMonitorTextTexture, NULL, NULL, &textW, &textH);
     SDL_Rect dstrect = {STATS_MONITOR_X + STATS_MONITOR_BORDER_X, STATS_MONITOR_Y + STATS_MONITOR_BORDER_Y, textW, textH};
     SDL_RenderCopy(d->renderer, d->statsMonitorTextTexture, NULL, &dstrect);
+    
 }
 
 TTF_Font *getInfoWindowFont(TTF_Font *font)
