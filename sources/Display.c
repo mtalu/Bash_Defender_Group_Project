@@ -217,29 +217,12 @@ void displayStatsMonitor() {
     SDL_RenderCopy(d->renderer, d->statsMonitorTexture, NULL, &(d->statsMonitorRect));
 }
 
-void updateTowerMonitor(char *outputString, int dfault) {
+void updateTowerMonitor(char *outputString) {
     Display d = getDisplayPointer(NULL);
-    
-    int time = SDL_GetTicks();
-    static int timeOfCall = 0;
-    static char *displayString = NULL;
-    static char *displayString2 = NULL;
-    
-    if(dfault) {
-        displayString = outputString;
-    }
-    else {
-        displayString = displayString2 = outputString;
-        timeOfCall = SDL_GetTicks();
-    }
-    
-    if(timeOfCall != 0 && time - timeOfCall < 5000) {
-        displayString = displayString2;
-    }
     
     displayTowerMonitor();
     
-    d->infoWindowTextSurface = getInfoWindowTextSurface(displayString);
+    d->infoWindowTextSurface = getInfoWindowTextSurface(outputString);
     d->infoWindowTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowTextSurface);
     
     //Query text dimensions so text doesn't strech to whole screen
@@ -295,7 +278,7 @@ SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     //TTF_Font *font = getInfoWindowFont(NULL);
     //    SDL_Color fontColour = { 0xFF, 0xFF, 0xFF };
 
-    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, 150);
+    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, TOWER_MONITOR_WIDTH - TOWER_TEXT_BORDER_X);
     if(textSurface == NULL) crash("getInfoWindowTextSurface()");
     
     return textSurface;

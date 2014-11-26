@@ -20,24 +20,45 @@
 #define MAX_OUTPUT_STRING 200
 
 
-void towerMonitor(unsigned int targetTower) {
+void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
+    int time = SDL_GetTicks();
+    static int lastTower = 0, timeOfCall = 0, optionalStringSet = 0;
     char *outputString;
-    int dfault;
+    static char *optionalString = NULL;
     
-    if(targetTower == 0) {
-        outputString = defaultTowerString();
-        dfault = true;
+    if(timeOfCall != 0 && time - timeOfCall < 10000) {
+        if(optionalStringSet) {
+            outputString = optionalString;
+        }
+        else {
+            outputString = getTowerString(lastTower);
+        }
     }
     else {
-        outputString = (towerString(targetTower));
-        dfault = false;
+        if(optionalOutputString == NULL && targetTower) {
+            outputString = getTowerString(targetTower);
+            timeOfCall = SDL_GetTicks();
+            lastTower = targetTower;
+        }
+        else if(optionalOutputString) {
+            outputString = optionalOutputString;
+            timeOfCall = SDL_GetTicks();
+            optionalString = optionalOutputString;
+            optionalStringSet = 1;
+        }
+        else {
+            outputString = getDefaultTowerString();
+        }
     }
     
+    if(time - timeOfCall > 10000) {
+        optionalStringSet = 0;
+    }
     
-    updateTowerMonitor(outputString, dfault);
+        updateTowerMonitor(outputString);
 }
 
-char *defaultTowerString() {
+char *getDefaultTowerString() {
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
     char towers[4];
@@ -50,7 +71,7 @@ char *defaultTowerString() {
     return outputString;
 }
 
-char *towerString(unsigned int targetTower) {
+char *getTowerString(unsigned int targetTower) {
     
     int iRange, iDamage, iSpeed, iAOEpower, iAOErange;
     getStats(&iRange,&iDamage,&iSpeed,&iAOEpower,&iAOErange, targetTower);
@@ -104,24 +125,37 @@ void statsMonitor() {
     updateStatsMonitor(outputString);
 }
 
+/*void textToTowerMonitor(char *outputString) {
+    static char *string = NULL;
+    int time = SDL_GetTicks(), timeOfCallSet = 0;
+    static int timeOfCall = 0;
+    
+    if(!timeOfCallSet) {
+        timeOfCall = SDL_GetTicks();
+        string = outputString;
+    }
+    
+    if(time - timeOfCall > 10000) {
+        outputString = getDefaultTowerString();
+    }
+    
+    updateTowerMonitor(outputString);
+    
+}*/
+
 void manUpgrade()
 {
-    int dfault = false;
-    
-    updateTowerMonitor("GENERAL COMMANDS MANUAL: \nupgrade\n type ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3", dfault);
+    towerMonitor(-1, "GENERAL COMMANDS MANUAL: \n\nupgrade\n\n type ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3");
 }
 
 void manCat()
 {
-    int dfault = false;
     
-    updateTowerMonitor("GENERAL COMMANDS MANUAL: cat \n type ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n", dfault);
+    towerMonitor(-1, "GENERAL COMMANDS MANUAL: cat \n type ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n");
 }
 void manMan()
 {
-    int dfault = false;
-    
-    updateTowerMonitor("GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n", dfault);
+    towerMonitor(-1, "GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n");
 }
 
 

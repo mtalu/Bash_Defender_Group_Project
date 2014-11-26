@@ -50,7 +50,7 @@ TTF_Font *getInfoWindowFont(TTF_Font *font);
 
 void displayTowerMonitor();
 void displayStatsMonitor();
-void updateTowerMonitor(char *outputString, int dfault);
+void updateTowerMonitor(char *outputString);
 void updateStatsMonitor(char *outputString);
 char *strdup2(char * s);
 

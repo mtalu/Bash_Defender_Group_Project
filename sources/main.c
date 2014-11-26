@@ -41,7 +41,7 @@ int main()
             parse(inputCommand);
         }
         statsMonitor();
-        towerMonitor(0);
+        towerMonitor(0, NULL);
         present_enemy(d);
         present_tower(d);
         checkActQueue();

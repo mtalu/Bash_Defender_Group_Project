@@ -11,9 +11,9 @@
 
 #include "../includes/Display.h"
 
-void towerMonitor(unsigned int targetTower);
-char *defaultTowerString();
-char *towerString(unsigned int targetTower);
+void towerMonitor(unsigned int targetTower, char *outputString);
+char *getDefaultTowerString();
+char *getTowerString(unsigned int targetTower);
 void statsMonitor();
 void manUpgrade();
 void manCat();
