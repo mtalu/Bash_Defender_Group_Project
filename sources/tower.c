@@ -9,12 +9,12 @@
 #include "../includes/debug.h"
 
 struct tower {
-	int towerID;
-    int x, y;
-    int damage;
-    int range;
-	int speed;
-    int AOErange; //! not yet implemented
+   int towerID;
+   int x, y;
+   int damage;
+   int range;
+   int speed;
+   int AOErange; //! not yet implemented
 	int AOEpower; //!not yet implemented
 	int firing;
     int targetPosition[2];
@@ -46,16 +46,90 @@ struct towerGroup	{
 };
 
 int getTowerDamage(int towerID)	{
-	return getTowerGrp(NULL)->listOfTowers[towerID-1]->damage;
+	return getTowerGrp(NULL)->listOfTowers[towerID]->damage;
 }
 
 void createTowerGroup()	{
 
 	TowerGroup Group = (TowerGroup) malloc(sizeof(*Group));
 	getTowerGrp(Group);
-	Group->listOfTowers=NULL;
+	Group->listOfTowers=malloc(sizeof(tower));
 	Group->numOfTowers = 0;
 }
+/* original create tower may be decomissioned in future
+    returns the number of towers if succesful 
+    returns 0 if something goes wrong
+ */
+tower createTower() {
+    getTowerGrp(NULL)->numOfTowers++; //!increased number of towers when one is created
+    getTowerGrp(NULL)->listOfTowers = realloc(getTowerGrp(NULL)->listOfTowers, (getTowerGrp(NULL)->numOfTowers+1)*sizeof(tower));
+    if(getTowerGrp(NULL)->listOfTowers==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower() \n towergroup array realloc failed\n");
+        return 0;
+    }
+    tower t = malloc(sizeof(*t));
+    if(t==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower()\n tower  malloc failed\n");
+        return 0;
+    }
+    getTowerGrp(NULL)->listOfTowers[getTowerGrp(NULL)->numOfTowers] = t;
+    
+    getTowerPointer(t);  //! Should no longer be used.  Functions should ID tower that they wish to target.
+    
+    populateTower(t,getTowerGrp(NULL)->numOfTowers); //! populating tower stats
+	
+
+    return t;
+	//return getTowerGrp(NULL)->numOfTowers;
+    
+}
+/* called when create tower command input by player. Places a tower at the specified x y.
+    returns total number of towers if succesful
+    returns 0 if failled
+ */
+int userCreateTower(int inputTowerPositionX, int inputTowerPositionY)
+{
+    TowerGroup TG = getTowerGrp(NULL);
+
+    TG->numOfTowers++; //!increased number of towers when one is created
+    TG->listOfTowers = realloc(TG->listOfTowers, (TG->numOfTowers+1)*sizeof(tower));
+    if(TG->listOfTowers==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower() \n towergroup array realloc failed\n");
+        return 0;
+    }
+    tower t = malloc(sizeof(*t));
+    if(t==NULL)
+    {
+        fprintf(stderr,"ERROR: createTower()\n tower  malloc failed\n");
+        return 0;
+    }
+    TG->listOfTowers[TG->numOfTowers] = t;
+    initialiseNewTower(t, inputTowerPositionX, inputTowerPositionY);
+    
+    
+    return TG->numOfTowers;
+    
+}
+void initialiseNewTower(tower newTow, int TowerPositionX, int TowerPositionY )
+{
+    TowerGroup TG = getTowerGrp(NULL);
+    
+    newTow->towerID = TG->numOfTowers;//new tower ID is the same as the number of towers in the group
+    newTow->x = TowerPositionX;
+    newTow->y = TowerPositionY;
+    newTow->damage = 10;
+    newTow->range = 1000;
+    newTow->firing = 0;
+	newTow->level = 1;
+    newTow->speed = 10;
+    newTow->AOEpower = 10;
+    newTow->AOErange = 10;
+    
+}
+
 
 /*
  * Must be called and created before towers are created.
@@ -71,32 +145,37 @@ TowerGroup getTowerGrp(TowerGroup Group)	{
 	return newGroup;
 }
 
-commandType checkActQueue()	{
-
+commandType checkActQueue()
+{
 	commandType cmd;
 	upgradeStat stat;
 	int target;
-	if (popFromQueue(getQueue(NULL),&cmd,&stat,&target,getGame(NULL),10)) {
-		switch (cmd)	{
+	if (popFromQueue(getQueue(NULL),&cmd,&stat,&target,getGame(NULL),10))
+    {
+		switch (cmd)
+        {
 			case upgrade:
-					if(upgradeTowerStat(stat,target))	{
+            {
+					if( upgradeTowerStat(stat,target)!= -1 ) 	{
 						return upgrade;
-					} else {
+					}
+                    else {
 						return 0;
 					}
-					break;
+            }
 			case execute:
 					return execute;
 					break;
 			default:	
-					fprintf(stderr,"unrecognised command");
+					fprintf(stderr,"checkActQueue tower.c: unrecognised command\n");
 					break;
 		}
 	}
 	return 0;
 }
 
-int upgradeDmg(int target)	{
+int upgradeDmg(int target)
+{
 	
 	tower upgradeT;
 	if((upgradeT = getTowerID(target))!= NULL)	{
@@ -104,41 +183,87 @@ int upgradeDmg(int target)	{
 	}
 	return 0;
 }
+int upgradeRange(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->range++;
+	}
+	return 0;
+}
+int upgradeSpeed(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->speed++;
+	}
+	return 0;
+}
+int upgradeAOEpower(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->AOEpower++;
+	}
+	return 0;
+}
+int upgradeAOErange(int target)
+{
+	
+	tower upgradeT;
+	if((upgradeT = getTowerID(target))!= NULL)	{
+		return upgradeT->AOErange++;
+	}
+	return 0;
+}
 
-upgradeStat upgradeTowerStat(upgradeStat stat,int target)	{
+upgradeStat upgradeTowerStat(upgradeStat stat, int target)	{
 
 	switch(stat)	{
 		case power:
+        {
 			if(upgradeDmg(target))	{
 				return power;
 			}
-			return 0;
-			break;
+        }
 		case range:
-
-			break;
+        {
+			if(upgradeRange(target))	{
+				return range;
+			}
+        }
 		case speed:
-
-			break;
+        {
+			if(upgradeSpeed(target))	{
+				return speed;
+			}
+        }
 		case AOErange:
-
-			break;
+        {
+			if(upgradeAOErange(target))	{
+				return AOErange;
+			}
+        }
 		case AOEpower:
-
-			break;
+        {
+			if(upgradeAOEpower(target))	{
+				return AOEpower;
+			}
+        }
 		default:
-			return 0;
-			fprintf(stderr,"unrecognised stat");
-			break;
-	}
+			fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
+            return statError;
 
-	return 0;
+	}
 }
 
 
 void testUpgradeTowerStat()	{
 
-	createPath();
+	createLevelPaths();
 	createTowerGroup();
 	tower t1 = createTower();
 	tower t2 = createTower();
@@ -154,22 +279,6 @@ unsigned int getNumberOfTowers()	{
 	return ((getTowerGrp(NULL))->numOfTowers);
 }
 
-tower createTower() {
-	 	
-  		getTowerGrp(NULL)->numOfTowers++; //!increased number of towers when one is created
-		getTowerGrp(NULL)->listOfTowers = realloc(getTowerGrp(NULL)->listOfTowers, getTowerGrp(NULL)->numOfTowers*sizeof(tower));
-	  	tower t = malloc(sizeof(*t));
-   	 	getTowerGrp(NULL)->listOfTowers[getTowerGrp(NULL)->numOfTowers-1] = t;
-
-		getTowerPointer(t);  //! Should no longer be used.  Functions should ID tower that they wish to target.
-		
-   		populateTower(t,getTowerGrp(NULL)->numOfTowers); //! populating tower stats
-	
-   		return t;
-
-	return NULL;
-  
-}
 
 void freeAllTowers()	{
 
@@ -182,7 +291,7 @@ void freeAllTowers()	{
 
 void testGetTower()	{
 
-	createPath();
+	createLevelPaths();
 	createTowerGroup();
 	createTower();
 	sput_fail_unless(getNumberOfTowers() == 1, "Valid: Number of towers held in group is one.");
@@ -210,7 +319,7 @@ tower getTowerPointer(tower updatedT) {
  */
 tower getTowerID(int target)	{
 	int i;
-	for( i = 0; i < (getTowerGrp(NULL))->numOfTowers; i++)	{
+	for( i = 1; i <= (getTowerGrp(NULL))->numOfTowers; i++)	{
 		if((getTowerGrp(NULL))->listOfTowers[i]->towerID == target)	{
 				return getTowerGrp(NULL)->listOfTowers[i];
 		}
@@ -230,49 +339,50 @@ void populateTower(tower newTow, int id) {
     newTow->range = 10;
     newTow->firing = 0;
 	newTow->level = 1;
+    newTow->speed = 50;
+
+
 }
 
 void getStats(int *range, int *damage, int *speed, int *AOEpower, int *AOErange, unsigned int towerID)
 {
     TowerGroup towers = getTowerGrp(NULL);
-     *range = towers->listOfTowers[towerID-1]->range;
-     *damage = towers->listOfTowers[towerID-1]->damage;
-     *speed = towers->listOfTowers[towerID-1]->speed;
-     *AOEpower = towers->listOfTowers[towerID-1]->AOEpower;
-     *AOErange = towers->listOfTowers[towerID-1]->AOErange;
+     *range = towers->listOfTowers[towerID]->range;
+     *damage = towers->listOfTowers[towerID]->damage;
+     *speed = towers->listOfTowers[towerID]->speed;
+     *AOEpower = towers->listOfTowers[towerID]->AOEpower;
+     *AOErange = towers->listOfTowers[towerID]->AOErange;
 }
 
-int getTowerX() {
-  
-    tower t = getTowerPointer(NULL);
-    
-    return t->x;
+int getTowerX(int towerID)
+{
+    TowerGroup TG = getTowerGrp(NULL);
+    return TG->listOfTowers[towerID]->x;
 }
 
-int getTowerY() {
-  
-    tower t = getTowerPointer(NULL);
-    
-    return t->y;
+int getTowerY(int towerID)
+{
+    TowerGroup TG = getTowerGrp(NULL);
+    return TG->listOfTowers[towerID]->y;
 }
 
 int setTowerY(int towerID, int newY)	{
 
-	getTowerGrp(NULL)->listOfTowers[towerID-1]->y = newY;
+	getTowerGrp(NULL)->listOfTowers[towerID]->y = newY;
 	return newY;
 	
 }
 
 int setTowerRange(int towerID, int newRange)	{
 
-	getTowerGrp(NULL)->listOfTowers[towerID-1]->range = newRange;
+	getTowerGrp(NULL)->listOfTowers[towerID]->range = newRange;
 	return newRange;
 
 }
 
 int setTowerX(int towerID,int newX)	{
 
-	getTowerGrp(NULL)->listOfTowers[towerID-1]->x = newX;
+	getTowerGrp(NULL)->listOfTowers[towerID]->x = newX;
 	return newX;
 
 }
@@ -316,13 +426,6 @@ void fire() {
 			}
 		}
 	}
-//  if(inRange(t->x, t->y, t->range) == 1) {
-//      t->firing = 1;
-//      getTarget(&t->target[0]);
-//      damageEnemy (t->damage);
-//  } else {
-//      t->firing = 0;
-//  }
 }
 
 
@@ -338,6 +441,19 @@ void printTower(tower t) {
 
 void present_tower(Display d)
 {
-   drawTower(d, 80, 100, 80, 80);
+    TowerGroup TG = getTowerGrp(NULL);
+    if(TG->numOfTowers>0)
+    {
+        for(int towerID=1; towerID<=TG->numOfTowers; ++towerID)
+        {
+            drawTower(d, getTowerX(towerID), getTowerY(towerID), 80, 80);
+	    if(TG->listOfTowers[towerID]->firing)	{
+           	drawLine(d,getTowerX(towerID), getTowerY(towerID), TG->listOfTowers[towerID]->targetPosition[0],TG->listOfTowers[towerID]->targetPosition[1]);     
+	    }
+            // 80s for tow width and height - these are constant for now.
+            
+        }
+    }
+    
 }
 

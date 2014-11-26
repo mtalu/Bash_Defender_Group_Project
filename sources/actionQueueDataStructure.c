@@ -141,7 +141,7 @@ void testPushToQueue()	{
 	sput_fail_unless(getFirstOption(newQueue) == power,"Valid: Top of Queue Option");
 	sput_fail_unless(getLastCommand(newQueue) == execute,"Valid: Last of Queue Command");
 	sput_fail_unless(getLastOption(newQueue) == range,"Valid: Last of Queue Option");
-	addGold(newGame,10);
+	addGold(10);
 	//popFromQueue(newQueue,&nCommand,&nStat,tar,newGame,10);
 
 }
@@ -218,7 +218,7 @@ void testPopFromQueue()	{
 	int needed = 10;
 	GameProperties newGame = createGame();
 	ActionQueueStructure newQueue = createActionQueue();
-	addGold(newGame,10);
+	addGold(10);
 	pushToQueue(newQueue,nCommand,nStat,tar);
 	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: cooldown not ready when trying to pop");
 	delayGame(ACTIONCOOLDOWN);
@@ -227,9 +227,9 @@ void testPopFromQueue()	{
 	pushToQueue(newQueue,nCommand,nStat,tar);
 	delayGame(ACTIONCOOLDOWN);
 	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: Not enough Gold");
-	addGold(newGame,10);
+	addGold(10);
 	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==1, "Valid: Have enough gold");
-	addGold(newGame,10);
+	addGold(10);
 	pushToQueue(newQueue,nCommand,nStat,tar);
 	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: Cooldown not ready");
 	
@@ -252,11 +252,11 @@ void testcheckGold()	{
 
 	GameProperties testGame;
     testGame = createGame();
-	addGold(testGame,10);
+	addGold(10);
 	sput_fail_unless(checkGold(10,testGame) == 1,"boundary Testing enough gold");
 	takeGold(testGame,10);
 	sput_fail_unless(checkGold(50,testGame) == 0,"Testing not enough gold");
-	addGold(testGame,100);
+	addGold(100);
 	sput_fail_unless(checkGold(10,testGame) == 1,"Testing enough gold");
 
 	free(testGame);

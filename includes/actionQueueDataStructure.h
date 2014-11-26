@@ -12,7 +12,8 @@ enum commandType
     execute=1,
     set=2,
     man=3,
-    cat=4
+    cat=4,
+    mktwr=5
 };
 typedef enum commandType commandType;
 

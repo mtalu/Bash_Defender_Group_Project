@@ -24,10 +24,11 @@ void actionUsageError();
 upgradeStat getUpgradeStats(const char * inputStringUpgradeStats);
 int parseUpgrade(char ** commandArray, int numberOfChunks);
 void testGetUpgradeStat(upgradeStat statToUpgrade);
-void upgrageStatUsageError( upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats);
+void upgrageStatUsageError(const char * inputStringUpgradeStats, upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats);
 unsigned int getTargetTower(const char * inputStringTargeting);
 int parseCat(char * inputStringTargeting);
 int parseMan(char * inputStringCommandMan);
+int parseMktwr(char ** commandArray);
 
 
 
