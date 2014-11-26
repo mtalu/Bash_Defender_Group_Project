@@ -40,7 +40,9 @@ void drawTower(Display d, int x, int y, int w, int h);
 void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target);
 //enemy
 void init_enemy(Display d, char *pic_name);
-void drawEnemy(Display d, int x, int y, int w, int h);
+
+void drawEnemy(Display d, int x, int y, int w, int h, double currentHealth, double maxHealth);
+
 
 
 //check

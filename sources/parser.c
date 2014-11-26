@@ -106,6 +106,8 @@ int parseMktwr(char ** commandArray)
         return 0;
     }
     
+
+    return 1;
     
 }
 /* calls man printing functions
@@ -147,11 +149,13 @@ int parseMan(char * inputStringCommandMan)
             return 1;
         }
         default:
+        {
             fprintf(stderr,"\n*** Man Command Error ***\n");
             fprintf(stderr,"second command not recognised \n");
             fprintf(stderr,"you entered: %s\n",inputStringCommandMan);
             actionUsageError();
             return 0;
+        }
     }
 }
 

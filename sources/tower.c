@@ -9,16 +9,21 @@
 #include "../includes/debug.h"
 
 struct tower {
-   int towerID;
-   int x, y;
-   int damage;
-   int range;
-   int speed;
-   int AOErange; //! not yet implemented
-	int AOEpower; //!not yet implemented
-	int firing;
+    int towerID;
+    int x, y;
+    int damage;
+    int range;
+    int speed;
+    int AOErange; //! not yet implemented
+    int AOEpower; //!not yet implemented
+    int targetID;
+    int firing;
     int targetPosition[2];
-	int level;
+    int level;
+    int height;
+    int width;
+    int gunX;
+    int gunY;
 };
 
 void testingTowerModule()	{
@@ -85,6 +90,8 @@ tower createTower() {
 	//return getTowerGrp(NULL)->numOfTowers;
     
 }
+
+
 /* called when create tower command input by player. Places a tower at the specified x y.
     returns total number of towers if succesful
     returns 0 if failled
@@ -113,6 +120,9 @@ int userCreateTower(int inputTowerPositionX, int inputTowerPositionY)
     return TG->numOfTowers;
     
 }
+
+
+
 void initialiseNewTower(tower newTow, int TowerPositionX, int TowerPositionY )
 {
     TowerGroup TG = getTowerGrp(NULL);
@@ -120,13 +130,18 @@ void initialiseNewTower(tower newTow, int TowerPositionX, int TowerPositionY )
     newTow->towerID = TG->numOfTowers;//new tower ID is the same as the number of towers in the group
     newTow->x = TowerPositionX;
     newTow->y = TowerPositionY;
-    newTow->damage = 10;
-    newTow->range = 1000;
+
+    newTow->damage = 3;
+    newTow->range = 200;
     newTow->firing = 0;
-	newTow->level = 1;
+	  newTow->level = 1;
     newTow->speed = 10;
     newTow->AOEpower = 10;
     newTow->AOErange = 10;
+    newTow->height = 80;
+    newTow->width = 80;
+    newTow->gunX = 40;
+    newTow->gunY = 20;
     
 }
 
@@ -415,28 +430,52 @@ void freeTower(tower t) {
 void fire() {
   
 	int enemyID, towerID;
-	for(towerID = 1; towerID <= getNumberOfTowers(); towerID++)	{ 
+
+	for(towerID = 1; towerID <= getNumberOfTowers(); towerID++)	{
+	  tower currentTower = getTowerID(towerID);
+	  currentTower->firing = 0;
+	  
 		for(enemyID = 1; enemyID <= getNumberOfEnemies(); enemyID++)	{
-			if(inRange(getTowerID(towerID)->x, getTowerID(towerID)->y, getTowerID(towerID)->range, enemyID) == 1) {
-				(getTowerID(towerID))->firing = 1;
-				towerGetTargetPos(getTowerID(towerID)->targetPosition,enemyID);	
-				damageEnemy (getTowerID(towerID)->damage,enemyID);
-			} else {
-				(getTowerID(towerID))->firing = 0;
-			}
-		}
-	}
+			if (!isDead(enemyID) ) {
+			  if(inRange(currentTower->x + (currentTower->width/2),
+                         currentTower->y + (currentTower->height/2),
+                         currentTower->range, enemyID) == 1) {
+			      
+                  // if first enemy encountered, fire at it
+                  if(currentTower->firing == 0) {
+                      currentTower->firing = 1;
+                      currentTower->targetID = enemyID;
+                  }
+                  // else, compare with current target to choose closest to end of path
+                  else {
+                      if(distanceToEndOfPath(enemyID) <
+                         distanceToEndOfPath(currentTower->targetID) ) {
+                          currentTower->targetID = enemyID;
+                      }
+                  }
+              }
+            }
+        }
+
+      // now target is assigned, shoot!
+        if(currentTower->firing == 1) {
+            towerGetTargetPos(currentTower->targetPosition, currentTower->targetID);
+            damageEnemy(currentTower->damage, currentTower->targetID);
+        }
+    }
 }
 
 
 void printTower(tower t) {
 
-  printf("tower x = %d, tower y = %d, tower firing = %d", t->x, t->y, t->firing);
-  if(t->firing) {
-    printf(" Tower firing coords x = %d, tower firing coords y = %d ", t->targetPosition[0], t->targetPosition[1]);
-  } else {
-    printf(" ");
-  }
+    printf("tower x = %d, tower y = %d, tower firing = %d", t->x, t->y, t->firing);
+    if(t->firing) {
+        printf(" Tower firing coords x = %d, tower firing coords y = %d ",
+               t->targetPosition[0], t->targetPosition[1]);
+    }
+    else {
+        printf(" ");
+    }
 }
 
 void present_tower(Display d)
@@ -446,14 +485,16 @@ void present_tower(Display d)
     {
         for(int towerID=1; towerID<=TG->numOfTowers; ++towerID)
         {
-            drawTower(d, getTowerX(towerID), getTowerY(towerID), 80, 80);
-	    if(TG->listOfTowers[towerID]->firing)	{
-           	drawLine(d,getTowerX(towerID), getTowerY(towerID), TG->listOfTowers[towerID]->targetPosition[0],TG->listOfTowers[towerID]->targetPosition[1]);     
-	    }
+            tower currentTower = getTowerID(towerID);
+            drawTower(d, currentTower->x, currentTower->y, currentTower->width,
+                      currentTower->height);
+            if(TG->listOfTowers[towerID]->firing == 1)	{
+                drawLine(d, currentTower->x+currentTower->gunX,
+                         currentTower->y+currentTower->gunY, currentTower->targetPosition[0],
+                         currentTower->targetPosition[1]);
+            }
             // 80s for tow width and height - these are constant for now.
-            
         }
     }
-    
 }
 
