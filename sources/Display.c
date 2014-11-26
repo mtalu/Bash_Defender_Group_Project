@@ -9,8 +9,8 @@
 #include "../includes/parser.h"
 
 //Window dimensions
-#define SCREEN_WIDTH 940
-#define SCREEN_HEIGHT 780
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 700
 
 //Information monitor dimensions
 #define INFO_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.5)
@@ -25,6 +25,8 @@
 #define STATS_MONITOR_WIDTH (SCREEN_WIDTH / 4)
 #define STATS_MONITOR_X 0
 #define STATS_MONITOR_Y 0
+
+#define HEALTH 80
 
 
 struct display {
@@ -61,6 +63,9 @@ struct display {
     SDL_Surface *enemySurface;
     SDL_Rect     enemyRect;
     SDL_Texture *enemyTexture;
+    
+    //enemy health
+    SDL_Rect healthBar;
 
     SDL_Event event;
 };
@@ -94,13 +99,14 @@ Display init_SDL(){
     d->statsMonitorTexture = SDL_CreateTextureFromSurface(d->renderer, d->statsMonitor);
     d->statsMonitorRect = (SDL_Rect) {STATS_MONITOR_X, STATS_MONITOR_Y, STATS_MONITOR_WIDTH, STATS_MONITOR_HEIGHT};
     
+    putenv("SDL_VIDEODRIVER=dga");
 
     
-    init_enemy(d, "enemy.png");
+    init_enemy(d, "sdl2-spritesheet-actual.png");
     init_tower(d, "tower.png");
-    check_load_images(d->enemySurface,"info_window_background.png");
     
-
+    check_load_images(d->infoWindowSurface,"info_window_background.png");
+    
     getDisplayPointer(d);//store display ptr
     
     TTF_Font *font;
@@ -113,7 +119,6 @@ Display init_SDL(){
     
     getInfoWindowFont(font);//stores font ptr
 
-    
     return d;
 }
 
@@ -135,14 +140,13 @@ void crash(char *message) {
 }
 
 
-//Tower and enemy graphics functions
-
-
-//damage line from X & Y to X & Y
+//damage line from X & Y to target X Y>
 void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target){
-    SDL_SetRenderDrawColor(d->renderer, 0,0,0, 255);
+    SDL_SetRenderDrawColor(d->renderer, 0, 0, 0, 255);
     SDL_RenderDrawLine(d->renderer, X_from, Y_from, X_target, Y_target);
 }
+
+//Tower and enemy graphics functions
 
 //load an image for an enemy
 void init_enemy(Display d, char *pic_name){
@@ -151,10 +155,29 @@ void init_enemy(Display d, char *pic_name){
     d->enemyTexture = SDL_CreateTextureFromSurface(d->renderer, d->enemySurface);
 }
 
+void init_picture(SDL_Renderer *renderer, SDL_Surface * surface, SDL_Texture *texture, char *pic_name){
+    surface = IMG_Load(pic_name);
+    check_load_images(surface, pic_name);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+}
+
+
 // draw an enemy at x and y coor
-void drawEnemy(Display d, int x, int y, int w, int h){
+void drawEnemy(Display d, int x, int y, int w, int h, double currentHealth, double maxHealth){
+    Uint32 ticks = SDL_GetTicks();
+    Uint32 sprite = (ticks / 100) % 4;
+    SDL_Rect srcrect = { sprite * w, 0, w, h};
     d->enemyRect = (SDL_Rect) {x, y, w, h};
-    SDL_RenderCopy(d->renderer, d->enemyTexture, NULL, &(d->enemyRect));
+    SDL_RenderCopy(d->renderer, d->enemyTexture, &srcrect, &d->enemyRect);
+    
+    double color = (255*((double)currentHealth/maxHealth));
+    printf("%f\n", color);
+    SDL_SetRenderDrawColor(d->renderer, 0, color, 0, 255);
+    double health = ((double)(currentHealth * HEALTH)/maxHealth);
+   // printf("%f\n", health);
+    d->healthBar = (SDL_Rect) {x, y -20, health, 20};
+    SDL_RenderCopy(d->renderer, d->enemyTexture, &srcrect, &d->enemyRect);
+    SDL_RenderFillRect(d->renderer, &d->healthBar);
 }
 
 //loads an image for a tower
@@ -172,7 +195,7 @@ void drawTower(Display d, int x, int y, int w, int h){
 
 void startFrame(Display d) {
     //Display d = getDisplayPointer(NULL);
-    SDL_SetRenderDrawColor(d->renderer, 0, 0, 255, 255);
+    SDL_SetRenderDrawColor(d->renderer, 168, 230, 255, 255);
     SDL_RenderClear(d->renderer);
 }
 

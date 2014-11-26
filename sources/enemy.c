@@ -204,14 +204,14 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->pathProgress = 0;
     newEnemy->x = newEnemy->enemyPath->pathCoords[0][0];
     newEnemy->y = newEnemy->enemyPath->pathCoords[0][1];
-    newEnemy->maxHealth = 100;
+    newEnemy->maxHealth = 500;
     newEnemy->health = newEnemy->maxHealth;
     newEnemy->armour = 0;
     newEnemy->speed = 2;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
-    newEnemy->height = 50;
-    newEnemy->width = 50;
+    newEnemy->height = 64;
+    newEnemy->width = 32;
     newEnemy->damage = 10;
 	  newEnemy->firedUpon = FALSE;
 }
@@ -230,8 +230,8 @@ void initialiseHeavyEnemy(Enemy newEnemy)
     newEnemy->speed = 1;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
-    newEnemy->height = 70;
-    newEnemy->width = 70;
+    newEnemy->height = 64;
+    newEnemy->width = 32;
     newEnemy->damage = 100;
 	  newEnemy->firedUpon = FALSE;    
 }
@@ -260,7 +260,7 @@ void present_enemy(Display d)
     {
         if(!isDead(i))
         {
-            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, enemyList->enemyArray[i]->width, enemyList->enemyArray[i]->height);
+            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, enemyList->enemyArray[i]->width, enemyList->enemyArray[i]->height, (double)enemyList->enemyArray[i]->health, (double)enemyList->enemyArray[i]->maxHealth);
         }
     }
 }
@@ -337,8 +337,8 @@ int inRange(int tX, int tY, int tRange, int enemyID)
     
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
     
-    int distanceBetweenTowerAndEnemy = (int)sqrt( pow((double)(e->x-tX),2) +
-                                              pow((double)(e->y-tY),2)    );
+    int distanceBetweenTowerAndEnemy = (int)sqrt( pow((double)(e->x+(e->width/2)-tX),2) +
+                                              pow((double)(e->y+(e->height/2)-tY),2)    );
     if(distanceBetweenTowerAndEnemy<tRange){
 		e->firedUpon = TRUE;
         return 1;
@@ -368,14 +368,19 @@ void damageEnemy(int damage, int enemyID)
     }
 }
 
+int distanceToEndOfPath(int enemyID)
+{
+  Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+  return e->enemyPath->pathLength - e->pathProgress;
+}
 
 void towerGetTargetPos(int * towerTargetPosition, int enemyID)
 {
 
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
     
-    towerTargetPosition[0] = e->x;
-    towerTargetPosition[1] = e->y;
+    towerTargetPosition[0] = e->x+(e->width/2);
+    towerTargetPosition[1] = e->y+(e->height/2);
     
   
 }

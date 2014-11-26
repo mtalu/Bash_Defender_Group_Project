@@ -106,6 +106,7 @@ int parseMktwr(char ** commandArray)
         return 0;
     }
     
+    return 1;
     
 }
 /* calls man printing functions
