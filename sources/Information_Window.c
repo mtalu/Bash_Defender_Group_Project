@@ -25,6 +25,21 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
     static int lastTower = 0, timeOfCall = 0, optionalStringSet = 0;
     char *outputString;
     static char *optionalString = NULL;
+
+    if(targetTower && !optionalOutputString) {
+        outputString = getTowerString(targetTower);
+        timeOfCall = SDL_GetTicks();
+        lastTower = targetTower;
+        optionalStringSet = 0;
+    }
+    else if(optionalOutputString) {
+        outputString = optionalString = optionalOutputString;
+        timeOfCall = SDL_GetTicks();
+        optionalStringSet = 1;
+    }
+    else {
+        outputString = getDefaultTowerString();
+    }
     
     if(timeOfCall != 0 && time - timeOfCall < 10000) {
         if(optionalStringSet) {
@@ -32,22 +47,6 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
         }
         else {
             outputString = getTowerString(lastTower);
-        }
-    }
-    else {
-        if(optionalOutputString == NULL && targetTower) {
-            outputString = getTowerString(targetTower);
-            timeOfCall = SDL_GetTicks();
-            lastTower = targetTower;
-        }
-        else if(optionalOutputString) {
-            outputString = optionalOutputString;
-            timeOfCall = SDL_GetTicks();
-            optionalString = optionalOutputString;
-            optionalStringSet = 1;
-        }
-        else {
-            outputString = getDefaultTowerString();
         }
     }
     
