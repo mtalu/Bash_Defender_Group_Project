@@ -29,6 +29,8 @@ struct enemy {
     int speed;
     int damage;
     int enemyID;
+    int height;
+    int width;
 	  BOOL firedUpon;
     int dead;
 };
@@ -170,6 +172,7 @@ void createEnemy()
     }
    initialiseEnemy( enemyList->enemyArray[enemyList->numberOfEnemies]);
 }
+
 int getNumberOfEnemies()
 {
     return getEnemyGroup(NULL)->numberOfEnemies;
@@ -207,6 +210,29 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->speed = 2;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
+    newEnemy->height = 50;
+    newEnemy->width = 50;
+    newEnemy->damage = 10;
+	  newEnemy->firedUpon = FALSE;
+}
+
+void initialiseHeavyEnemy(Enemy newEnemy)
+{
+    
+    LevelPaths lP = getLevelPaths(NULL);
+    newEnemy->enemyPath = lP->paths[rand()%lP->numberOfPaths];
+    newEnemy->pathProgress = 0;
+    newEnemy->x = newEnemy->enemyPath->pathCoords[0][0];
+    newEnemy->y = newEnemy->enemyPath->pathCoords[0][1];
+    newEnemy->maxHealth = 1000;
+    newEnemy->health = newEnemy->maxHealth;
+    newEnemy->armour = 5;
+    newEnemy->speed = 1;
+    newEnemy->enemyID=getNumberOfEnemies();
+    newEnemy->dead = 0;
+    newEnemy->height = 70;
+    newEnemy->width = 70;
+    newEnemy->damage = 100;
 	  newEnemy->firedUpon = FALSE;    
 }
 
@@ -234,7 +260,7 @@ void present_enemy(Display d)
     {
         if(!isDead(i))
         {
-            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, 50/*width*/, 50/*height*/);
+            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, enemyList->enemyArray[i]->width, enemyList->enemyArray[i]->height);
         }
     }
 }

@@ -40,5 +40,6 @@ void assignMemoryForPaths(int numberOfPaths);
 void layPaths(int numberOfPaths);
 void createHorizontalPath(Path P);
 void createDogLegPath(Path P);
+void initialiseHeavyEnemy(Enemy newEnemy);
 
 #endif
