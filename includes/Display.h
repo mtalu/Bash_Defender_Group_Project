@@ -12,10 +12,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2_ttf/SDL_ttf.h>
 #include <SDL2_image/SDL_image.h>
-
-#include <stdlib.h>
-
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -54,7 +50,7 @@ TTF_Font *getInfoWindowFont(TTF_Font *font);
 
 void displayInfoWindow();
 void displayStatsMonitor();
-void updateInfoWindow( char *outputString);
+void updateInfoWindow(char *outputString, int dfault);
 void updateStatsMonitor(char *outputString);
 void sendTextToInfoWindow(Display d, char *string);
 char *strdup2(char * s);

@@ -7,6 +7,8 @@
 
 #include "../includes/Display.h"
 #include "../includes/parser.h"
+#include "../includes/tower.h"
+#include <stdbool.h>
 
 //Window dimensions
 #define SCREEN_WIDTH 940
@@ -17,8 +19,8 @@
 #define INFO_WINDOW_WIDTH (SCREEN_WIDTH / 3.5)
 #define INFO_WINDOW_X (SCREEN_WIDTH - INFO_WINDOW_WIDTH)
 #define INFO_WINDOW_Y (SCREEN_HEIGHT - INFO_WINDOW_HEIGHT)
-#define TEXT_BORDER_X 20
-#define TEXT_BORDER_Y 20
+#define TEXT_BORDER_X 25
+#define TEXT_BORDER_Y 25
 
 //Stats monitor dimensions
 #define STATS_MONITOR_HEIGHT (SCREEN_HEIGHT / 3.5)
@@ -218,18 +220,27 @@ void displayStatsMonitor() {
     SDL_RenderCopy(d->renderer, d->statsMonitorTexture, NULL, &(d->statsMonitorRect));
 }
 
-void updateInfoWindow( char *outputString) {
-    static char * string = "         TOWER MONITOR";
+void updateInfoWindow(char *outputString, int dfault) {
+    int time = SDL_GetTicks();
+    static int timeOfCall = 0;
+    static char *string = " ";
+    static char *string2 = " ";
+    string = outputString;
     
-    if(outputString) {
-        string = strdup2(outputString);
-        int ticks = SDL_GetTicks();
-        printf("\n%d", ticks);
+    if(!dfault) {
+        printf("Not default\n");
+        string = string2 = outputString;
+        printf("%s", string);
+        timeOfCall = SDL_GetTicks();
     }
     
+    if(timeOfCall != 0 && time - timeOfCall < 5000) {
+        //strcpy(string, outputString);
+        string = string2;
+    }
+
     Display d = getDisplayPointer(NULL);
     
-    //Update information window with new tower information
     displayInfoWindow();
     
     d->infoWindowTextSurface = getInfoWindowTextSurface(string);
@@ -241,10 +252,11 @@ void updateInfoWindow( char *outputString) {
     SDL_QueryTexture(d->infoWindowTextTexture, NULL, NULL, &textW, &textH);
     SDL_Rect dstrect = {INFO_WINDOW_X + TEXT_BORDER_X, INFO_WINDOW_Y + TEXT_BORDER_Y, textW, textH};
     SDL_RenderCopy(d->renderer, d->infoWindowTextTexture, NULL, &dstrect);
+    
 }
 
 void updateStatsMonitor( char *outputString) {
-    static char *string = "         STATS MONITOR";
+    static char *string = "           STATS MONITOR";
     
     if(outputString) {
         string = strdup2(outputString);
@@ -305,7 +317,7 @@ SDL_Surface *getInfoWindowTextSurface(char *outputString) {
     //TTF_Font *font = getInfoWindowFont(NULL);
     //    SDL_Color fontColour = { 0xFF, 0xFF, 0xFF };
 
-    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, 130);
+    textSurface = TTF_RenderText_Blended_Wrapped(d->infoWindowFont, outputString, d->infoWindowFontColour, 150);
     if(textSurface == NULL) crash("getInfoWindowTextSurface()");
     
     return textSurface;
