@@ -48,11 +48,10 @@ TTF_Font *getInfoWindowFont(TTF_Font *font);
 #include <stdio.h>
 #include "Information_Window.h"
 
-void displayInfoWindow();
+void displayTowerMonitor();
 void displayStatsMonitor();
-void updateInfoWindow(char *outputString, int dfault);
+void updateTowerMonitor(char *outputString, int dfault);
 void updateStatsMonitor(char *outputString);
-void sendTextToInfoWindow(Display d, char *string);
 char *strdup2(char * s);
 
 

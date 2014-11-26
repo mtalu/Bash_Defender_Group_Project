@@ -2,7 +2,7 @@
 //  Information_Window.c
 //  Group_Project
 //
-//  Functions to create and display tower monitor and stats monitor
+//  Functions relating to tower monitor and stats monitor
 //
 //  Created by Michael on 10/11/2014.
 //  Copyright (c) 2014 Michael. All rights reserved.
@@ -20,21 +20,21 @@
 #define MAX_OUTPUT_STRING 200
 
 
-void towerMonitor(unsigned int towerIDtoCat) {
+void towerMonitor(unsigned int targetTower) {
     char *outputString;
     int dfault;
     
-    if(towerIDtoCat == 0) {
+    if(targetTower == 0) {
         outputString = defaultTowerString();
         dfault = true;
     }
     else {
-        outputString = (towerString(towerIDtoCat));
+        outputString = (towerString(targetTower));
         dfault = false;
     }
     
     
-    updateInfoWindow(outputString, dfault);
+    updateTowerMonitor(outputString, dfault);
 }
 
 char *defaultTowerString() {
@@ -50,15 +50,15 @@ char *defaultTowerString() {
     return outputString;
 }
 
-char *towerString(unsigned int towerIDtoCat) {
+char *towerString(unsigned int targetTower) {
     
     int iRange, iDamage, iSpeed, iAOEpower, iAOErange;
-    getStats(&iRange,&iDamage,&iSpeed,&iAOEpower,&iAOErange, towerIDtoCat);
+    getStats(&iRange,&iDamage,&iSpeed,&iAOEpower,&iAOErange, targetTower);
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
     char range[4], damage[4], speed[4], AOEdamage[4], AOErange[4];
     
-    sprintf(outputString, "TOWER %d\n\nRange: ", 1);
+    sprintf(outputString, "TOWER %d\n\nRange: ", targetTower);
     sprintf(range, "%d", iRange);
     sprintf(damage, "%d",iDamage);
     sprintf(speed, "%d", iSpeed);
@@ -108,20 +108,20 @@ void manUpgrade()
 {
     int dfault = false;
     
-    updateInfoWindow("GENERAL COMMANDS MANUAL: \nupgrade\n type ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3", dfault);
+    updateTowerMonitor("GENERAL COMMANDS MANUAL: \nupgrade\n type ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3", dfault);
 }
 
 void manCat()
 {
     int dfault = false;
     
-    updateInfoWindow("GENERAL COMMANDS MANUAL: cat \n type ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n", dfault);
+    updateTowerMonitor("GENERAL COMMANDS MANUAL: cat \n type ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n", dfault);
 }
 void manMan()
 {
     int dfault = false;
     
-    updateInfoWindow("GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n", dfault);
+    updateTowerMonitor("GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n", dfault);
 }
 
 
