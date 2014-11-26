@@ -201,7 +201,7 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->pathProgress = 0;
     newEnemy->x = newEnemy->enemyPath->pathCoords[0][0];
     newEnemy->y = newEnemy->enemyPath->pathCoords[0][1];
-    newEnemy->maxHealth = 100;
+    newEnemy->maxHealth = 10000;
     newEnemy->health = newEnemy->maxHealth;
     newEnemy->armour = 0;
     newEnemy->speed = 2;

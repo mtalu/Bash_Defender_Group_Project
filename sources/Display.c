@@ -9,8 +9,8 @@
 #include "../includes/parser.h"
 
 //Window dimensions
-#define SCREEN_WIDTH 940
-#define SCREEN_HEIGHT 780
+#define SCREEN_WIDTH	800 
+#define SCREEN_HEIGHT 	700 
 
 //Information monitor dimensions
 #define INFO_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.5)
@@ -25,6 +25,12 @@
 #define STATS_MONITOR_WIDTH (SCREEN_WIDTH / 4)
 #define STATS_MONITOR_X 0
 #define STATS_MONITOR_Y 0
+
+//Terminal monitor dimensions
+#define TERMINAL_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.5)
+#define TERMINAL_WINDOW_WIDTH (SCREEN_WIDTH / 3.5)
+#define TERMINAL_WINDOW_X (0)
+#define TERMINAL_WINDOW_Y (SCREEN_HEIGHT - TERMINAL_WINDOW_HEIGHT)
 
 
 struct display {
@@ -396,13 +402,20 @@ int terminal_window(Display d, char *pass, char *clear, char * inputCommand)
                     
                     strcpy(pass, clear);
                 }
+				if(event->key.keysym.sym == SDLK_BACKSPACE)
+				{
+					if(pass[strlen(pass) - 1] != '>')
+					{
+						pass[strlen(pass) - 1] = '\0';
+					}
+					display_text(d, pass);
+				}
+                switch(d->event.key.keysym.sym)
                 {
-                    switch(d->event.key.keysym.sym)
-                    {
-                        case SDLK_ESCAPE:
-                            done = 1;
-                            break;
-                    }
+                	case SDLK_ESCAPE:
+                	done = 1;
+                	break;
+                
                 }
                 break;
             }
@@ -422,15 +435,17 @@ void display_text(Display d, char *pass)
 {
     int texW = 200, texH = 50;
     SDL_Rect dstrect = { 5, 5, texW, texH };
-    SDL_Surface *text;
-    SDL_Texture *newtexture;
-    SDL_Color text_color = {255, 0, 0};
-    dstrect.x = 50;
-    dstrect.y = 450;
+	SDL_Rect imagerect = {TERMINAL_WINDOW_X, TERMINAL_WINDOW_Y, TERMINAL_WINDOW_WIDTH, TERMINAL_WINDOW_HEIGHT};
+    SDL_Surface *text, *imagesurface;
+    SDL_Texture *newtexture, *imagetexture;
+    SDL_Color text_color = {0, 255, 0};
+    dstrect.x = TERMINAL_WINDOW_X + (TERMINAL_WINDOW_WIDTH / 10);
+    dstrect.y = TERMINAL_WINDOW_Y + (TERMINAL_WINDOW_HEIGHT - (TERMINAL_WINDOW_HEIGHT / 7));
     
+	imagesurface = IMG_Load("terminalwindow.png");
+	imagetexture = SDL_CreateTextureFromSurface(d->renderer, imagesurface);
     text = TTF_RenderText_Solid(d->infoWindowFont, pass, text_color);
     newtexture = SDL_CreateTextureFromSurface(d->renderer, text);
-    //SDL_LockTexture(newtexture, NULL, text->pixels, &text->pitch);
     if(newtexture == NULL)
     {
         printf("Panic\n");	
@@ -439,7 +454,10 @@ void display_text(Display d, char *pass)
     dstrect.h = text->h;
     SDL_FreeSurface(text);
     SDL_QueryTexture(newtexture, NULL, NULL, &texW, &texH);
+	SDL_RenderCopy(d->renderer, imagetexture, NULL, &imagerect);
     SDL_RenderCopy(d->renderer, newtexture, NULL, &dstrect);
+	SDL_DestroyTexture(newtexture);
+	SDL_DestroyTexture(imagetexture);
 }
 
 /* duplicates a string */
