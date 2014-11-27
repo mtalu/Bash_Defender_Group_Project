@@ -90,6 +90,8 @@ Display init_SDL(){
     d->infoWindowSurface = IMG_Load("info_monitor.png");
     d->infoWindowTexture = SDL_CreateTextureFromSurface(d->renderer, d->infoWindowSurface);
     d->infoWindowRect = (SDL_Rect){TOWER_MONITOR_X, TOWER_MONITOR_Y, TOWER_MONITOR_WIDTH, TOWER_MONITOR_HEIGHT};
+    d->infoWindowTextureRect = (SDL_Rect) {TOWER_MONITOR_X + TOWER_TEXT_BORDER_X, TOWER_MONITOR_Y + TOWER_TEXT_BORDER_Y, 0, 0};
+
     d->infoWindowFont = TTF_OpenFont("OpenSans-Regular.ttf", 10);
     if(d->infoWindowFont == NULL) crash("TTF_(OpenFont)");
     d->infoWindowFontColour.r = 0x7c, d->infoWindowFontColour.g = 0xfc, d->infoWindowFontColour.b = 0x00;
@@ -97,6 +99,8 @@ Display init_SDL(){
     d->statsMonitor = IMG_Load("stats_monitor.png");
     d->statsMonitorTexture = SDL_CreateTextureFromSurface(d->renderer, d->statsMonitor);
     d->statsMonitorRect = (SDL_Rect) {STATS_MONITOR_X, STATS_MONITOR_Y, STATS_MONITOR_WIDTH, STATS_MONITOR_HEIGHT};
+    d->statsMonitorTextureRect = (SDL_Rect) {STATS_MONITOR_X + STATS_MONITOR_BORDER_X, STATS_MONITOR_Y + STATS_MONITOR_BORDER_Y, 0, 0};
+
     
 
     
@@ -229,10 +233,22 @@ void updateTowerMonitor(char *outputString) {
     int textW = 0;
     int textH = 0;
     SDL_QueryTexture(d->infoWindowTextTexture, NULL, NULL, &textW, &textH);
-    SDL_Rect dstrect = {TOWER_MONITOR_X + TOWER_TEXT_BORDER_X, TOWER_MONITOR_Y + TOWER_TEXT_BORDER_Y, textW, textH};
-    SDL_RenderCopy(d->renderer, d->infoWindowTextTexture, NULL, &dstrect);
+    d->infoWindowTextureRect.w = textW;
+    d->infoWindowTextureRect.h = textH;
+    
+    SDL_RenderCopy(d->renderer, d->infoWindowTextTexture, NULL, &(d->infoWindowTextureRect));
+    
+    SDL_FreeSurface(d->infoWindowTextSurface);
+    SDL_DestroyTexture(d->infoWindowTextTexture);
     
 }
+
+/*void testStatsMonitor (char *outputString) {
+    Display d = getDisplayPointer(d);
+    
+    
+}*/
+
 
 void updateStatsMonitor(char *outputString) {
     Display d = getDisplayPointer(NULL);
@@ -246,8 +262,14 @@ void updateStatsMonitor(char *outputString) {
     int textW = 0;
     int textH = 0;
     SDL_QueryTexture(d->statsMonitorTextTexture, NULL, NULL, &textW, &textH);
-    SDL_Rect dstrect = {STATS_MONITOR_X + STATS_MONITOR_BORDER_X, STATS_MONITOR_Y + STATS_MONITOR_BORDER_Y, textW, textH};
-    SDL_RenderCopy(d->renderer, d->statsMonitorTextTexture, NULL, &dstrect);
+    d->statsMonitorTextureRect.w = textW;
+    d->statsMonitorTextureRect.h = textH;
+    
+    SDL_RenderCopy(d->renderer, d->statsMonitorTextTexture, NULL, &(d->statsMonitorTextureRect));
+    
+    SDL_FreeSurface(d->statsMonitorTextSurface);
+    SDL_DestroyTexture(d->statsMonitorTextTexture);
+    free(outputString);
     
 }
 

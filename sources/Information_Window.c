@@ -54,7 +54,7 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
         optionalStringSet = 0;
     }
     
-        updateTowerMonitor(outputString);
+    updateTowerMonitor(outputString);
 }
 
 char *getDefaultTowerString() {
