@@ -115,9 +115,9 @@ int pushToQueue(ActionQueueStructure queue, commandType command, upgradeStat opt
 
 void testPushToQueue()	{
 	
-	//commandType nCommand;
-	//commandType nStat;
-	//int tar = 1;
+    //commandType nCommand;
+    //commandType nStat;
+    //int tar = 1;
 
     commandType nCommand_1=upgrade;
     upgradeStat nStat_1=power;
