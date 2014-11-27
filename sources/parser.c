@@ -106,6 +106,7 @@ int parseMktwr(char ** commandArray)
         return 0;
     }
     
+
     return 1;
     
 }
@@ -130,7 +131,7 @@ int parseMan(char * inputStringCommandMan)
         }
         case man:
         {
-            //manMan();
+            manMan();
             return 1;//0 for error
         }
         case execute:
@@ -148,11 +149,13 @@ int parseMan(char * inputStringCommandMan)
             return 1;
         }
         default:
+        {
             fprintf(stderr,"\n*** Man Command Error ***\n");
             fprintf(stderr,"second command not recognised \n");
             fprintf(stderr,"you entered: %s\n",inputStringCommandMan);
             actionUsageError();
             return 0;
+        }
     }
 }
 
@@ -167,7 +170,7 @@ int parseCat(char * inputStringTargeting)
         unsigned int targetTower = getTargetTower(inputStringTargeting);
         if(targetTower)
         {
-            catTower(targetTower);//function in Information_Window.c
+            towerMonitor(targetTower, NULL);//function in Information_Window.c
             return 1;
         }
         else

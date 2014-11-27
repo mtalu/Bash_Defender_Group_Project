@@ -8,8 +8,7 @@ CFLAGS = -O4 -Wall -pedantic -std=c99 -F /usr/local/lib/ -I /usr/local/include -
 #		$(INCDIR)terminalwindow.h\
 #		$(INCDIR)sput.h              
 TARGET =  main
-SOURCES = Display.c Information_Window.c levelController.c tower.c enemy.c actionQueueDataStructure.c parser.c gameProperties.c $(TARGET).c
-#          	parser.c\
+SOURCES = levelController.c Display.c Information_Window.c tower.c enemy.c actionQueueDataStructure.c parser.c gameProperties.c $(TARGET).c
 #	  		sTower2.c\
 #	  		tower2.c\
 #      		enemy2.c\

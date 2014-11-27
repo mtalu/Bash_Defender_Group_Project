@@ -12,12 +12,12 @@
 #include "../includes/main.h"
 #include "../includes/enemy.h"
 
-
 int main()
 
 {	
 
     //testing();
+    Display d = init_SDL(); 
     initLevel();
     createEnemy();
     char text[128] = {'>', '>'};
@@ -26,7 +26,6 @@ int main()
     pass = text;
     clear = empty;
     addGold(100);
-    Display d = init_SDL();
     int steps=0;
     do{
         ++steps;
@@ -37,8 +36,7 @@ int main()
             parse(inputCommand);
         }
         statsMonitor();
-        displayInfoWindow();
-        updateInfoWindow(NULL);
+        towerMonitor(0, NULL);
         present_enemy(d);
         present_tower(d);
         checkActQueue();
@@ -50,7 +48,7 @@ int main()
         }
         if(steps%100 == 0)
         {
-            userCreateTower(rand()%940, rand()%780);
+            userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
             createEnemy();
         }
         endFrame(d);

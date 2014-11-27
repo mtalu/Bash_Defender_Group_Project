@@ -3,21 +3,17 @@
 #include "../includes/sput.h"
 #include <math.h>
 
-#define SCREEN_WIDTH 500
-#define SCREEN_HEIGHT 300
-
 #include "../includes/enemy.h"
 
 struct path {
-  int pathLength;
-  int **pathCoords;
-} ;
-
+    int pathLength;
+    int **pathCoords;
+};
 
 struct levelPaths {
-  int numberOfPaths;
-  Path *paths;
-} ;
+    int numberOfPaths;
+    Path *paths;
+};
 
 struct enemy {
     int x, y;
@@ -29,9 +25,10 @@ struct enemy {
     int speed;
     int damage;
     int enemyID;
+
     int height;
     int width;
-	  BOOL firedUpon;
+    BOOL firedUpon;
     int dead;
 };
 
@@ -76,11 +73,11 @@ void createHorizontalPath(Path P)
 {
   //create one path all the way across the middle of the screen
   P->pathLength = 0;
-  P->pathCoords = (int **) malloc(sizeof(int *) * SCREEN_WIDTH);
-  for(int i = 0; i < SCREEN_WIDTH; i++) {
+  P->pathCoords = (int **) malloc(sizeof(int *) * MAP_WIDTH);
+  for(int i = 0; i < MAP_WIDTH; i++) {
     P->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[i][0] = i;
-    P->pathCoords[i][1] = SCREEN_HEIGHT/2;
+    P->pathCoords[i][1] = MAP_HEIGHT/2;
     P->pathLength++;
   }
 }
@@ -89,16 +86,16 @@ void createDogLegPath(Path P)
 {
   //create path that goes up from the centre and carries along a route above the middle of the screen
   P->pathLength = 0;
-  P->pathCoords = (int **) malloc(sizeof(int *) * (SCREEN_WIDTH + (SCREEN_HEIGHT/4))); //length of path should be width and a quarter of height
+  P->pathCoords = (int **) malloc(sizeof(int *) * (MAP_WIDTH + (MAP_HEIGHT/4))); //length of path should be width and a quarter of height
     // go right for a quarter of the screen width
-  for (int i = 0; i < SCREEN_WIDTH/4; i++) {
+  for (int i = 0; i < MAP_WIDTH/4; i++) {
     P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[P->pathLength][0] = i;
-    P->pathCoords[P->pathLength][1] = SCREEN_HEIGHT/2;
+    P->pathCoords[P->pathLength][1] = MAP_HEIGHT/2;
     P->pathLength++;
   }
     // go up for a quarter of the screen height
-  for(int i = SCREEN_HEIGHT/2; i < 3*SCREEN_HEIGHT/4; i++) {
+  for(int i = MAP_HEIGHT/2; i < 3*MAP_HEIGHT/4; i++) {
     P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[P->pathLength][0] = P->pathCoords[P->pathLength-1][0];
     P->pathCoords[P->pathLength][1] = i;
@@ -106,7 +103,7 @@ void createDogLegPath(Path P)
   }
   
     // carry on right for the rest of the screen width
-  for(int i = SCREEN_WIDTH/4; i < SCREEN_WIDTH; i++) {
+  for(int i = MAP_WIDTH/4; i < MAP_WIDTH; i++) {
     P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[P->pathLength][0] = i;
     P->pathCoords[P->pathLength][1] = P->pathCoords[P->pathLength-1][1];
@@ -210,15 +207,15 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->speed = 2;
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
+
     newEnemy->height = 64;
     newEnemy->width = 32;
     newEnemy->damage = 10;
-	  newEnemy->firedUpon = FALSE;
+    newEnemy->firedUpon = FALSE;
 }
 
 void initialiseHeavyEnemy(Enemy newEnemy)
 {
-    
     LevelPaths lP = getLevelPaths(NULL);
     newEnemy->enemyPath = lP->paths[rand()%lP->numberOfPaths];
     newEnemy->pathProgress = 0;
@@ -233,7 +230,7 @@ void initialiseHeavyEnemy(Enemy newEnemy)
     newEnemy->height = 64;
     newEnemy->width = 32;
     newEnemy->damage = 100;
-	  newEnemy->firedUpon = FALSE;    
+    newEnemy->firedUpon = FALSE;
 }
 
 int setEnemyHealth(int enemyID, int newHealth)	{
@@ -258,9 +255,12 @@ void present_enemy(Display d)
     EnemyGroup enemyList = getEnemyGroup(NULL);
     for(int i=1; i<=enemyList->numberOfEnemies; ++i)
     {
+        Enemy e = enemyList->enemyArray[i];
+
         if(!isDead(i))
         {
-            drawEnemy(d, enemyList->enemyArray[i]->x, enemyList->enemyArray[i]->y, enemyList->enemyArray[i]->width, enemyList->enemyArray[i]->height, (double)enemyList->enemyArray[i]->health, (double)enemyList->enemyArray[i]->maxHealth);
+
+            drawEnemy(d, e->x, e->y, e->width, e->height, (double)e->health, (double)e->maxHealth);
         }
     }
 }
@@ -279,19 +279,20 @@ void freeEnemy(int enemyID)
 int moveEnemy(int enemyID )
 {
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
-  if(!isDead(enemyID) ) {
-    if(e->pathProgress < e->enemyPath->pathLength - e->speed) {
-      e->pathProgress += e->speed;
-      e->x = e->enemyPath->pathCoords[e->pathProgress][0];
-      e->y = e->enemyPath->pathCoords[e->pathProgress][1];
-      return 0;
-    } else {
-      damageHealth(e->damage);
-      e->dead = 1;
-      return 0;
+    if(!isDead(enemyID) ) {
+        if(e->pathProgress < e->enemyPath->pathLength - e->speed) {
+            e->pathProgress += e->speed;
+            e->x = e->enemyPath->pathCoords[e->pathProgress][0];
+            e->y = e->enemyPath->pathCoords[e->pathProgress][1];
+            return 0;
+        }
+        else {
+            damageHealth(e->damage);
+            e->dead = 1;
+            return 0;
+        }
     }
-  }
-  return 1;
+    return 1;
 }
 
 int setEnemyX(int enemyID, int newX)	{
@@ -337,8 +338,10 @@ int inRange(int tX, int tY, int tRange, int enemyID)
     
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
     
+
     int distanceBetweenTowerAndEnemy = (int)sqrt( pow((double)(e->x+(e->width/2)-tX),2) +
                                               pow((double)(e->y+(e->height/2)-tY),2)    );
+
     if(distanceBetweenTowerAndEnemy<tRange){
 		e->firedUpon = TRUE;
         return 1;
@@ -368,10 +371,11 @@ void damageEnemy(int damage, int enemyID)
     }
 }
 
+
 int distanceToEndOfPath(int enemyID)
 {
-  Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
-  return e->enemyPath->pathLength - e->pathProgress;
+    Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+    return e->enemyPath->pathLength - e->pathProgress;
 }
 
 void towerGetTargetPos(int * towerTargetPosition, int enemyID)
@@ -379,6 +383,7 @@ void towerGetTargetPos(int * towerTargetPosition, int enemyID)
 
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
     
+
     towerTargetPosition[0] = e->x+(e->width/2);
     towerTargetPosition[1] = e->y+(e->height/2);
     
