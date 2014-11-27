@@ -11,12 +11,12 @@
 
 #include "../includes/Display.h"
 
-
-
-void catTower(unsigned int towerIDtoCat);
+void towerMonitor(unsigned int targetTower, char *outputString);
+char *getDefaultTowerString();
+char *getTowerString(unsigned int targetTower);
+void statsMonitor();
 void manUpgrade();
 void manCat();
 void manMan();
-void statsMonitor();
 
 #endif
