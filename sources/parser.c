@@ -131,7 +131,7 @@ int parseMan(char * inputStringCommandMan)
         }
         case man:
         {
-            //manMan();
+            manMan();
             return 1;//0 for error
         }
         case execute:
@@ -170,7 +170,7 @@ int parseCat(char * inputStringTargeting)
         unsigned int targetTower = getTargetTower(inputStringTargeting);
         if(targetTower)
         {
-            catTower(targetTower);//function in Information_Window.c
+            towerMonitor(targetTower, NULL);//function in Information_Window.c
             return 1;
         }
         else
