@@ -33,6 +33,7 @@ struct enemy {
 
     int height;
     int width;
+
     int dead;
 };
 
@@ -108,15 +109,14 @@ void layPaths(int numberOfPaths)
 */
 void createHorizontalPath(Path P)
 {
-
-    P->pathLength = 0;
-    P->pathCoords = (int **) malloc(sizeof(int *) * MAP_WIDTH);
-    for(int i = 0; i < MAP_WIDTH; i++) {
-        P->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
-        P->pathCoords[i][0] = i;
-        P->pathCoords[i][1] = MAP_HEIGHT/2;
-        P->pathLength++;
-    }
+  P->pathLength = 0;
+  P->pathCoords = (int **) malloc(sizeof(int *) * MAP_WIDTH);
+  for(int i = 0; i < MAP_WIDTH; i++) {
+    P->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
+    P->pathCoords[i][0] = i;
+    P->pathCoords[i][1] = MAP_HEIGHT/2;
+    P->pathLength++;
+  }
 }
 
 /*
@@ -248,6 +248,7 @@ void Test_createEnemy()
 
     createLevelPaths();
     createEnemyGroup();
+
     
     createEnemy();
     sput_fail_unless(getNumberOfEnemies() == 1, "Valid: Number of enemies held in group is one.");
@@ -265,7 +266,6 @@ void Test_createEnemy()
 */                                            
 void initialiseEnemy(Enemy newEnemy)
 {
-    
     LevelPaths lP = getLevelPaths(NULL);
     newEnemy->enemyPath = lP->paths[rand()%lP->numberOfPaths];
     newEnemy->pathProgress = 0;
@@ -281,6 +281,7 @@ void initialiseEnemy(Enemy newEnemy)
     newEnemy->height = 64;
     newEnemy->width = 32;
     newEnemy->damage = 10;
+
 }
 
 /*
@@ -302,6 +303,7 @@ void initialiseHeavyEnemy(Enemy newEnemy)
     newEnemy->height = 64;
     newEnemy->width = 32;
     newEnemy->damage = 100;
+
 }
 
 /*
@@ -389,6 +391,15 @@ int moveEnemy(int enemyID )
         }
     }
     return 1;
+
+}
+
+int setEnemyX(int enemyID, int newX)	{
+
+	Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+	e->x = newX;
+	return e->x;
+>>>>>>> benjis/working
 }
 
 /*
@@ -473,9 +484,11 @@ void damageEnemy(int damage, int enemyID)
     }
 }
 
+
 /*
 * calculates how far the specified enemy is from the end of their path. Used for tower target aquisition.
 */
+
 int distanceToEndOfPath(int enemyID)
 {
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
@@ -489,6 +502,7 @@ void towerGetTargetPos(int * towerTargetPosition, int enemyID)
 {
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
     
+
     towerTargetPosition[0] = e->x+(e->width/2);
     towerTargetPosition[1] = e->y+(e->height/2);
 }

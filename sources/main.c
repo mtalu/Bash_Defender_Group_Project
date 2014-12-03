@@ -16,10 +16,13 @@ int main()
 
 {	
 
-    testing();
     Display d = init_SDL(); 
     initLevel();
+    testing();
+    //Display d = init_SDL(); 
+//    createTower();
     createEnemy();
+
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
     char *pass, *clear, *inputCommand=NULL;
@@ -56,6 +59,42 @@ int main()
     
     //while(moveEnemy(1) != 1);
     shutSDL(d);
+//    char text[128] = {'>', '>'};
+//    char empty[128] = {'>', '>'};
+//    char *pass, *clear, *inputCommand=NULL;
+//    pass = text;
+//    clear = empty;
+//    addGold(100);
+//    int steps=0;
+//    do{
+//        ++steps;
+//        startFrame(d);
+//        terminal_window(d, pass, clear,inputCommand);
+//        if(inputCommand)
+//        {
+//            parse(inputCommand);
+//        }
+//        statsMonitor();
+//        towerMonitor(0, NULL);
+//        present_enemy(d);
+//        present_tower(d);
+//        popToTower()
+//	fire();
+//        for(int i=1; i<=getNumberOfEnemies(); ++i)
+//        {
+//            int move = moveEnemy(i);
+//           
+//        }
+//        if(steps%100 == 0)
+//        {
+//            userCreateTower(rand()% (int) MAP_WIDTH, rand()% (int) MAP_HEIGHT);
+//            createEnemy();
+//        }
+//        endFrame(d);
+//    } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
+//    
+//    //while(moveEnemy(1) != 1);
+//    shutSDL(d);
 
     freeEnemyGroup();
     freeLevelPaths();
@@ -68,15 +107,15 @@ int main()
 
 void testing()	{
 
-    testingGameStructure();
-    testingActionQueue();
-    parseToQueueTesting();
-    testEnemy();
-    testingTowerModule();
-    parseToTowerTesting();
-    towerToEnemyTesting();
+    //testingGameStructure();
+    //testingActionQueue();
+    //parseToQueueTesting();
+    //testEnemy();
+    //testingTowerModule();
+	parseToTowerTesting();
+    //towerToEnemyTesting();
 
-    testValidParses();
+    //testValidParses();
 
 
 }
@@ -95,12 +134,6 @@ void towerToEnemyTesting()	{
 
 void testEnemyInRange()	{
 
-    createLevelPaths(); 
-    createTowerGroup();
-	createActionQueue();
-	createGame();
-	createTower();
-	createEnemyGroup();
 	createEnemy();
 	setEnemyHealth(1,100);
 	setEnemyArmour(1,0);
@@ -154,29 +187,22 @@ void parseToQueueTesting()	{
 
 void testParseToTower()	{
 
-	createLevelPaths();	
-    createTowerGroup();
-	createActionQueue();
-	createGame();
 	createTower();
 	createTower();
-	addGold(10);
-	addGold(10);
+	setTowerRange(1,10); //Setting tower range to 10 for tests.
+	setTowerDamage(2,10); //Setting tower damage to 10 for tests.
+	addGold(1000);
 	parse("upgrade r t1");
-	parse("upgrade r t2");
-	delayGame(ACTIONCOOLDOWN);
+	parse("upgrade p t2");
 	sput_fail_unless(getFirstTarget() == 1, "First target is 1");
 	sput_fail_unless(getLastTarget() == 2, "Last target is 2");
-	createTower();
-	parse("upgrade r t3");
-	sput_fail_unless(getLastTarget() == 3, "Last target is 3");
-	sput_fail_unless(checkActQueue()== upgrade, "Upgrade command popped by tower 1");	
 	delayGame(ACTIONCOOLDOWN);
-	sput_fail_unless(checkActQueue()== upgrade, "Upgrade command popped by tower 2");
+	popToTower();
+	sput_fail_unless(getTowerRange(1) == 11, "Upgraded range is 11");
+	delayGame(ACTIONCOOLDOWN);
+	popToTower();
+	sput_fail_unless(getTowerDamage(2) == 11, "Upgraded damage is 11");
 	freeAllTowers();
-	free(getTowerGrp(NULL));
-	free(getGame(NULL));
-	free(getQueue(NULL));
 }
 
 void testValidParses()	{
