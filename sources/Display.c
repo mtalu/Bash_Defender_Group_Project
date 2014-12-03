@@ -226,7 +226,6 @@ void shutSDL(Display d){
 
 //Information window functions
 
-
 /**
  Display empty tower monitor in bottom right corner of screen
  */
@@ -238,7 +237,7 @@ void displayTowerMonitor() {
 }
 
 /**
- Display empty stats monitor in top left corner of screen
+ Display empty stats bar at top of screen
  */
 void displayStatsBar() {
     
@@ -246,11 +245,13 @@ void displayStatsBar() {
     
     SDL_SetRenderDrawColor(d->renderer, d->statsBarColour.r, d->statsBarColour.g, d->statsBarColour.b, 0);
     SDL_RenderFillRect(d->renderer, &(d->statsBarRect));
+    SDL_SetRenderDrawColor(d->renderer, 255, 255, 255, 0);
+    SDL_RenderDrawRect(d->renderer, &(d->statsBarRect));
 }
 
 
 /**
-Display output string in first parameter in tower monitor
+Display output string in tower monitor
 */
 void updateTowerMonitor(char *outputString) {
     Display d = getDisplayPointer(NULL);
@@ -276,7 +277,7 @@ void updateTowerMonitor(char *outputString) {
 }
 
 /**
- Display output string in first parameter in stats monitor
+ Display output string in stats monitor
  */
 void updateStatsBar(char *outputString) {
     Display d = getDisplayPointer(NULL);
