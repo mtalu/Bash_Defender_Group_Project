@@ -27,12 +27,12 @@ int SCREEN_HEIGHT_GLOBAL;
 #define TOWER_TEXT_BORDER_Y 25
 
 //Stats monitor dimensions
-#define STATS_MONITOR_HEIGHT (SCREEN_HEIGHT_GLOBAL / 3.5)
-#define STATS_MONITOR_WIDTH (SCREEN_WIDTH_GLOBAL / 4)
-#define STATS_MONITOR_X 0
-#define STATS_MONITOR_Y 0
-#define STATS_MONITOR_BORDER_X 30
-#define STATS_MONITOR_BORDER_Y 30
+#define STATS_BAR_X 0
+#define STATS_BAR_Y 0
+#define STATS_BAR_WIDTH (SCREEN_WIDTH)
+#define STATS_BAR_HEIGHT 30
+#define STATS_BAR_BORDER_X 300
+#define STATS_BAR_BORDER_Y 10
 
 //Terminal monitor dimensions
 #define TERMINAL_WINDOW_HEIGHT (SCREEN_HEIGHT_GLOBAL / 3.5)
@@ -92,9 +92,9 @@ TTF_Font *getInfoWindowFont(TTF_Font *font);
 #include "Information_Window.h"
 
 void displayTowerMonitor();
-void displayStatsMonitor();
+void displayStatsBar();
 void updateTowerMonitor(char *outputString);
-void updateStatsMonitor(char *outputString);
+void updateStatsBar(char *outputString);
 char *strdup2(char * s);
 
 

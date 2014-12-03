@@ -96,7 +96,7 @@ char *getTowerString(unsigned int targetTower) {
 /**
  Creates output string for stats monitor and updates stats monitor
  */
-void statsMonitor() {
+void statsBar() {
     
     GameProperties properties = getGame(NULL);
     
@@ -106,9 +106,9 @@ void statsMonitor() {
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
     
-    sprintf(outputString, "\n               STATS MONITOR\n\nGold: %d\nWave Number: %d\nHealth: %d", gold, waveNumber, health);
+    sprintf(outputString, "Gold: %d                                                                     Wave Number: %d                                                                     Health: %d", gold, waveNumber, health);
     
-    updateStatsMonitor(outputString);
+    updateStatsBar(outputString);
 }
 
 /**

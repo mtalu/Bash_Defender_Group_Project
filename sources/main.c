@@ -35,7 +35,8 @@ int main()
         {
             parse(inputCommand);
         }
-        statsMonitor();
+        
+        statsBar();
         towerMonitor(0, NULL);
         present_enemy(d);
         present_tower(d);
