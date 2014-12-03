@@ -10,35 +10,7 @@
 #include "../includes/tower.h"
 #include <stdbool.h>
 
-//Window dimensions
-#define SCREEN_WIDTH	800 
-#define SCREEN_HEIGHT 	700 
-
-//Tower monitor dimensions
-#define TOWER_MONITOR_HEIGHT (SCREEN_HEIGHT / 3.5)
-#define TOWER_MONITOR_WIDTH (SCREEN_WIDTH / 3.5)
-#define TOWER_MONITOR_X (SCREEN_WIDTH - TOWER_MONITOR_WIDTH)
-#define TOWER_MONITOR_Y (SCREEN_HEIGHT - TOWER_MONITOR_HEIGHT)
-#define TOWER_TEXT_BORDER_X 25
-#define TOWER_TEXT_BORDER_Y 25
-
-//Stats monitor dimensions
-#define STATS_MONITOR_HEIGHT (SCREEN_HEIGHT / 3.5)
-#define STATS_MONITOR_WIDTH (SCREEN_WIDTH / 4)
-#define STATS_MONITOR_X 0
-#define STATS_MONITOR_Y 0
-#define STATS_MONITOR_BORDER_X 30
-#define STATS_MONITOR_BORDER_Y 30
-
-//Terminal monitor dimensions
-#define TERMINAL_WINDOW_HEIGHT (SCREEN_HEIGHT / 3.5)
-#define TERMINAL_WINDOW_WIDTH (SCREEN_WIDTH / 3.5)
-#define TERMINAL_WINDOW_X (0)
-#define TERMINAL_WINDOW_Y (SCREEN_HEIGHT - TERMINAL_WINDOW_HEIGHT)
-
-
 #define HEALTH 80
-
 
 struct display {
     //Window objects
@@ -87,15 +59,19 @@ TTF_Font *getInfoWindowFont(TTF_Font *font);
 SDL_Surface *getInfoWindowTextSurface(char *outputString);
 void crash(char *message);
 
+void getWindowSize(int *w, int *h){
+    Display d = getDisplayPointer(NULL);
+    SDL_GetWindowSize(d->window, w, h);
+}
 
 Display init_SDL(){
-    
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) crash("SDL_Init()");
     if(TTF_Init() != 0) crash("TTF_Init()");
     if(IMG_Init(0) != 0) crash("IMG_Init()");
     
     Display d = (Display)malloc(sizeof(struct display));
     d->window = SDL_CreateWindow("TOWER DEFENSE", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+    getWindowSize(&SCREEN_WIDTH_GLOBAL,&SCREEN_HEIGHT_GLOBAL);
     d->renderer = SDL_CreateRenderer(d->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     
 

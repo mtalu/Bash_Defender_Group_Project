@@ -3,9 +3,31 @@
 #include <time.h>
 
 #include "./../includes/debug.h"
+#include "../includes/tower.h"
 
 /*----------Enumerated Types-----------*/
+enum commandType
+{
+    commandError=-1,
+    upgrade=0,
+    execute=1,
+    set=2,
+    man=3,
+    cat=4,
+    mktwr=5
+};
 
+
+enum upgradeStat
+{
+    statError=-1,
+    power=0,
+    range=1,
+    speed=2,
+    AOErange=3,
+    AOEpower=4,
+    level=5
+};
 
 /*----------Symbolic Constants-----------*/
 
@@ -13,8 +35,11 @@
 
 /*----------TypeDefs----------*/
 
+typedef enum commandType commandType;
+typedef enum upgradeStat upgradeStat;
 typedef struct gameProperties *GameProperties;
 typedef struct gameClock *GameClock;
+
 /*----------Function Prototypes-----------*/
 GameProperties createGame();
 int getGold(GameProperties game);
@@ -27,6 +52,7 @@ int setlastAction(GameProperties Game);
 GameProperties getGame(GameProperties createdGame);
 void damageHealth(int damage);
 int addGold(int gold);
+int getCostOfNewTower();
 
 void testingGameStructure();
 void CreateGameTest();

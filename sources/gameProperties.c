@@ -27,6 +27,7 @@ struct gameProperties {
 	int gold;
 	int WaveNo;
 	int health;
+    int costOfNewTower;
 	GameClock clock;
 };
 
@@ -62,6 +63,9 @@ void testSetLastAction()	{
 	free(newGame);
 }
 
+/*
+ * returns true is last action time is more than global cooldown
+ */
 int lastAction(GameProperties Game)	{
 
 	clock_t currTime = (double) clock() / CLOCKS_PER_SEC;
@@ -90,8 +94,6 @@ void testlastAction()	{
 	free(newGame);
 
 }
-
-
 
 void testingGameStructure()	{
 	sput_start_testing();
@@ -158,6 +160,11 @@ int getHealth(GameProperties game)	{
 	return game->health;
 }
 
+int getCostOfNewTower() {
+
+    return getGame(NULL)->costOfNewTower;
+}
+
 GameProperties createGame()	{
 
 	GameProperties newGame = (GameProperties) malloc(sizeof(*newGame));
@@ -165,6 +172,7 @@ GameProperties createGame()	{
 	newGame->gold=0;
 	newGame->WaveNo=0;
 	newGame->health=0;
+    newGame->costOfNewTower = 300;
 	newGame->clock->start_t  = newGame->clock->lastAction = (double) clock()/CLOCKS_PER_SEC;
 	getGame(newGame);
 	return newGame;

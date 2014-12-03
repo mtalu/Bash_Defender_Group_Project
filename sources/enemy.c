@@ -3,16 +3,12 @@
 #include "../includes/sput.h"
 #include <math.h>
 
-#define SCREEN_WIDTH 500
-#define SCREEN_HEIGHT 300
-
 #include "../includes/enemy.h"
 
 struct path {
     int pathLength;
     int **pathCoords;
 };
-
 
 struct levelPaths {
     int numberOfPaths;
@@ -77,11 +73,11 @@ void createHorizontalPath(Path P)
 {
   //create one path all the way across the middle of the screen
   P->pathLength = 0;
-  P->pathCoords = (int **) malloc(sizeof(int *) * SCREEN_WIDTH);
-  for(int i = 0; i < SCREEN_WIDTH; i++) {
+  P->pathCoords = (int **) malloc(sizeof(int *) * MAP_WIDTH);
+  for(int i = 0; i < MAP_WIDTH; i++) {
     P->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[i][0] = i;
-    P->pathCoords[i][1] = SCREEN_HEIGHT/2;
+    P->pathCoords[i][1] = MAP_HEIGHT/2;
     P->pathLength++;
   }
 }
@@ -90,16 +86,16 @@ void createDogLegPath(Path P)
 {
   //create path that goes up from the centre and carries along a route above the middle of the screen
   P->pathLength = 0;
-  P->pathCoords = (int **) malloc(sizeof(int *) * (SCREEN_WIDTH + (SCREEN_HEIGHT/4))); //length of path should be width and a quarter of height
+  P->pathCoords = (int **) malloc(sizeof(int *) * (MAP_WIDTH + (MAP_HEIGHT/4))); //length of path should be width and a quarter of height
     // go right for a quarter of the screen width
-  for (int i = 0; i < SCREEN_WIDTH/4; i++) {
+  for (int i = 0; i < MAP_WIDTH/4; i++) {
     P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[P->pathLength][0] = i;
-    P->pathCoords[P->pathLength][1] = SCREEN_HEIGHT/2;
+    P->pathCoords[P->pathLength][1] = MAP_HEIGHT/2;
     P->pathLength++;
   }
     // go up for a quarter of the screen height
-  for(int i = SCREEN_HEIGHT/2; i < 3*SCREEN_HEIGHT/4; i++) {
+  for(int i = MAP_HEIGHT/2; i < 3*MAP_HEIGHT/4; i++) {
     P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[P->pathLength][0] = P->pathCoords[P->pathLength-1][0];
     P->pathCoords[P->pathLength][1] = i;
@@ -107,7 +103,7 @@ void createDogLegPath(Path P)
   }
   
     // carry on right for the rest of the screen width
-  for(int i = SCREEN_WIDTH/4; i < SCREEN_WIDTH; i++) {
+  for(int i = MAP_WIDTH/4; i < MAP_WIDTH; i++) {
     P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
     P->pathCoords[P->pathLength][0] = i;
     P->pathCoords[P->pathLength][1] = P->pathCoords[P->pathLength-1][1];
@@ -183,8 +179,6 @@ int getNumberOfEnemies()
 void Test_createEnemy()
 {
     
-    createLevelPaths();
-    createEnemyGroup();
     createEnemy();
     sput_fail_unless(getNumberOfEnemies() == 1, "Valid: Number of enemies held in group is one.");
     sput_fail_unless(getEnemyHealth(getNumberOfEnemies()) == 100,"Valid: Enemy healt is default." );
@@ -199,7 +193,6 @@ void Test_createEnemy()
                                             
 void initialiseEnemy(Enemy newEnemy)
 {
-    
     LevelPaths lP = getLevelPaths(NULL);
     newEnemy->enemyPath = lP->paths[rand()%lP->numberOfPaths];
     newEnemy->pathProgress = 0;
