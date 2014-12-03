@@ -16,7 +16,7 @@ int main()
 
 {	
 
-    //testing();
+    testing();
     Display d = init_SDL(); 
     initLevel();
     createEnemy();
@@ -57,6 +57,8 @@ int main()
     //while(moveEnemy(1) != 1);
     shutSDL(d);
 
+    freeEnemyGroup();
+    freeLevelPaths();
 
     return 0;
 }
@@ -101,11 +103,13 @@ void testEnemyInRange()	{
 	createEnemyGroup();
 	createEnemy();
 	setEnemyHealth(1,100);
+	setEnemyArmour(1,0);
 	setEnemyX(1,50);
 	setEnemyY(1,50);
 	setTowerY(1,400);
 	setTowerX(1,400);
 	setTowerRange(1,10);
+	setTowerDamage(1,10);
 	sput_fail_unless(inRange(400,400,10,1)== 0, "Enemy 1 is out of range of tower 1");
 	fire();
 	sput_fail_unless(getEnemyHealth(1) == 100, "Out of range enemy 1 has full health after tower has fired");
@@ -116,7 +120,7 @@ void testEnemyInRange()	{
 	fire();
 	//sput_fail_unless(getEnemyHealth(1) == 100 - getTowerDamage(1),"In range enemy has reduced health from tower damage");
 	int i;
-	for(i = 0; i < 11; i++)	{
+	for(i = 0; i < 9; i++)	{
 	fire();
 	}
 	sput_fail_unless(isDead(1) == 1, "Enemy dead after being fired on 10 times");	

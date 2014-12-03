@@ -392,6 +392,13 @@ int setTowerRange(int towerID, int newRange)	{
 
 }
 
+int setTowerDamage(int towerID, int newDamage)	{
+
+	getTowerGrp(NULL)->listOfTowers[towerID]->damage = newDamage;
+	return newDamage;
+
+}
+
 int setTowerX(int towerID,int newX)	{
 
 	getTowerGrp(NULL)->listOfTowers[towerID]->x = newX;

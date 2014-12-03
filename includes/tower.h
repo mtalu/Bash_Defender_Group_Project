@@ -41,6 +41,7 @@ void present_tower(Display d);
 int setTowerX(int towerID,int newX);
 int setTowerY(int towerID, int newY);
 int setTowerRange(int towerID, int newRange);
+int setTowerDamage(int towerID, int newDamage);
 int getTowerDamage(int towerID);
 void testingTowerModule();
 void testGetTower();
