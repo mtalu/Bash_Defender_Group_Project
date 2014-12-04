@@ -394,13 +394,6 @@ int moveEnemy(int enemyID )
 
 }
 
-int setEnemyX(int enemyID, int newX)	{
-
-	Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
-	e->x = newX;
-	return e->x;
->>>>>>> benjis/working
-}
 
 /*
 * manually set the enemy's x coord - used in testing

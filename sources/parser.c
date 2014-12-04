@@ -14,7 +14,11 @@
 #include "../includes/actionQueueDataStructure.h"
 #include "./../includes/parser.h"
 #include "../includes/Information_Window.h"
-
+/*
+ * Parse called with string of user input from terminal window.
+ * reads the first token and calls the relevant command function 
+ * returns zero if syntax error.
+ */
 int parse(char *inputString)
 {
     size_t len = 1+strlen(inputString);//gets the size of inputString
@@ -94,7 +98,12 @@ int parse(char *inputString)
     }
     
 }
-
+/*
+ *  Called when we read mktwr cmd.
+ *  gets tower position and pushes to queue
+ *  returns 1 if cmd was probably successfully pushed to queue
+ *  returns 0 if definately not succesful or if target or stat call failed
+ */
 int parseMktwr(char ** commandArray)
 {
     int inputTowerPositionX = (int)strtol(commandArray[1], NULL, 10),//http://www.cplusplus.com/reference/cstdlib/strtol/
@@ -161,7 +170,12 @@ int parseMan(char * inputStringCommandMan)
 
 
 
-
+/*
+ *  Called when we read cat cmd.
+ *  gets target and pushes to info window.
+ *  returns 1 if cmd was probably successfully pushed.
+ *  returns 0 if definately not succesful or if target call failed.
+ */
 int parseCat(char * inputStringTargeting)
 {
     //looks for tower type target:
@@ -183,12 +197,12 @@ int parseCat(char * inputStringTargeting)
     
 }
 
-/*  Called when we read upgrade cmd.
-    gets stat and target and pushes to queue
-    returns 1 if cmd was probably successfully pushed to queue
-    returns 0 if definately not succesful or if target or stat call failed
-*/
-
+/*  
+ *  Called when we read upgrade cmd.
+ *  gets stat and target and pushes to queue
+ *  returns 1 if cmd was probably successfully pushed to queue
+ *  returns 0 if definately not succesful or if target or stat call failed
+ */
 int parseUpgrade(char ** commandArray, int numberOfChunks)
 {
     upgradeStat statToUpgrade = getUpgradeStats(commandArray[1]);
@@ -205,7 +219,8 @@ int parseUpgrade(char ** commandArray, int numberOfChunks)
     return 0;
 }
 
-/*  called on cat and upgrade commands with the target specifying token.
+/* 
+ *  Called on cat and upgrade commands with the target specifying token.
     looks at the 2nd char in the string to find an int 1-9 to be the target.
     Note, wont work for anything > 9, would just see 1.
     Will print its own error message.
@@ -243,9 +258,9 @@ unsigned int getTargetTower(const char * inputStringTargeting)
     return targetTower;
 }
 
-/*Called when we read an upgrade command, tests the next token against the possible stats 
- returns the corresponding upgradeStat Or
- returns statError  and calls the upgradeStatUsageError function
+/*  Called when we read an upgrade command, tests the next token against the possible stats
+ *  returns the corresponding upgradeStat Or
+    returns statError  and calls the upgradeStatUsageError function
  */
 upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 {
@@ -296,7 +311,10 @@ upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 
 
 
-/* if there was a syntax error in the users command call this function which will print usage advice to the terminal window*/
+/* 
+ *  if there was a syntax error in the users command call this function which
+    will print usage advice to the terminal window
+ */
 void upgrageStatUsageError(const char * inputStringUpgradeStats, upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats)
 {
     if(statToUpgrade==statError)//if it is still set to ERROR then the user made a mistake
@@ -317,9 +335,12 @@ void upgrageStatUsageError(const char * inputStringUpgradeStats, upgradeStat sta
 
 
 
-/* Takes the first string of the input command and tests it against the correct syntax to find which command they want to execute then returns that command as a enum commandType variable 
-    Returns commandType correspodning to the validated command 
-    or a commandError commandType*/
+/* 
+ *  Takes the first string of the input command and tests it against the correct
+    syntax to find which command they want to execute then returns that command 
+    as a enum commandType variable. Returns commandType correspodning to the 
+    validated command or a commandError commandType
+ */
 commandType getAction( const char * inputAction )
 {
     /*first lets make an array of strings to hold all the possible action commands*/
@@ -373,7 +394,10 @@ commandType getAction( const char * inputAction )
 
 
 
-/* if there was a syntax error in the users command call this function which will print usage advice to the terminal window*/
+/*
+ *   if there was a syntax error in the users command call this function which 
+     will print usage advice to the terminal window.
+ */
 void actionUsageError()
 {
     const char **validActions;
@@ -394,14 +418,19 @@ void actionUsageError()
         fprintf(stderr,"%s\n",validActions[i]);
     }
     fprintf(stderr,"\nType man [COMMAND] for usage\n");//we advise them on usage
-    //error messages will need to be passed back to the terminal to be printed. hopefully can do this by setting up a custom stream. For now will print to stderr.
+    //error messages will need to be passed back to the terminal to be printed.
+    //hopefully can do this by setting up a custom stream. For now will print to stderr.
     free(validActions);//free the mallocd array
 
 }
 
 
 
-/* Takes the input string and breaks into separate words (where there is a space and new string starts) each of these words is stored in the commandArray which is an array of strings*/
+/*
+ *  Takes the input string and breaks into separate words (where there is a 
+    space and new string starts) each of these words is stored in the 
+    commandArray which is an array of strings
+ */
 char **breakUpString(const char * inputString, int *numberOfChunksPtr, const char * delimiter)
 {
     char    *stringChunk,                       //holds the chunks on the input string as we break it up
@@ -428,7 +457,9 @@ char **breakUpString(const char * inputString, int *numberOfChunksPtr, const cha
     return commandArray;
 }
 
-/* duplicates a string */
+/*
+ *  Duplicates a string
+ */
 char *strdup(const char * s)
 {
     size_t len = 1+strlen(s);//gets the size of s
@@ -437,7 +468,9 @@ char *strdup(const char * s)
     return p ? memcpy(p, s, len) : NULL;//if p is non 0 ie malloc worked, then copy everything in s into p and return p. if p is NULL malloc didnt work so return NULL
 }
 
-/*frees the memory allocated in breakup string funct*/
+/*
+ *  frees the memory allocated in breakup string funct
+ */
 void freeCommandArray(char **commandArray,int numberOfChunks)
 {
     for(int i=0; i<numberOfChunks; ++i)
@@ -447,7 +480,9 @@ void freeCommandArray(char **commandArray,int numberOfChunks)
     free(commandArray);
 }
 
-/* test function. Prints contents of commandArray*/
+/*
+ *  Test function. Prints contents of commandArray
+ */
 void testCommandArray(char ** commandArray, int numberOfChunks)
 {
     for(int i=0; i<numberOfChunks; ++i)
@@ -456,7 +491,9 @@ void testCommandArray(char ** commandArray, int numberOfChunks)
         printf("|\n");
     }
 }
-
+/*
+ *  Test function. Prints the action  we read.
+ */
 void testGetAction(commandType action)
 {
     /*first lets make an array of strings to hold all the possible action commands*/
@@ -474,6 +511,9 @@ void testGetAction(commandType action)
     free(validActions);//free the mallocd array
 
 }
+/*
+ *  Test function. Prints upgrade stat we have read.
+ */
 void testGetUpgradeStat(upgradeStat statToUpgrade)
 {
     /*first lets make an array of strings to hold all the possible action commands*/
