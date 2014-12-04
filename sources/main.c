@@ -20,6 +20,7 @@ int main()
     initLevel();
     
     // testing();
+
     //Display d = init_SDL(); 
     userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));//createEnemy();
 
@@ -30,10 +31,12 @@ int main()
     clear = empty;
     addGold(100);
     int steps=0;
+        userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
     do{
         ++steps;
         startFrame(d);
         terminal_window(d, pass, clear,inputCommand);
+		popToTower();
         if(inputCommand)
         {
             parse(inputCommand);
@@ -42,10 +45,8 @@ int main()
         towerMonitor(0, NULL);
         present_enemy(d);
         present_tower(d);
-        printf("good\n");
-        
-        printf("after pop good \n");
-        fire();
+
+		fire();
         for(int i=1; i<=getNumberOfEnemies(); ++i)
         {
             int move = moveEnemy(i);

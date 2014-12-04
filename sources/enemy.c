@@ -348,8 +348,7 @@ void present_enemy(Display d)
 
         if(!isDead(i))
         {
-
-            drawEnemy(d, e->x, e->y, e->width, e->height, (double)e->health, (double)e->maxHealth);
+            drawEnemy(d, e->x, e->y, (double)e->health, (double)e->maxHealth, 0, 4);
         }
     }
 }

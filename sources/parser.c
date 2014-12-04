@@ -14,6 +14,7 @@
 #include "../includes/actionQueueDataStructure.h"
 #include "./../includes/parser.h"
 #include "../includes/Information_Window.h"
+
 /*
  * Parse called with string of user input from terminal window.
  * reads the first token and calls the relevant command function 
@@ -119,9 +120,9 @@ int parseMktwr(char ** commandArray)
     return 1;
     
 }
-/* calls man printing functions
- returns 1 if ok
- returns 0 if error and prints message
+/*  calls man printing functions
+ *  returns 1 if ok
+    returns 0 if error and prints message
  */
 int parseMan(char * inputStringCommandMan)
 {
@@ -258,8 +259,8 @@ unsigned int getTargetTower(const char * inputStringTargeting)
     return targetTower;
 }
 
-/*  Called when we read an upgrade command, tests the next token against the possible stats
- *  returns the corresponding upgradeStat Or
+/*  Called when we read an upgrade command, tests the next token against the 
+ *  possible stats returns the corresponding upgradeStat Or
     returns statError  and calls the upgradeStatUsageError function
  */
 upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
@@ -312,7 +313,7 @@ upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 
 
 /* 
- *  if there was a syntax error in the users command call this function which
+ *  If there was a syntax error in the users command call this function which
     will print usage advice to the terminal window
  */
 void upgrageStatUsageError(const char * inputStringUpgradeStats, upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats)
@@ -395,14 +396,17 @@ commandType getAction( const char * inputAction )
 
 
 /*
- *   if there was a syntax error in the users command call this function which 
+ *   If there was a syntax error in the users command call this function which
      will print usage advice to the terminal window.
  */
 void actionUsageError()
 {
     const char **validActions;
-    int numberOfActions=6;//have 5 action commands at this time: upgrade, execute, set, man, cat
-    validActions=(const char **)malloc(numberOfActions*sizeof(char*));//array of $[numberOfActions] strings
+    int numberOfActions=6;//have 5 action commands at this time: upgrade, execute,
+                          //set, man, cat
+    validActions=(const char **)malloc(numberOfActions*sizeof(char*));
+    //array of
+        //$[numberOfActions] strings
     validActions[0]="upgrade";
     validActions[1]="execute";
     validActions[2]="set";
