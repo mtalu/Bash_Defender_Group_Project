@@ -14,6 +14,9 @@
 int SCREEN_WIDTH_GLOBAL;
 int SCREEN_HEIGHT_GLOBAL;
 
+/*
+ *Initializes all data structures required for level
+ */
 void initLevel()    {
 
     createLevelPaths();
@@ -23,6 +26,9 @@ void initLevel()    {
     createEnemyGroup();
 }
 
+/*
+ *Frees all Data structures
+ */
 void endLevel() {
 
     freeAllTowers();

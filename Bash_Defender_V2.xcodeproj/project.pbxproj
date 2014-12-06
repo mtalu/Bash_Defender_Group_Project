@@ -10,16 +10,15 @@
 		4C3F57CD1A276D20006FD1E5 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F57CA1A276D20006FD1E5 /* SDL2_image.framework */; };
 		4C3F57CE1A276D20006FD1E5 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F57CB1A276D20006FD1E5 /* SDL2_ttf.framework */; };
 		4C3F57CF1A276D20006FD1E5 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F57CC1A276D20006FD1E5 /* SDL2.framework */; };
-		4C3F57EE1A276D8D006FD1E5 /* actionQueueDataStructure.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57DB1A276D8D006FD1E5 /* actionQueueDataStructure.c */; };
-		4C3F57EF1A276D8D006FD1E5 /* Display.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57DC1A276D8D006FD1E5 /* Display.c */; };
-		4C3F57F01A276D8D006FD1E5 /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57DD1A276D8D006FD1E5 /* enemy.c */; };
-		4C3F57F11A276D8D006FD1E5 /* gameProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57E01A276D8D006FD1E5 /* gameProperties.c */; };
-		4C3F57F21A276D8D006FD1E5 /* Information_Window.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57E31A276D8D006FD1E5 /* Information_Window.c */; };
-		4C3F57F31A276D8D006FD1E5 /* levelController.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57E41A276D8D006FD1E5 /* levelController.c */; };
-		4C3F57F41A276D8D006FD1E5 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57E51A276D8D006FD1E5 /* main.c */; };
-		4C3F57F51A276D8D006FD1E5 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57E61A276D8D006FD1E5 /* makefile */; };
-		4C3F57F61A276D8D006FD1E5 /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57E81A276D8D006FD1E5 /* parser.c */; };
-		4C3F57F71A276D8D006FD1E5 /* tower.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F57EC1A276D8D006FD1E5 /* tower.c */; };
+		4CB8A0FE1A33BD0A0076E35F /* actionQueueDataStructure.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EA1A33BD0A0076E35F /* actionQueueDataStructure.c */; };
+		4CB8A0FF1A33BD0A0076E35F /* Display.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EB1A33BD0A0076E35F /* Display.c */; };
+		4CB8A1001A33BD0A0076E35F /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EC1A33BD0A0076E35F /* enemy.c */; };
+		4CB8A1011A33BD0A0076E35F /* gameProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EF1A33BD0A0076E35F /* gameProperties.c */; };
+		4CB8A1021A33BD0A0076E35F /* Information_Window.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0F21A33BD0A0076E35F /* Information_Window.c */; };
+		4CB8A1031A33BD0A0076E35F /* levelController.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0F31A33BD0A0076E35F /* levelController.c */; };
+		4CB8A1041A33BD0A0076E35F /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0F41A33BD0A0076E35F /* main.c */; };
+		4CB8A1051A33BD0A0076E35F /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0F61A33BD0A0076E35F /* parser.c */; };
+		4CB8A1061A33BD0A0076E35F /* tower.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0FB1A33BD0A0076E35F /* tower.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,36 +38,38 @@
 		4C3F57CA1A276D20006FD1E5 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		4C3F57CB1A276D20006FD1E5 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
 		4C3F57CC1A276D20006FD1E5 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		4C3F57D01A276D79006FD1E5 /* actionQueueDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = actionQueueDataStructure.h; path = includes/actionQueueDataStructure.h; sourceTree = "<group>"; };
-		4C3F57D11A276D79006FD1E5 /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = debug.h; path = includes/debug.h; sourceTree = "<group>"; };
-		4C3F57D21A276D79006FD1E5 /* Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Display.h; path = includes/Display.h; sourceTree = "<group>"; };
-		4C3F57D31A276D79006FD1E5 /* enemy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = enemy.h; path = includes/enemy.h; sourceTree = "<group>"; };
-		4C3F57D41A276D79006FD1E5 /* gameProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gameProperties.h; path = includes/gameProperties.h; sourceTree = "<group>"; };
-		4C3F57D51A276D79006FD1E5 /* Information_Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Information_Window.h; path = includes/Information_Window.h; sourceTree = "<group>"; };
-		4C3F57D61A276D79006FD1E5 /* levelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = levelController.h; path = includes/levelController.h; sourceTree = "<group>"; };
-		4C3F57D71A276D79006FD1E5 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = main.h; path = includes/main.h; sourceTree = "<group>"; };
-		4C3F57D81A276D79006FD1E5 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = parser.h; path = includes/parser.h; sourceTree = "<group>"; };
-		4C3F57D91A276D7A006FD1E5 /* sput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sput.h; path = includes/sput.h; sourceTree = "<group>"; };
-		4C3F57DA1A276D7A006FD1E5 /* tower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tower.h; path = includes/tower.h; sourceTree = "<group>"; };
-		4C3F57DB1A276D8D006FD1E5 /* actionQueueDataStructure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = actionQueueDataStructure.c; path = sources/actionQueueDataStructure.c; sourceTree = "<group>"; };
-		4C3F57DC1A276D8D006FD1E5 /* Display.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Display.c; path = sources/Display.c; sourceTree = "<group>"; };
-		4C3F57DD1A276D8D006FD1E5 /* enemy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enemy.c; path = sources/enemy.c; sourceTree = "<group>"; };
-		4C3F57DE1A276D8D006FD1E5 /* enemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = enemy.png; path = sources/enemy.png; sourceTree = "<group>"; };
-		4C3F57DF1A276D8D006FD1E5 /* FreeSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeSans.ttf; path = sources/FreeSans.ttf; sourceTree = "<group>"; };
-		4C3F57E01A276D8D006FD1E5 /* gameProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gameProperties.c; path = sources/gameProperties.c; sourceTree = "<group>"; };
-		4C3F57E11A276D8D006FD1E5 /* info_monitor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_monitor.png; path = sources/info_monitor.png; sourceTree = "<group>"; };
-		4C3F57E21A276D8D006FD1E5 /* info_window_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_window_background.png; path = sources/info_window_background.png; sourceTree = "<group>"; };
-		4C3F57E31A276D8D006FD1E5 /* Information_Window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Information_Window.c; path = sources/Information_Window.c; sourceTree = "<group>"; };
-		4C3F57E41A276D8D006FD1E5 /* levelController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = levelController.c; path = sources/levelController.c; sourceTree = "<group>"; };
-		4C3F57E51A276D8D006FD1E5 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = sources/main.c; sourceTree = "<group>"; };
-		4C3F57E61A276D8D006FD1E5 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = makefile; path = sources/makefile; sourceTree = "<group>"; };
-		4C3F57E71A276D8D006FD1E5 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "sources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
-		4C3F57E81A276D8D006FD1E5 /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parser.c; path = sources/parser.c; sourceTree = "<group>"; };
-		4C3F57E91A276D8D006FD1E5 /* sdl2-spritesheet-actual.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sdl2-spritesheet-actual.png"; path = "sources/sdl2-spritesheet-actual.png"; sourceTree = "<group>"; };
-		4C3F57EA1A276D8D006FD1E5 /* stats_monitor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_monitor.png; path = sources/stats_monitor.png; sourceTree = "<group>"; };
-		4C3F57EB1A276D8D006FD1E5 /* terminalwindow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = terminalwindow.png; path = sources/terminalwindow.png; sourceTree = "<group>"; };
-		4C3F57EC1A276D8D006FD1E5 /* tower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tower.c; path = sources/tower.c; sourceTree = "<group>"; };
-		4C3F57ED1A276D8D006FD1E5 /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = sources/tower.png; sourceTree = "<group>"; };
+		4CB8A0DE1A33BCF50076E35F /* actionQueueDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = actionQueueDataStructure.h; path = includes/actionQueueDataStructure.h; sourceTree = "<group>"; };
+		4CB8A0DF1A33BCF50076E35F /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = debug.h; path = includes/debug.h; sourceTree = "<group>"; };
+		4CB8A0E01A33BCF50076E35F /* Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Display.h; path = includes/Display.h; sourceTree = "<group>"; };
+		4CB8A0E11A33BCF50076E35F /* enemy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = enemy.h; path = includes/enemy.h; sourceTree = "<group>"; };
+		4CB8A0E21A33BCF50076E35F /* enemy.h_old */ = {isa = PBXFileReference; lastKnownFileType = text; name = enemy.h_old; path = includes/enemy.h_old; sourceTree = "<group>"; };
+		4CB8A0E31A33BCF50076E35F /* gameProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gameProperties.h; path = includes/gameProperties.h; sourceTree = "<group>"; };
+		4CB8A0E41A33BCF50076E35F /* Information_Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Information_Window.h; path = includes/Information_Window.h; sourceTree = "<group>"; };
+		4CB8A0E51A33BCF50076E35F /* levelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = levelController.h; path = includes/levelController.h; sourceTree = "<group>"; };
+		4CB8A0E61A33BCF50076E35F /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = main.h; path = includes/main.h; sourceTree = "<group>"; };
+		4CB8A0E71A33BCF50076E35F /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = parser.h; path = includes/parser.h; sourceTree = "<group>"; };
+		4CB8A0E81A33BCF50076E35F /* sput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sput.h; path = includes/sput.h; sourceTree = "<group>"; };
+		4CB8A0E91A33BCF50076E35F /* tower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tower.h; path = includes/tower.h; sourceTree = "<group>"; };
+		4CB8A0EA1A33BD0A0076E35F /* actionQueueDataStructure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = actionQueueDataStructure.c; path = sources/actionQueueDataStructure.c; sourceTree = "<group>"; };
+		4CB8A0EB1A33BD0A0076E35F /* Display.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Display.c; path = sources/Display.c; sourceTree = "<group>"; };
+		4CB8A0EC1A33BD0A0076E35F /* enemy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enemy.c; path = sources/enemy.c; sourceTree = "<group>"; };
+		4CB8A0ED1A33BD0A0076E35F /* enemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = enemy.png; path = sources/enemy.png; sourceTree = "<group>"; };
+		4CB8A0EE1A33BD0A0076E35F /* FreeSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeSans.ttf; path = sources/FreeSans.ttf; sourceTree = "<group>"; };
+		4CB8A0EF1A33BD0A0076E35F /* gameProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gameProperties.c; path = sources/gameProperties.c; sourceTree = "<group>"; };
+		4CB8A0F01A33BD0A0076E35F /* info_monitor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_monitor.png; path = sources/info_monitor.png; sourceTree = "<group>"; };
+		4CB8A0F11A33BD0A0076E35F /* info_window_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_window_background.png; path = sources/info_window_background.png; sourceTree = "<group>"; };
+		4CB8A0F21A33BD0A0076E35F /* Information_Window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Information_Window.c; path = sources/Information_Window.c; sourceTree = "<group>"; };
+		4CB8A0F31A33BD0A0076E35F /* levelController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = levelController.c; path = sources/levelController.c; sourceTree = "<group>"; };
+		4CB8A0F41A33BD0A0076E35F /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = sources/main.c; sourceTree = "<group>"; };
+		4CB8A0F51A33BD0A0076E35F /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "sources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		4CB8A0F61A33BD0A0076E35F /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parser.c; path = sources/parser.c; sourceTree = "<group>"; };
+		4CB8A0F71A33BD0A0076E35F /* sdl2-spritesheet-actual.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sdl2-spritesheet-actual.png"; path = "sources/sdl2-spritesheet-actual.png"; sourceTree = "<group>"; };
+		4CB8A0F81A33BD0A0076E35F /* stats_monitor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_monitor.png; path = sources/stats_monitor.png; sourceTree = "<group>"; };
+		4CB8A0F91A33BD0A0076E35F /* terminalwindow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = terminalwindow.png; path = sources/terminalwindow.png; sourceTree = "<group>"; };
+		4CB8A0FA1A33BD0A0076E35F /* tower_monitor_fallout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower_monitor_fallout.png; path = sources/tower_monitor_fallout.png; sourceTree = "<group>"; };
+		4CB8A0FB1A33BD0A0076E35F /* tower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tower.c; path = sources/tower.c; sourceTree = "<group>"; };
+		4CB8A0FC1A33BD0A0076E35F /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = sources/tower.png; sourceTree = "<group>"; };
+		4CB8A0FD1A33BD0A0076E35F /* tower1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower1.png; path = sources/tower1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,36 +89,38 @@
 		4C3F57B71A276CAC006FD1E5 = {
 			isa = PBXGroup;
 			children = (
-				4C3F57D01A276D79006FD1E5 /* actionQueueDataStructure.h */,
-				4C3F57D11A276D79006FD1E5 /* debug.h */,
-				4C3F57D21A276D79006FD1E5 /* Display.h */,
-				4C3F57D31A276D79006FD1E5 /* enemy.h */,
-				4C3F57D41A276D79006FD1E5 /* gameProperties.h */,
-				4C3F57D51A276D79006FD1E5 /* Information_Window.h */,
-				4C3F57D61A276D79006FD1E5 /* levelController.h */,
-				4C3F57D71A276D79006FD1E5 /* main.h */,
-				4C3F57DB1A276D8D006FD1E5 /* actionQueueDataStructure.c */,
-				4C3F57DC1A276D8D006FD1E5 /* Display.c */,
-				4C3F57DD1A276D8D006FD1E5 /* enemy.c */,
-				4C3F57DE1A276D8D006FD1E5 /* enemy.png */,
-				4C3F57DF1A276D8D006FD1E5 /* FreeSans.ttf */,
-				4C3F57E01A276D8D006FD1E5 /* gameProperties.c */,
-				4C3F57E11A276D8D006FD1E5 /* info_monitor.png */,
-				4C3F57E21A276D8D006FD1E5 /* info_window_background.png */,
-				4C3F57E31A276D8D006FD1E5 /* Information_Window.c */,
-				4C3F57E41A276D8D006FD1E5 /* levelController.c */,
-				4C3F57E51A276D8D006FD1E5 /* main.c */,
-				4C3F57E61A276D8D006FD1E5 /* makefile */,
-				4C3F57E71A276D8D006FD1E5 /* OpenSans-Regular.ttf */,
-				4C3F57E81A276D8D006FD1E5 /* parser.c */,
-				4C3F57E91A276D8D006FD1E5 /* sdl2-spritesheet-actual.png */,
-				4C3F57EA1A276D8D006FD1E5 /* stats_monitor.png */,
-				4C3F57EB1A276D8D006FD1E5 /* terminalwindow.png */,
-				4C3F57EC1A276D8D006FD1E5 /* tower.c */,
-				4C3F57ED1A276D8D006FD1E5 /* tower.png */,
-				4C3F57D81A276D79006FD1E5 /* parser.h */,
-				4C3F57D91A276D7A006FD1E5 /* sput.h */,
-				4C3F57DA1A276D7A006FD1E5 /* tower.h */,
+				4CB8A0EA1A33BD0A0076E35F /* actionQueueDataStructure.c */,
+				4CB8A0EB1A33BD0A0076E35F /* Display.c */,
+				4CB8A0EC1A33BD0A0076E35F /* enemy.c */,
+				4CB8A0ED1A33BD0A0076E35F /* enemy.png */,
+				4CB8A0EE1A33BD0A0076E35F /* FreeSans.ttf */,
+				4CB8A0EF1A33BD0A0076E35F /* gameProperties.c */,
+				4CB8A0F01A33BD0A0076E35F /* info_monitor.png */,
+				4CB8A0F11A33BD0A0076E35F /* info_window_background.png */,
+				4CB8A0F21A33BD0A0076E35F /* Information_Window.c */,
+				4CB8A0F31A33BD0A0076E35F /* levelController.c */,
+				4CB8A0F41A33BD0A0076E35F /* main.c */,
+				4CB8A0F51A33BD0A0076E35F /* OpenSans-Regular.ttf */,
+				4CB8A0F61A33BD0A0076E35F /* parser.c */,
+				4CB8A0F71A33BD0A0076E35F /* sdl2-spritesheet-actual.png */,
+				4CB8A0F81A33BD0A0076E35F /* stats_monitor.png */,
+				4CB8A0F91A33BD0A0076E35F /* terminalwindow.png */,
+				4CB8A0FA1A33BD0A0076E35F /* tower_monitor_fallout.png */,
+				4CB8A0FB1A33BD0A0076E35F /* tower.c */,
+				4CB8A0FC1A33BD0A0076E35F /* tower.png */,
+				4CB8A0FD1A33BD0A0076E35F /* tower1.png */,
+				4CB8A0DE1A33BCF50076E35F /* actionQueueDataStructure.h */,
+				4CB8A0DF1A33BCF50076E35F /* debug.h */,
+				4CB8A0E01A33BCF50076E35F /* Display.h */,
+				4CB8A0E11A33BCF50076E35F /* enemy.h */,
+				4CB8A0E21A33BCF50076E35F /* enemy.h_old */,
+				4CB8A0E31A33BCF50076E35F /* gameProperties.h */,
+				4CB8A0E41A33BCF50076E35F /* Information_Window.h */,
+				4CB8A0E51A33BCF50076E35F /* levelController.h */,
+				4CB8A0E61A33BCF50076E35F /* main.h */,
+				4CB8A0E71A33BCF50076E35F /* parser.h */,
+				4CB8A0E81A33BCF50076E35F /* sput.h */,
+				4CB8A0E91A33BCF50076E35F /* tower.h */,
 				4C3F57CA1A276D20006FD1E5 /* SDL2_image.framework */,
 				4C3F57CB1A276D20006FD1E5 /* SDL2_ttf.framework */,
 				4C3F57CC1A276D20006FD1E5 /* SDL2.framework */,
@@ -197,16 +200,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C3F57F31A276D8D006FD1E5 /* levelController.c in Sources */,
-				4C3F57F11A276D8D006FD1E5 /* gameProperties.c in Sources */,
-				4C3F57F01A276D8D006FD1E5 /* enemy.c in Sources */,
-				4C3F57EF1A276D8D006FD1E5 /* Display.c in Sources */,
-				4C3F57F61A276D8D006FD1E5 /* parser.c in Sources */,
-				4C3F57F71A276D8D006FD1E5 /* tower.c in Sources */,
-				4C3F57F21A276D8D006FD1E5 /* Information_Window.c in Sources */,
-				4C3F57EE1A276D8D006FD1E5 /* actionQueueDataStructure.c in Sources */,
-				4C3F57F51A276D8D006FD1E5 /* makefile in Sources */,
-				4C3F57F41A276D8D006FD1E5 /* main.c in Sources */,
+				4CB8A1031A33BD0A0076E35F /* levelController.c in Sources */,
+				4CB8A1011A33BD0A0076E35F /* gameProperties.c in Sources */,
+				4CB8A1001A33BD0A0076E35F /* enemy.c in Sources */,
+				4CB8A1061A33BD0A0076E35F /* tower.c in Sources */,
+				4CB8A0FF1A33BD0A0076E35F /* Display.c in Sources */,
+				4CB8A1021A33BD0A0076E35F /* Information_Window.c in Sources */,
+				4CB8A0FE1A33BD0A0076E35F /* actionQueueDataStructure.c in Sources */,
+				4CB8A1051A33BD0A0076E35F /* parser.c in Sources */,
+				4CB8A1041A33BD0A0076E35F /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +330,7 @@
 				4C3F57C91A276CAC006FD1E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

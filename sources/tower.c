@@ -23,6 +23,25 @@ struct tower {
     int gunY;
 };
 
+int getTowerRange(int towerID)	{
+	return getTowerID(towerID)->range;     
+}
+int getTowerSpeed(int towerID)	{
+	return getTowerID(towerID)->speed;     
+}
+int getTowerDamage(int towerID)	{
+	return getTowerID(towerID)->damage;     
+}
+int getTowerAOErange(int towerID)	{
+	return getTowerID(towerID)->level;     
+}
+int getTowerAOEpower(int towerID)	{
+	return getTowerID(towerID)->AOEpower;     
+}
+int getTowerLevel(int towerID)	{
+	return getTowerID(towerID)->level;     
+}
+
 void testingTowerModule()	{
 	sput_start_testing();
 	sput_set_output_stream(NULL);	
@@ -46,10 +65,6 @@ struct towerGroup	{
 	unsigned int numOfTowers;
 	
 };
-
-int getTowerDamage(int towerID)	{
-	return getTowerGrp(NULL)->listOfTowers[towerID]->damage;
-}
 
 void createTowerGroup()	{
 
@@ -157,34 +172,34 @@ TowerGroup getTowerGrp(TowerGroup Group)	{
 	return newGroup;
 }
 
-commandType checkActQueue()
-{
-	commandType cmd;
-	upgradeStat stat;
-	int target;
-	if (popFromQueue(getQueue(NULL),&cmd,&stat,&target,getGame(NULL),10))
-    {
-		switch (cmd)
-        {
-			case upgrade:
-            {
-					if( upgradeTowerStat(stat,target)!= -1 ) 	{
-						return upgrade;
-					}
-                    else {
-						return 0;
-					}
-            }
-			case execute:
-					return execute;
-					break;
-			default:	
-					fprintf(stderr,"checkActQueue tower.c: unrecognised command\n");
-					break;
-		}
-	}
-	return 0;
-}
+//commandType checkActQueue()
+//{
+//	commandType cmd;
+//	upgradeStat stat;
+//	int target;
+//	if (popFromQueue(getQueue(NULL),&cmd,&stat,&target,getGame(NULL),10))
+//    {
+//		switch (cmd)
+//        {
+//			case upgrade:
+//            {
+//					if( upgradeTowerStat(stat,target)!= -1 ) 	{
+//						return upgrade;
+//					}
+//                    else {
+//						return 0;
+//					}
+//            }
+//			case execute:
+//					return execute;
+//					break;
+//			default:	
+//					fprintf(stderr,"checkActQueue tower.c: unrecognised command\n");
+//					break;
+//		}
+//	}
+//	return 0;
+//}
 
 int upgradeDmg(int target)
 {
@@ -232,45 +247,45 @@ int upgradeAOErange(int target)
 	return 0;
 }
 
-upgradeStat upgradeTowerStat(upgradeStat stat, int target)	{
-
-	switch(stat)	{
-		case power:
-        {
-			if(upgradeDmg(target))	{
-				return power;
-			}
-        }
-		case range:
-        {
-			if(upgradeRange(target))	{
-				return range;
-			}
-        }
-		case speed:
-        {
-			if(upgradeSpeed(target))	{
-				return speed;
-			}
-        }
-		case AOErange:
-        {
-			if(upgradeAOErange(target))	{
-				return AOErange;
-			}
-        }
-		case AOEpower:
-        {
-			if(upgradeAOEpower(target))	{
-				return AOEpower;
-			}
-        }
-		default:
-			fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
-            return statError;
-
-	}
-}
+//upgradeStat upgradeTowerStat(upgradeStat stat, int target)	{
+//
+//	switch(stat)	{
+//		case power:
+//        {
+//			if(upgradeDmg(target))	{
+//				return power;
+//			}
+//        }
+//		case range:
+//        {
+//			if(upgradeRange(target))	{
+//				return range;
+//			}
+//        }
+//		case speed:
+//        {
+//			if(upgradeSpeed(target))	{
+//				return speed;
+//			}
+//        }
+//		case AOErange:
+//        {
+//			if(upgradeAOErange(target))	{
+//				return AOErange;
+//			}
+//        }
+//		case AOEpower:
+//        {
+//			if(upgradeAOEpower(target))	{
+//				return AOEpower;
+//			}
+//        }
+//		default:
+//			fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
+//            return statError;
+//
+//	}
+//}
 
 
 void testUpgradeTowerStat()	{
@@ -279,10 +294,10 @@ void testUpgradeTowerStat()	{
 	createTowerGroup();
 	tower t1 = createTower();
 	tower t2 = createTower();
-	sput_fail_unless(upgradeTowerStat(power,1) == power,"Valid Power Upgrade: tower one for upgrade");
-	sput_fail_unless(upgradeTowerStat(power,1) == power,"Valid Power Upgrade: Tower two for upgrade");
-	sput_fail_unless(upgradeTowerStat(0,1) == 0, " Invalid: Passing invalid upgrade");
-	sput_fail_unless(upgradeTowerStat(power,3) == 0, " Invalid: Passing invalid target");
+	//sput_fail_unless(upgradeTowerStat(power,1) == power,"Valid Power Upgrade: tower one for upgrade");
+	//sput_fail_unless(upgradeTowerStat(power,1) == power,"Valid Power Upgrade: Tower two for upgrade");
+	//sput_fail_unless(upgradeTowerStat(0,1) == 0, " Invalid: Passing invalid upgrade");
+	//sput_fail_unless(upgradeTowerStat(power,3) == 0, " Invalid: Passing invalid target");
 	free(t1);
 	free(t2);
 }
@@ -294,7 +309,7 @@ unsigned int getNumberOfTowers()	{
 
 void freeAllTowers()	{
 
-	int i = 0;
+	int i = 1;
 	while(i < getTowerGrp(NULL)->numOfTowers)	{
 		free(getTowerGrp(NULL)->listOfTowers[i]);
 		i++;
@@ -350,7 +365,7 @@ void populateTower(tower newTow, int id) {
     newTow->damage = 10;
     newTow->range = 10;
     newTow->firing = 0;
-	newTow->level = 1;
+    newTow->level = 1;
     newTow->speed = 50;
 
 
@@ -389,6 +404,13 @@ int setTowerRange(int towerID, int newRange)	{
 
 	getTowerGrp(NULL)->listOfTowers[towerID]->range = newRange;
 	return newRange;
+
+}
+
+int setTowerDamage(int towerID, int newDamage)	{
+
+	getTowerGrp(NULL)->listOfTowers[towerID]->damage = newDamage;
+	return newDamage;
 
 }
 
@@ -484,7 +506,7 @@ void present_tower(Display d)
         {
             tower currentTower = getTowerID(towerID);
             drawTower(d, currentTower->x, currentTower->y, currentTower->width,
-                      currentTower->height);
+                      currentTower->height,currentTower->range, 0);
             if(TG->listOfTowers[towerID]->firing == 1)	{
                 drawLine(d, currentTower->x+currentTower->gunX,
                          currentTower->y+currentTower->gunY, currentTower->targetPosition[0],
@@ -494,4 +516,3 @@ void present_tower(Display d)
         }
     }
 }
-

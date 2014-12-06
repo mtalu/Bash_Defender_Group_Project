@@ -51,9 +51,9 @@ void testingActionQueue()	{
     sput_run_test(testcheckGold);
     sput_leave_suite();
 	
-	sput_enter_suite("testPopFromQueue(): Popping from queue");
-	sput_run_test(testPopFromQueue);
-	sput_leave_suite();
+	//sput_enter_suite("testPopFromQueue(): Popping from queue");
+	//sput_run_test(testPopFromQueue);
+	//sput_leave_suite();
 
 	sput_enter_suite("testPushToQueue(): Pushing to queue");
 	sput_run_test(testPushToQueue);
@@ -62,6 +62,9 @@ void testingActionQueue()	{
 	sput_finish_testing();
 }
 
+/*
+ *Creates queue.  Must be run at the start of every game.
+ */
 ActionQueueStructure createActionQueue()	{
 
 	ActionQueueStructure newActionQueue = (ActionQueueStructure) malloc(sizeof(*newActionQueue));
@@ -90,6 +93,9 @@ int createNode(ActionQueueStructure queue)	{
 
 }
 
+/*
+ *Returns actionqueue address
+ */
 ActionQueueStructure getQueue(ActionQueueStructure queue)	{
 
 	static ActionQueueStructure stQueue;
@@ -115,10 +121,6 @@ int pushToQueue(ActionQueueStructure queue, commandType command, upgradeStat opt
 
 void testPushToQueue()	{
 	
-    //commandType nCommand;
-    //commandType nStat;
-    //int tar = 1;
-
     commandType nCommand_1=upgrade;
     upgradeStat nStat_1=power;
     int tar_1 = 1;
@@ -127,11 +129,6 @@ void testPushToQueue()	{
     upgradeStat nStat_2=range;
     int tar_2 = 2;
 
-    //commandType nCommand_3=set;
-    //upgradeStat nStat_3=speed;
-    //int tar_3 = 3;
-	
-	
     GameProperties newGame = createGame();
     ActionQueueStructure newQueue = createActionQueue();
 
@@ -142,48 +139,183 @@ void testPushToQueue()	{
 	sput_fail_unless(getLastCommand(newQueue) == execute,"Valid: Last of Queue Command");
 	sput_fail_unless(getLastOption(newQueue) == range,"Valid: Last of Queue Option");
 	addGold(10);
-	//popFromQueue(newQueue,&nCommand,&nStat,tar,newGame,10);
 
 }
-
+/*
+ *Returns first command in queue
+ */
 commandType getFirstCommand(ActionQueueStructure queue)	{
 
 	return queue->start->command;
 }
 
+/*
+ *Returns last command in queue
+ */
 commandType getLastCommand(ActionQueueStructure queue)	{
 
 	return queue->current->command;
 }
 
+/*
+ *Returns first option in queue
+ */
 upgradeStat getFirstOption(ActionQueueStructure queue)	{
 
 	return queue->start->option;
 
 }
 
+/*
+ *Returns last option in queue
+ */
 upgradeStat getLastOption(ActionQueueStructure queue)	{
 
 	return queue->current->option;
 
 }
 
+/*
+ *Returns first target in queue
+ */
 int getFirstTarget()	{
 
 	return (getQueue(NULL))->start->target;
 
 }
 
+/*
+ *Returns last target in queue
+ */
 int getLastTarget()	{
 
 	return (getQueue(NULL))->current->target;
 
 }
+/*
+ *Returns costs of command based on current tower stats
+ */
+int calulateCosts(commandType cmd, upgradeStat stat, int target)    {
+
+    switch(cmd) {
+        case upgrade:
+            return ((getTowerLevel(target))*getCurrentStat(stat,target));
+            break;
+        case mktwr:
+            return getCostOfNewTower();
+            break;
+        default:
+
+            break;
+    }
+
+    return 0;
+}
 
 /*
- *Pops from front of Queue.  TODO: How do we check how much gold is needed?
+ *Returns specified stat of specified tower
  */
-int popFromQueue(ActionQueueStructure queue, commandType *cmd, upgradeStat *stat, int *target, GameProperties Game, int needed)	{ //! int needed: how much gold is required
+int getCurrentStat(upgradeStat stat,int target)	{
+
+	switch(stat)	{
+		case power:
+				return getTowerDamage(target);
+				break;	
+		case range:
+				return getTowerRange(target);
+				break;	
+		case speed:
+				return getTowerSpeed(target);	
+				break;	
+		case AOErange:
+				return getTowerAOErange(target);
+				break;	
+		case AOEpower:
+				return getTowerAOEpower(target);
+				break;	
+		case level:
+				return getTowerLevel(target);
+				break;	
+		default:
+				return 0;
+				break;
+	}
+}
+
+/*
+ *Upgrades tower stat
+ */
+upgradeStat upgradeTowerStat(upgradeStat stat, int target)  {
+
+    switch(stat)    {
+        case power:
+        {
+            if(upgradeDmg(target))  {
+                return power;
+            }
+        }
+        case range:
+        {
+            if(upgradeRange(target))    {
+                return range;
+            }
+        }
+        case speed:
+        {
+            if(upgradeSpeed(target))    {
+                return speed;
+            }
+        }
+        case AOErange:
+        {
+            if(upgradeAOErange(target)) {
+                return AOErange;
+            }
+        }
+        case AOEpower:
+        {
+            if(upgradeAOEpower(target)) {
+                return AOEpower;
+            }
+        }
+        default:
+            fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
+            return statError;
+
+    }
+}
+/*
+ *Checks start of action Queue for command, and actions it if all criteria are met
+ */
+int popToTower()	{
+	ActionQueueStructure queue = getQueue(NULL);
+	GameProperties Game = getGame(NULL);
+	int needed;
+	if(queue->start != NULL) {
+	needed = calulateCosts(queue->start->command,queue->start->option,queue->start->target);
+		if (checkQueue(queue, Game,needed)){
+			ActionQueueStructure queue = getQueue(NULL);
+			GameProperties Game = getGame(NULL);
+			upgradeTowerStat(queue->start->option,queue->start->target);
+			takeGold(Game, needed);
+			QueueNode tempStart = queue->start;
+   		     queue->start = queue->start->nextNode;
+			free(tempStart);
+			setlastAction(Game);
+			--(queue->nItems);
+		return 1;	
+		}
+	}
+		return 0;
+}
+
+
+/*
+ *Pops from front of Queue.
+ */
+int popFromQueue(ActionQueueStructure queue, commandType *cmd, upgradeStat *stat, int *target)	{ 
+    GameProperties Game = getGame(NULL);
+    int needed = calulateCosts(*cmd,*stat,*target);
 	if((queue->start != NULL) && (checkQueue(queue,Game, needed)))	{ //!	testing target, available gold, cooldown time 
 		*cmd = queue->start->command;
 		*stat = queue->start->option;
@@ -208,33 +340,6 @@ int checkQueue(ActionQueueStructure queue, GameProperties Game, int needed)	{
 			return 1;		
 	} 
 	return 0;	
-}
-
-void testPopFromQueue()	{
-
-	commandType nCommand=upgrade;
-	upgradeStat nStat=power;
-	int tar = 1;	
-	int needed = 10;
-	GameProperties newGame = createGame();
-	ActionQueueStructure newQueue = createActionQueue();
-	addGold(10);
-	pushToQueue(newQueue,nCommand,nStat,tar);
-	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: cooldown not ready when trying to pop");
-	delayGame(ACTIONCOOLDOWN);
-	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==1, "Valid: cooldown ready when trying to pop");
-	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: Nothing in queue");
-	pushToQueue(newQueue,nCommand,nStat,tar);
-	delayGame(ACTIONCOOLDOWN);
-	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: Not enough Gold");
-	addGold(10);
-	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==1, "Valid: Have enough gold");
-	addGold(10);
-	pushToQueue(newQueue,nCommand,nStat,tar);
-	sput_fail_unless(popFromQueue(newQueue,&nCommand,&nStat,&tar,newGame,needed)==0, "Invalid: Cooldown not ready");
-	
-	free(newGame);
-	free(newQueue);
 }
 
 /*

@@ -27,12 +27,15 @@ struct gameProperties {
 	int gold;
 	int WaveNo;
 	int health;
+    int costOfNewTower;
 	GameClock clock;
 };
 
 /*---------- Functions ----------*/
 
-
+/*
+ *Delays game by specified amount
+ */
 clock_t delayGame(int delayN)	{
 
 	clock_t ticks1, ticks2,timeWaited;
@@ -45,6 +48,9 @@ clock_t delayGame(int delayN)	{
 	return timeWaited;
 }
 
+/*
+ *Sets lastAction member to current clock time
+ */
 int setlastAction(GameProperties Game)	{
 	Game->clock->lastAction = clock()/CLOCKS_PER_SEC;
 	return (int) Game->clock->lastAction;
@@ -62,6 +68,9 @@ void testSetLastAction()	{
 	free(newGame);
 }
 
+/*
+ * returns true is last action time is more than global cooldown
+ */
 int lastAction(GameProperties Game)	{
 
 	clock_t currTime = (double) clock() / CLOCKS_PER_SEC;
@@ -73,6 +82,9 @@ int lastAction(GameProperties Game)	{
 		return 0;
 }
 
+/*
+ *Damages play health with specified amount of damage
+ */
 void damageHealth(int damage)	{
 
 	getGame(NULL)->health -= damage;
@@ -90,8 +102,6 @@ void testlastAction()	{
 	free(newGame);
 
 }
-
-
 
 void testingGameStructure()	{
 	sput_start_testing();
@@ -136,6 +146,9 @@ void CreateGameTest()	{
 	free(testGame);
 }
 
+/*
+ *Returns or sets memory address of game structure`
+ */
 GameProperties getGame(GameProperties createdGame)	{
 
 	static GameProperties game;
@@ -147,6 +160,9 @@ GameProperties getGame(GameProperties createdGame)	{
 
 }
 
+/*
+ *Returns the current wave number
+ */
 int getWave(GameProperties game)	{
 
 	return game->WaveNo;
@@ -158,6 +174,17 @@ int getHealth(GameProperties game)	{
 	return game->health;
 }
 
+/*
+ *Returns cost of new tower
+ */
+int getCostOfNewTower() {
+
+    return getGame(NULL)->costOfNewTower;
+}
+
+/*
+ *Creates game structure.  Needs to be run in level init
+ */
 GameProperties createGame()	{
 
 	GameProperties newGame = (GameProperties) malloc(sizeof(*newGame));
@@ -165,12 +192,16 @@ GameProperties createGame()	{
 	newGame->gold=0;
 	newGame->WaveNo=0;
 	newGame->health=0;
+    newGame->costOfNewTower = 300;
 	newGame->clock->start_t  = newGame->clock->lastAction = (double) clock()/CLOCKS_PER_SEC;
 	getGame(newGame);
 	return newGame;
 
 }
 
+/*
+ *Returns amount of gold available
+ */
 int getGold(GameProperties game)	{
 
 	return game->gold;
@@ -185,7 +216,9 @@ void TestGetGold()	{
 	free(testGame);
 }
 
-
+/*
+ *Adds specified amount of gold to pot
+ */
 int addGold(int gold)	{
 	GameProperties game = getGame(NULL);
 	if(gold > 0)	{
@@ -206,6 +239,9 @@ void TestAddGold()	{
 	free(testGame);
 }
 
+/*
+ *Subtracts specified amount of gold
+ */
 int takeGold(GameProperties game,int gold)	{
 
 	if (game->gold >= gold)	{

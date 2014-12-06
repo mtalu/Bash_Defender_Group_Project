@@ -33,7 +33,7 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
     static int lastTower = 0, timeOfCall = 0, optionalStringSet = 0;
     char *outputString;
     static char *optionalString = NULL;
-
+    
     if(targetTower && !optionalOutputString) {
         outputString = getTowerString(targetTower);
         timeOfCall = SDL_GetTicks();
@@ -135,5 +135,3 @@ void manMan()
 {
     towerMonitor(-1, "GENERAL COMMANDS MANUAL: \n\nman \n\ntype ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n");
 }
-
-
