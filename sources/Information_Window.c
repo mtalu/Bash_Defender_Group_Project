@@ -18,14 +18,22 @@
 #include <stdbool.h>
 
 #define MAX_OUTPUT_STRING 200
+#define DEFAULT_SCREEN_TIME 10000
 
 
+
+/**
+ If called with target tower as first parameter and second parameter set to -1, gets output string
+ for that tower and sends to tower monitor. If called with first parameter set to NULL and optional
+ output string as second parameter, sends that string to tower monitor. After a certain period
+ of time, default tower screen reappears.
+ */
 void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
     int time = SDL_GetTicks();
     static int lastTower = 0, timeOfCall = 0, optionalStringSet = 0;
     char *outputString;
     static char *optionalString = NULL;
-
+    
     if(targetTower && !optionalOutputString) {
         outputString = getTowerString(targetTower);
         timeOfCall = SDL_GetTicks();
@@ -41,7 +49,7 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
         outputString = getDefaultTowerString();
     }
     
-    if(timeOfCall != 0 && time - timeOfCall < 10000) {
+    if(timeOfCall != 0 && time - timeOfCall < DEFAULT_SCREEN_TIME) {
         if(optionalStringSet) {
             outputString = optionalString;
         }
@@ -50,13 +58,17 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
         }
     }
     
-    if(time - timeOfCall > 10000) {
+    if(time - timeOfCall > DEFAULT_SCREEN_TIME) {
         optionalStringSet = 0;
     }
     
     updateTowerMonitor(outputString);
 }
 
+
+/**
+ Creates default string for tower monitor and sends to tower monitor
+ */
 char *getDefaultTowerString() {
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
@@ -66,6 +78,9 @@ char *getDefaultTowerString() {
     return outputString;
 }
 
+/**
+ Creates output string for specific tower and sends to tower monitor
+ */
 char *getTowerString(unsigned int targetTower) {
     
     int range, damage, speed, AOEpower, AOErange;
@@ -78,7 +93,10 @@ char *getTowerString(unsigned int targetTower) {
     return outputString;
 }
 
-void statsMonitor() {
+/**
+ Creates output string for stats monitor and updates stats monitor
+ */
+void statsBar() {
     
     GameProperties properties = getGame(NULL);
     
@@ -88,24 +106,32 @@ void statsMonitor() {
     
     char *outputString = malloc(MAX_OUTPUT_STRING);
     
-    sprintf(outputString, "\n               STATS MONITOR\n\nGold: %d\nWave Number: %d\nHealth: %d", gold, waveNumber, health);
+    sprintf(outputString, "Gold: %d                                                                     Wave Number: %d                                                                     Health: %d", gold, waveNumber, health);
     
-    updateStatsMonitor(outputString);
+    updateStatsBar(outputString);
 }
 
+/**
+ Sends "upgrade" command help string to tower monitor
+ */
 void manUpgrade()
 {
-    towerMonitor(-1, "GENERAL COMMANDS MANUAL: \n\nupgrade\n\n type ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3");
+    towerMonitor(-1, "GENERAL COMMANDS MANUAL: \n\nupgrade\n\ntype ""upgrade"" followed by a stat\n ( p, r, s, AOEp, AOEr)\n ) followed by a target tower\neg t1, t2, t3...\nExamples:\nupgrade r t2\nupgrade p t3");
 }
 
+/**
+ Sends "cat" command help string to tower monitor
+ */
 void manCat()
 {
     
-    towerMonitor(-1, "GENERAL COMMANDS MANUAL: cat \n type ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n");
+    towerMonitor(-1, "GENERAL COMMANDS MANUAL: \n\ncat \n\ntype ""cat"" followed by a target eg t1, t2, t3... to display the stats of that target\n");
 }
+
+/**
+ Sends "man" command help string to tower monitor
+ */
 void manMan()
 {
-    towerMonitor(-1, "GENERAL COMMANDS MANUAL: man \n type ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n");
+    towerMonitor(-1, "GENERAL COMMANDS MANUAL: \n\nman \n\ntype ""man"" followed by a command eg upgrade or cat to view the manual entry for that command\n");
 }
-
-
