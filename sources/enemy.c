@@ -248,7 +248,6 @@ void Test_createEnemy()
 
     createLevelPaths();
     createEnemyGroup();
-
     
     createEnemy();
     sput_fail_unless(getNumberOfEnemies() == 1, "Valid: Number of enemies held in group is one.");

@@ -191,7 +191,7 @@ GameProperties createGame()	{
 	newGame->clock = (GameClock) malloc(sizeof(*(newGame->clock)));
 	newGame->gold=0;
 	newGame->WaveNo=0;
-	newGame->health=0;
+	newGame->health=100;
     newGame->costOfNewTower = 300;
 	newGame->clock->start_t  = newGame->clock->lastAction = (double) clock()/CLOCKS_PER_SEC;
 	getGame(newGame);
