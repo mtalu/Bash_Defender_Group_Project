@@ -107,18 +107,19 @@ int parse(char *inputString)
  */
 int parseMktwr(char ** commandArray)
 {
-    int inputTowerPositionX = (int)strtol(commandArray[1], NULL, 10),//http://www.cplusplus.com/reference/cstdlib/strtol/
-        inputTowerPositionY = (int)strtol(commandArray[2], NULL, 10);
-    
-    if(inputTowerPositionX==0 || inputTowerPositionY==0)
+    int towerPosition = tolower(commandArray[2][0]) - 'a' +1;
+    upgradeStat twrType = getUpgradeStats(commandArray[1]);
+    if(towerPosition<'a' || twrType!=INT || twrType!=CHAR)//put in a greaterthan bound on the number of postions
     {
         //syntax error
         return 0;
     }
     
-
-    return 1;
-    
+    if(pushToQueue(getQueue(NULL),mktwr,twrType,towerPosition)>=1)
+    {
+        return 1;
+    }
+    else return 0;
 }
 /*  calls man printing functions
  *  returns 1 if ok
@@ -267,13 +268,17 @@ upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
 {
     /*first lets make an array of strings to hold all the possible action commands*/
     const char **validUpgradeStats;
-    int numberOfStats=5;//have 5 action commands at this time: upgrade, execute, set, man, cat
+    int numberOfStats=7;//have 5 action commands at this time: upgrade, execute, set, man, cat
     validUpgradeStats=(const char **)malloc(numberOfStats*sizeof(char*));//array of $[numberOfActions] strings
     validUpgradeStats[0]="p";
     validUpgradeStats[1]="r";
     validUpgradeStats[2]="s";
     validUpgradeStats[3]="AOEr";
     validUpgradeStats[4]="AOEp";
+    validUpgradeStats[5]="INT";
+    validUpgradeStats[6]="CHAR";
+
+
     //now test the input string against all valid stats
     upgradeStat statToUpgrade=statError;
     for(int i=0; i<numberOfStats; ++i)
@@ -297,6 +302,13 @@ upgradeStat getUpgradeStats(const char * inputStringUpgradeStats)
                 case 4:
                     statToUpgrade = AOEpower;
                     return statToUpgrade;
+                case 5:
+                    statToUpgrade = INT;
+                    return statToUpgrade;
+                case 6:
+                    statToUpgrade = CHAR;
+                    return statToUpgrade;
+                    
             }
         }
     }
