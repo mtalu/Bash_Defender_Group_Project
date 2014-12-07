@@ -16,12 +16,13 @@ int main()
 
 {	
 
-    Display d = init_SDL(); 
+    Display d = init_SDL();
     initLevel();
-//    testing();
+    
+    // testing();
+
     //Display d = init_SDL(); 
-//    createTower();
-    createEnemy();
+    userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));//createEnemy();
 
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
@@ -44,6 +45,7 @@ int main()
         towerMonitor(0, NULL);
         present_enemy(d);
         present_tower(d);
+
 		fire();
         for(int i=1; i<=getNumberOfEnemies(); ++i)
         {
@@ -53,8 +55,9 @@ int main()
         if(steps%100 == 0)
         {
             userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
-            createEnemy();
+             createEnemy();
         }
+        //popToTower();
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
     

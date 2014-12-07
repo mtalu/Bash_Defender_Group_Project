@@ -506,7 +506,7 @@ void present_tower(Display d)
         {
             tower currentTower = getTowerID(towerID);
             drawTower(d, currentTower->x, currentTower->y, currentTower->width,
-                      currentTower->height);
+                      currentTower->height,currentTower->range, 0);
             if(TG->listOfTowers[towerID]->firing == 1)	{
                 drawLine(d, currentTower->x+currentTower->gunX,
                          currentTower->y+currentTower->gunY, currentTower->targetPosition[0],
