@@ -24,6 +24,14 @@ void initLevel()    {
     createActionQueue();
     createGame();
     createEnemyGroup();
+	createTowerPos();
+}
+
+void levelOneTowerPostions()	{
+
+	addTowerPosNode(100,200);	
+	addTowerPosNode(300,600);
+	addTowerPosNode(500,300);
 }
 
 /*
@@ -35,6 +43,9 @@ void endLevel() {
     free(getTowerGrp(NULL));
     free(getGame(NULL));
     free(getQueue(NULL));
+	freeAllTowerPositions();
+	freeEnemyGroup();
+	freeLevelPaths();
 }
 
 void initEnemy()  {

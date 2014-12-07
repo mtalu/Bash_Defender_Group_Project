@@ -292,21 +292,35 @@ int popToTower()	{
 	GameProperties Game = getGame(NULL);
 	int needed;
 	if(queue->start != NULL) {
-	needed = calulateCosts(queue->start->command,queue->start->option,queue->start->target);
-		if (checkQueue(queue, Game,needed)){
-			ActionQueueStructure queue = getQueue(NULL);
-			GameProperties Game = getGame(NULL);
-			upgradeTowerStat(queue->start->option,queue->start->target);
-			takeGold(Game, needed);
-			QueueNode tempStart = queue->start;
-   		     queue->start = queue->start->nextNode;
-			free(tempStart);
-			setlastAction(Game);
-			--(queue->nItems);
-		return 1;	
+		needed = calulateCosts(queue->start->command,queue->start->option,queue->start->target);
+		switch(queue->start->command)	{
+			case upgrade:
+				if (checkQueue(queue, Game,needed)){
+					ActionQueueStructure queue = getQueue(NULL);
+					GameProperties Game = getGame(NULL);
+					upgradeTowerStat(queue->start->option,queue->start->target);
+					takeGold(Game, needed);
+				}
+				break;
+			case mktwr:
+				//! request tower type ignored for now.
+				if (checkQueue(queue,Game,needed)){
+					createTowerFromPositions(queue->start->target);
+				}
+				break;
+			default:
+
+				break;
 		}
-	}
+	} else {
 		return 0;
+	}
+	QueueNode tempStart = queue->start;
+    queue->start = queue->start->nextNode;
+	free(tempStart);
+	setlastAction(Game);
+	--(queue->nItems);
+	return 1;
 }
 
 
