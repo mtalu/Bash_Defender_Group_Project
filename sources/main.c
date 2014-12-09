@@ -18,12 +18,11 @@ int main()
 
     Display d = init_SDL();
     initLevel();
-    
+	levelOneTowerPostions();
     //testing();
 
-    userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));//createEnemy();
-    userCreateTower(200, 200);//createEnemy();
-
+    //userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));//createEnemy();
+  	//createEnemy();
     char text[128] = {'>', '>'};
     char empty[128] = {'>', '>'};
     char *pass, *clear, *inputCommand=NULL;
@@ -31,6 +30,8 @@ int main()
     clear = empty;
     addGold(100);
     int steps=0;
+	createTowerFromPositions(1);
+	createTowerFromPositions(2);
     do{
         ++steps;
         startFrame(d);

@@ -111,6 +111,7 @@ ActionQueueStructure getQueue(ActionQueueStructure queue)	{
  * Pushes values to newly created node at back of queue
  */
 int pushToQueue(ActionQueueStructure queue, commandType command, upgradeStat option, int target)	{
+		printf("pushing to queue\n");
 		createNode(queue);
 		queue->current->command = command;
 		queue->current->option = option;

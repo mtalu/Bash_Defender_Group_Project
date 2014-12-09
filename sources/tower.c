@@ -44,6 +44,7 @@ void createTowerPos()	{
 
 	TowerPos newPositions = (TowerPos) malloc(sizeof(*newPositions));
 	newPositions->numberOfPositions = 0;
+	newPositions->towerPositions = malloc(sizeof(TowerPosNode));
 	getTowerPos(newPositions);
 }
 
@@ -68,7 +69,7 @@ void addTowerPosNode(int x, int y)	{
 
 		TowerPos tPos = getTowerPos(NULL);
 		tPos->numberOfPositions++;
-		tPos->towerPositions = (TowerPosNode*) realloc(tPos->towerPositions, (tPos->numberOfPositions+1)*sizeof(*(tPos->towerPositions)));
+		tPos->towerPositions = (TowerPosNode*) realloc(tPos->towerPositions, (tPos->numberOfPositions+1)*(sizeof(*(tPos->towerPositions))));
 		TowerPosNode newTower = (TowerPosNode) malloc(sizeof(*newTower));
 		newTower->x = x;
 		newTower->y = y;
@@ -207,6 +208,8 @@ tower createTower() {
  */
 void createTowerFromPositions(int position)	{
 	TowerPos tPos = getTowerPos(NULL);
+	printf("test\n");
+	iprint(tPos->towerPositions[position]->x);
 	userCreateTower(tPos->towerPositions[position]->x,tPos->towerPositions[position]->y);
 
 }

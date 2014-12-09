@@ -26,7 +26,9 @@ void initLevel()    {
     createEnemyGroup();
 	createTowerPos();
 }
-
+/*
+ *Allowed tower positions for level one
+ */
 void levelOneTowerPostions()	{
 
 	addTowerPosNode(100,200);	
