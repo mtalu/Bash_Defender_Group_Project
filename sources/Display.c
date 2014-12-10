@@ -34,7 +34,6 @@ struct display {
     SDL_Color towerMonitorFontColour;
 
 	//Menu Screen Objects
-	SDL_Rect menu;
 	SDL_Surface *backgroundsurface;
 	SDL_Texture *backgroundtexture;
 	SDL_Rect startbutton;
@@ -497,8 +496,7 @@ void display_text(Display d, char *pass)
 
 void menu_screen(Display d, int *started)
 {
-	d->menu = (SDL_Rect) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-	d->startbutton = (SDL_Rect) {(SCREEN_WIDTH/2) - ((SCREEN_HEIGHT/6)/2), (SCREEN_HEIGHT/3)*2, SCREEN_HEIGHT/6, SCREEN_HEIGHT/6};
+	d->startbutton = (SDL_Rect) {(SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2), (SCREEN_HEIGHT_GLOBAL/3)*2, SCREEN_HEIGHT_GLOBAL/6, SCREEN_HEIGHT_GLOBAL/6};
 
 	d->backgroundsurface = IMG_Load("menu_screen5.png");
 	d->backgroundtexture = SDL_CreateTextureFromSurface(d->renderer, d->backgroundsurface);
@@ -509,7 +507,7 @@ void menu_screen(Display d, int *started)
 	SDL_FreeSurface(d->backgroundsurface);
 	SDL_FreeSurface(d->startsurface);
 
-	SDL_RenderCopy(d->renderer, d->backgroundtexture, NULL, &d->menu);
+	SDL_RenderCopy(d->renderer, d->backgroundtexture, NULL, NULL);
     SDL_RenderCopy(d->renderer, d->starttexture, NULL, &d->startbutton);
 	SDL_RenderPresent(d->renderer);
 
@@ -522,8 +520,8 @@ void menu_screen(Display d, int *started)
 		{
 			case SDL_MOUSEBUTTONDOWN:
 			{
-				if(event.button.x >= (SCREEN_WIDTH/2) - ((SCREEN_HEIGHT/6)/2) && event.button.x <= (SCREEN_WIDTH/2) - ((SCREEN_HEIGHT/6)/2) + SCREEN_WIDTH/6 && 
-					event.button.y >= (SCREEN_HEIGHT/3)*2 &&  event.button.y <= (SCREEN_HEIGHT/3)*2 + SCREEN_HEIGHT/6)
+				if(event.button.x >= (SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2) && event.button.x <= (SCREEN_WIDTH_GLOBAL/2) - ((SCREEN_HEIGHT_GLOBAL/6)/2) + SCREEN_WIDTH_GLOBAL/6 && 
+					event.button.y >= (SCREEN_HEIGHT_GLOBAL/3)*2 &&  event.button.y <= (SCREEN_HEIGHT_GLOBAL/3)*2 + SCREEN_HEIGHT_GLOBAL/6)
 				{
 					if(event.button.button == SDL_BUTTON_LEFT)
 					{
