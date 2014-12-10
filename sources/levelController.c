@@ -17,13 +17,13 @@ int SCREEN_HEIGHT_GLOBAL;
 struct keyword	{
 
 	levelCommand lCommand;
-	LCmdProp *propertiesList;	
+	KeywordProp *propertiesList;	
 	int nProperties;
 	Keyword prev;
 
 };
 
-struct lCmdProp	{
+struct keywordProp	{
 	property p;
 	int propertyValue;
 };
@@ -34,6 +34,44 @@ struct keywordQueue	{
 	Keyword end;
 	int nCommands;
 };
+
+void queueReader()	{
+
+	KeywordQueue kQueue = getKWQueue(NULL);
+	Keyword curr = kQueue->start;
+	while(curr != NULL)	{
+		switch(curr->lCommand)	{
+			case makeTowerP:
+					makeTowerCommand(curr);				
+					break;
+			case totalWaves:
+					setWaveTotalCommand(curr);
+					break;
+			case wave:
+
+					break;
+			case delay:
+
+					break;
+			default:
+
+					break;
+		}
+		curr = curr->prev;
+	}
+}
+
+void makeTowerCommand(Keyword setTower)	{
+	printf("setting tower position\n");
+	addTowerPosNode(setTower->propertiesList[0]->propertyValue,setTower->propertiesList[1]->propertyValue);
+	
+
+}
+
+void setWaveTotalCommand(Keyword setWaveTotal)	{
+	printf("Set wave total\n");
+	setTotalWaveNo(setWaveTotal->propertiesList[0]->propertyValue);
+}
 
 void printQueue()	{
 	
@@ -108,31 +146,17 @@ KeywordQueue getKWQueue(KeywordQueue kwQueue)	{
 void initLevel()    {
 	createKeywordQueue();
 	createLevel();
-    //createLevelPaths();
-  //  createTowerGroup();
-   // createActionQueue();
-    //createGame();
-  //  createEnemyGroup();
-//	createTowerPos();
-}
-/*
- *Setting This Levels variables
- */
-void levelSettings()	{
-
-	//! Positions Users can put towers
-	addTowerPosNode(100,200);	
-	addTowerPosNode(300,600);
-	addTowerPosNode(500,300);
-
-	//! Setting wave number
-	setTotalWaveNo(3);
-	
+    createLevelPaths();
+    createTowerGroup();
+    createActionQueue();
+    createGame();
+    createEnemyGroup();
+	createTowerPos();
+	queueReader();
 }
 
 void createLevel()	{
 	readLevelSettingsFile("../data/level1.txt");
-
 }
 
 void addKeyWordToken(char *token)	{
@@ -165,13 +189,13 @@ void addProperty(property p)	{
 	kWQueue->end->nProperties++;
 
 	if(kWQueue->end->nProperties == 1)	{
-		kWQueue->end->propertiesList = (LCmdProp*) malloc(sizeof(*kWQueue->end->propertiesList));
+		kWQueue->end->propertiesList = (KeywordProp*) malloc(sizeof(*kWQueue->end->propertiesList));
 	} else	{
-		kWQueue->end->propertiesList = (LCmdProp*) realloc(kWQueue->end->propertiesList, (kWQueue->end->nProperties)*sizeof(*(kWQueue->end->propertiesList))); 
+		kWQueue->end->propertiesList = (KeywordProp*) realloc(kWQueue->end->propertiesList, (kWQueue->end->nProperties)*sizeof(*(kWQueue->end->propertiesList))); 
 	}
 
 
-	kWQueue->end->propertiesList[kWQueue->end->nProperties-1] = (LCmdProp) malloc(sizeof(*(kWQueue->end->propertiesList[kWQueue->end->nProperties -1])));
+	kWQueue->end->propertiesList[kWQueue->end->nProperties-1] = (KeywordProp) malloc(sizeof(*(kWQueue->end->propertiesList[kWQueue->end->nProperties -1])));
 
 	kWQueue->end->propertiesList[kWQueue->end->nProperties -1]->p = p;
 }

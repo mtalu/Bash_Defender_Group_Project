@@ -6,11 +6,22 @@
 
 #define ENDOFSTRING '\0'
 #define READCHAR	'/'
-typedef enum levelCommand { makeTowerP, totalWaves, wave, delay } levelCommand;
-typedef enum property {x, y, total, waveID, enemyType, dTime } property;
+typedef enum levelCommand { makeTowerP= 0, 
+							totalWaves = 1, 
+							wave = 2, 
+							delay = 3 
+} levelCommand;
+
+typedef enum property {	x = 0, 
+						y = 1, 
+						total = 2, 
+						waveID = 3, 
+						enemyType = 4, 
+						dTime = 5 
+} property;
 
 typedef struct keyword *Keyword;
-typedef struct lCmdProp *LCmdProp;
+typedef struct keywordProp *KeywordProp;
 typedef struct keywordQueue *KeywordQueue;
 typedef struct parseLineArray *ParseLineArray;
 
@@ -19,7 +30,6 @@ void createKeywordQueue();
 KeywordQueue getKWQueue(KeywordQueue kwQueue);
 void initLevel();
 void endLevel();
-void levelSettings();
 void addKeyWordToken(char *token);
 void readLevelSettingsFile(char *file);
 int checkProperty(char *token);
@@ -32,4 +42,6 @@ void addProperty(property p);
 void addValue(char *token);
 void createLevel();
 void printQueue();
+void makeTowerCommand(Keyword setTower);
+void setWaveTotalCommand(Keyword setWaveTotal);
 #endif
