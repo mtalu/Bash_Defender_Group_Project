@@ -15,8 +15,8 @@ int SCREEN_HEIGHT_GLOBAL;
 #define SCREEN_WIDTH    800
 #define SCREEN_HEIGHT   700
 
-//#define FULLSCREEN_YN SDL_WINDOW_FULLSCREEN
-#define FULLSCREEN_YN 0
+#define FULLSCREEN_YN SDL_WINDOW_FULLSCREEN
+//#define FULLSCREEN_YN 0
 
 //Tower monitor dimensions
 #define TOWER_MONITOR_HEIGHT (SCREEN_HEIGHT_GLOBAL / 3.5)
@@ -74,9 +74,14 @@ void shutSDL(Display d);
 //tower
 void drawTower(Display d, int x, int y, int w, int h, int range, int type);
 void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target);
+void drawTowerPosition(int x, int y, int w, int h);
+
 //enemy
 
-void drawEnemy(Display d, int x, int y, double currentHealth, double maxHealth, int type, int frames);
+void drawEnemy(Display d, int x, int y, int w, int h, int pic_width, int pic_height, double currentHealth, double maxHealth, int type, int frames, int anim_speed);
+
+void presentAnimation();
+void drawBackground();
 
 
 //check

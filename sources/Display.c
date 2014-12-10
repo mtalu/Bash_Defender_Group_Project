@@ -14,9 +14,13 @@
 struct display {
     //Window objects
     SDL_Window  *window;
-    SDL_Surface *background;
     SDL_Renderer *renderer;
     Uint32 sky, red;
+    
+    //background
+    SDL_Surface *backgroundSurface;
+    SDL_Texture *backgroundTexture;
+
     
     //Tower monitor objects
     SDL_Surface *towerMonitorSurface;
@@ -40,6 +44,8 @@ struct display {
     //Tower objects
     SDL_Surface *towerSurface[2];
     SDL_Texture *towerTexture[2];
+    SDL_Surface *towerPositionSurface;
+    SDL_Texture *towerPoistionTexture;
     
     //Enemy objects
     SDL_Surface *enemySurface[2];
@@ -50,6 +56,12 @@ struct display {
     SDL_Rect    rect;
 
     SDL_Event event;
+    
+    //animation
+    SDL_Surface *circ1_Surface[2];
+    SDL_Texture *circ1_Texture[2];
+    SDL_Surface *circ2_Surface[2];
+    SDL_Texture *circ2_Texture[2];
 };
 
 /*Functions prototypes for functions only used internally*/
@@ -58,10 +70,10 @@ void initTTF(void);
 SDL_Surface *getInfoWindowTextSurface(char *outputString);
 void crash(char *message);
 void getWindowSize(int *w, int *h);
-void drawRange(Display d, int cx, int cy, int r);
-void draw_circle(SDL_Surface *surface, int n_cx, int n_cy, int radius, Uint32 pixel);
+void drawRange(Display d, double cx, double cy, double r);
 void init_pic(SDL_Renderer **rend, SDL_Surface **surface, SDL_Texture **texture, char *pic_name);
 void check_load_images(SDL_Surface *surface, char *pic_name);
+void presentCircuit(Display d,SDL_Texture *text[2], int x,int y,int w, int h, int frames, int pic_width, int pic_height, int anim_speed);
 
 Display init_SDL(){
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) crash("SDL_Init()");
@@ -94,10 +106,16 @@ Display init_SDL(){
     putenv("SDL_VIDEODRIVER=dga");
     
     /*inititalize pictures (load picture to the texture)*/
+    init_pic(&d->renderer, &d->backgroundSurface, &d->backgroundTexture, "map1.png");
     init_pic(&d->renderer, &d->enemySurface[0], &d->enemyTexture[0], "sdl2-spritesheet-actual.png");
+    init_pic(&d->renderer, &d->enemySurface[1], &d->enemyTexture[1], "int_enemy_basic.png");
     init_pic(&d->renderer, &d->towerSurface[0], &d->towerTexture[0], "tower.png");
     init_pic(&d->renderer, &d->towerSurface[1], &d->towerTexture[1], "tower1.png");
-
+    init_pic(&d->renderer, &d->towerPositionSurface, &d->towerPoistionTexture, "TowerLocationsA.png");
+    init_pic(&d->renderer, &d->circ1_Surface[0], &d->circ1_Texture[0], "circ1_dark.png");
+    init_pic(&d->renderer, &d->circ1_Surface[1], &d->circ1_Texture[1], "circ1_light.png");
+    init_pic(&d->renderer, &d->circ2_Surface[0], &d->circ2_Texture[0], "circ3_dark.png");
+    init_pic(&d->renderer, &d->circ2_Surface[1], &d->circ2_Texture[1], "circ3_light.png");
     getDisplayPointer(d);//store display ptr
     
     TTF_Font *font;
@@ -111,6 +129,42 @@ Display init_SDL(){
     
     return d;
 }
+
+/*call fucntion in the while loop to present all the animations*/
+void presentAnimation(){
+    Display d = getDisplayPointer(NULL);
+    presentCircuit(d, d->circ1_Texture,100, 100, 30, 100, 5,385, 324, 300);
+    presentCircuit(d, d->circ2_Texture,300, 300, 30, 60, 7,386, 195, 350);
+}
+
+void drawBackground(){
+    Display d = getDisplayPointer(NULL);
+    SDL_RenderCopy(d->renderer, d->backgroundTexture, NULL, NULL);
+}
+
+/*Draw tower position*/
+void drawTowerPosition(int x, int y, int w, int h){
+    Display d =getDisplayPointer(NULL);
+    d->rect = (SDL_Rect) {x, y, w, h};
+    SDL_RenderCopy(d->renderer, d->towerPoistionTexture, NULL, &d->rect);
+}
+
+/*present any animation with one staitc image at the back and one above it*/
+void presentCircuit(Display d,SDL_Texture *text[2], int x,int y,int w, int h, int frames, int pic_width, int pic_height, int anim_speed){
+    
+    d->rect= (SDL_Rect) {x, y , w * frames, h};
+    SDL_RenderCopy(d->renderer, text[0], NULL, &d->rect);
+    
+    Uint32 ticks = SDL_GetTicks();
+    Uint32 sprite = (ticks / anim_speed) % frames;
+    //srcrect runs through the actual pixels of the pixture
+    d->srcRect = (SDL_Rect){ sprite * (pic_width/frames), 0, (pic_width/frames), pic_height};
+    
+    //dstrect size could be decided by the user
+    d->rect = (SDL_Rect) {sprite * w + x, y, w, h};
+    SDL_RenderCopy(d->renderer, text[1], &d->srcRect, &d->rect);
+}
+
 
 void init_pic(SDL_Renderer **rend, SDL_Surface **surface, SDL_Texture **texture, char *pic_name){
     *surface = IMG_Load(pic_name);
@@ -148,9 +202,10 @@ void getWindowSize(int *w, int *h){
 }
 
 /*draw the range (circle)*/
-void drawRange(Display d, int cx, int cy, int r){
+void drawRange(Display d, double cx, double cy, double r){
+    SDL_SetRenderDrawColor(d->renderer, 255, 0, 0, 255);
     double dx, dy;
-    dx = floor(sqrt((2.0 * r ) ));
+    dx = floor(sqrt((1.0 * r ) ));
     SDL_RenderDrawLine(d->renderer, cx-dx, cy+r, cx+dx, cy+r);
     SDL_RenderDrawLine(d->renderer, cx-dx, cy-r, cx+dx, cy-r);
     for (dy = 1; dy <= r; dy += 1.0) {
@@ -162,6 +217,7 @@ void drawRange(Display d, int cx, int cy, int r){
     }
 }
 
+
 /*draw damage line from X & Y to target X Y> */
 void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target)
 {
@@ -169,12 +225,12 @@ void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target)
     SDL_RenderDrawLine(d->renderer, X_from, Y_from, X_target, Y_target);
 }
 
-/* draw an enemy at x and y coor with the health bar above it*/
-void drawEnemy(Display d, int x, int y, double currentHealth, double maxHealth, int type, int frames){
+//* draw an enemy at x and y coor with the health bar above it*/
+void drawEnemy(Display d, int x, int y, int w, int h, int pic_width, int pic_height, double currentHealth, double maxHealth, int type, int frames, int anim_speed){
     Uint32 ticks = SDL_GetTicks();
-    Uint32 sprite = (ticks / 100) % frames;
-    d->srcRect = (SDL_Rect){ sprite * 32, 0, 32, 64};
-    d->rect = (SDL_Rect) {x, y, 32, 64};
+    Uint32 sprite = (ticks / anim_speed) % frames;
+    d->srcRect = (SDL_Rect){ sprite * (pic_width/frames), 0, (pic_width/frames), pic_height};
+    d->rect = (SDL_Rect) {x, y, w, h};
     /*create animation by putting part of a spritesheet(image) into destination rect*/
     SDL_RenderCopy(d->renderer, d->enemyTexture[type], &d->srcRect, &d->rect);
     
@@ -182,19 +238,19 @@ void drawEnemy(Display d, int x, int y, double currentHealth, double maxHealth, 
     double color = (255*((double)currentHealth/maxHealth));
     SDL_SetRenderDrawColor(d->renderer, 0, color, 0, 255);
     double health = ((double)(currentHealth * HEALTH)/maxHealth);
-    d->rect = (SDL_Rect) {x, y -20, health, 20};
+    d->rect = (SDL_Rect) {x, y -20, health, 10};
     SDL_RenderFillRect(d->renderer, &d->rect);
 }
 
 
 /* draws the tower at x and y coor */
 void drawTower(Display d, int x, int y, int w, int h, int range, int type){
-    
     d->rect= (SDL_Rect) {x, y ,w, h};
     SDL_RenderCopy(d->renderer, d->towerTexture[type], NULL, &d->rect);
     SDL_SetRenderDrawColor(d->renderer, 0, 0, 0, 255);
     drawRange(d, x + (double)w/2, y + (double)h/2, range);
 }
+
 
 
 /*clear the screen before making any drawings */

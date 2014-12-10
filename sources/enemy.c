@@ -347,7 +347,7 @@ void present_enemy(Display d)
 
         if(!isDead(i))
         {
-            drawEnemy(d, e->x, e->y, (double)e->health, (double)e->maxHealth, 0, 4);
+                drawEnemy(d, e->x, e->y, 50, 50, 2010, 121, (double) e->health, (double)e->maxHealth, 1, 15, 200);
         }
     }
 }
@@ -471,6 +471,7 @@ void damageEnemy(int damage, int enemyID)
     if(e->health<=0)
     {
         e->dead=1;
+        
         addGold(e->maxHealth);
         // drawDeath(e->x, e->y);
     }

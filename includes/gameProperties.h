@@ -27,8 +27,13 @@ enum upgradeStat
     AOErange=3,
     AOEpower=4,
     level=5,
+<<<<<<< HEAD
 	INT=6, 
 	CHAR=7
+=======
+    INT=6,
+    CHAR=7
+>>>>>>> origin/master
 };
 
 /*----------Symbolic Constants-----------*/

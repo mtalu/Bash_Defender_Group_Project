@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C3F57CD1A276D20006FD1E5 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F57CA1A276D20006FD1E5 /* SDL2_image.framework */; };
-		4C3F57CE1A276D20006FD1E5 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F57CB1A276D20006FD1E5 /* SDL2_ttf.framework */; };
-		4C3F57CF1A276D20006FD1E5 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F57CC1A276D20006FD1E5 /* SDL2.framework */; };
 		4CB8A0FE1A33BD0A0076E35F /* actionQueueDataStructure.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EA1A33BD0A0076E35F /* actionQueueDataStructure.c */; };
 		4CB8A0FF1A33BD0A0076E35F /* Display.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EB1A33BD0A0076E35F /* Display.c */; };
 		4CB8A1001A33BD0A0076E35F /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0EC1A33BD0A0076E35F /* enemy.c */; };
@@ -19,6 +16,11 @@
 		4CB8A1041A33BD0A0076E35F /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0F41A33BD0A0076E35F /* main.c */; };
 		4CB8A1051A33BD0A0076E35F /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0F61A33BD0A0076E35F /* parser.c */; };
 		4CB8A1061A33BD0A0076E35F /* tower.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8A0FB1A33BD0A0076E35F /* tower.c */; };
+		67D2D4FD1A3871FC00F10A4B /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2D4F91A3871FC00F10A4B /* SDL2_image.framework */; };
+		67D2D4FE1A3871FC00F10A4B /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2D4FA1A3871FC00F10A4B /* SDL2_mixer.framework */; };
+		67D2D4FF1A3871FC00F10A4B /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2D4FB1A3871FC00F10A4B /* SDL2_ttf.framework */; };
+		67D2D5001A3871FC00F10A4B /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2D4FC1A3871FC00F10A4B /* SDL2.framework */; };
+		67D2D5051A38752600F10A4B /* Sound.c in Sources */ = {isa = PBXBuildFile; fileRef = 67D2D5041A38752600F10A4B /* Sound.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,9 +37,6 @@
 
 /* Begin PBXFileReference section */
 		4C3F57C01A276CAC006FD1E5 /* Bash_Defender_V2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Bash_Defender_V2; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C3F57CA1A276D20006FD1E5 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
-		4C3F57CB1A276D20006FD1E5 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
-		4C3F57CC1A276D20006FD1E5 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		4CB8A0DE1A33BCF50076E35F /* actionQueueDataStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = actionQueueDataStructure.h; path = includes/actionQueueDataStructure.h; sourceTree = "<group>"; };
 		4CB8A0DF1A33BCF50076E35F /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = debug.h; path = includes/debug.h; sourceTree = "<group>"; };
 		4CB8A0E01A33BCF50076E35F /* Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Display.h; path = includes/Display.h; sourceTree = "<group>"; };
@@ -70,6 +69,12 @@
 		4CB8A0FB1A33BD0A0076E35F /* tower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tower.c; path = sources/tower.c; sourceTree = "<group>"; };
 		4CB8A0FC1A33BD0A0076E35F /* tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower.png; path = sources/tower.png; sourceTree = "<group>"; };
 		4CB8A0FD1A33BD0A0076E35F /* tower1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower1.png; path = sources/tower1.png; sourceTree = "<group>"; };
+		67D2D4F91A3871FC00F10A4B /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2_image.framework; sourceTree = "<group>"; };
+		67D2D4FA1A3871FC00F10A4B /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2_mixer.framework; sourceTree = "<group>"; };
+		67D2D4FB1A3871FC00F10A4B /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2_ttf.framework; sourceTree = "<group>"; };
+		67D2D4FC1A3871FC00F10A4B /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2.framework; sourceTree = "<group>"; };
+		67D2D5041A38752600F10A4B /* Sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Sound.c; path = sources/Sound.c; sourceTree = "<group>"; };
+		67D2D5061A38752F00F10A4B /* Sound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sound.h; path = includes/Sound.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,9 +82,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C3F57CD1A276D20006FD1E5 /* SDL2_image.framework in Frameworks */,
-				4C3F57CE1A276D20006FD1E5 /* SDL2_ttf.framework in Frameworks */,
-				4C3F57CF1A276D20006FD1E5 /* SDL2.framework in Frameworks */,
+				67D2D4FE1A3871FC00F10A4B /* SDL2_mixer.framework in Frameworks */,
+				67D2D4FF1A3871FC00F10A4B /* SDL2_ttf.framework in Frameworks */,
+				67D2D4FD1A3871FC00F10A4B /* SDL2_image.framework in Frameworks */,
+				67D2D5001A3871FC00F10A4B /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,8 +95,15 @@
 		4C3F57B71A276CAC006FD1E5 = {
 			isa = PBXGroup;
 			children = (
+				67D2D4F91A3871FC00F10A4B /* SDL2_image.framework */,
+				67D2D4FA1A3871FC00F10A4B /* SDL2_mixer.framework */,
+				67D2D4FB1A3871FC00F10A4B /* SDL2_ttf.framework */,
+				67D2D4FC1A3871FC00F10A4B /* SDL2.framework */,
 				4CB8A0EA1A33BD0A0076E35F /* actionQueueDataStructure.c */,
+				67D2D5041A38752600F10A4B /* Sound.c */,
+				67D2D5061A38752F00F10A4B /* Sound.h */,
 				4CB8A0EB1A33BD0A0076E35F /* Display.c */,
+				4CB8A0E01A33BCF50076E35F /* Display.h */,
 				4CB8A0EC1A33BD0A0076E35F /* enemy.c */,
 				4CB8A0ED1A33BD0A0076E35F /* enemy.png */,
 				4CB8A0EE1A33BD0A0076E35F /* FreeSans.ttf */,
@@ -111,7 +124,6 @@
 				4CB8A0FD1A33BD0A0076E35F /* tower1.png */,
 				4CB8A0DE1A33BCF50076E35F /* actionQueueDataStructure.h */,
 				4CB8A0DF1A33BCF50076E35F /* debug.h */,
-				4CB8A0E01A33BCF50076E35F /* Display.h */,
 				4CB8A0E11A33BCF50076E35F /* enemy.h */,
 				4CB8A0E21A33BCF50076E35F /* enemy.h_old */,
 				4CB8A0E31A33BCF50076E35F /* gameProperties.h */,
@@ -121,9 +133,6 @@
 				4CB8A0E71A33BCF50076E35F /* parser.h */,
 				4CB8A0E81A33BCF50076E35F /* sput.h */,
 				4CB8A0E91A33BCF50076E35F /* tower.h */,
-				4C3F57CA1A276D20006FD1E5 /* SDL2_image.framework */,
-				4C3F57CB1A276D20006FD1E5 /* SDL2_ttf.framework */,
-				4C3F57CC1A276D20006FD1E5 /* SDL2.framework */,
 				4C3F57C21A276CAC006FD1E5 /* Bash_Defender_V2 */,
 				4C3F57C11A276CAC006FD1E5 /* Products */,
 			);
@@ -203,6 +212,7 @@
 				4CB8A1031A33BD0A0076E35F /* levelController.c in Sources */,
 				4CB8A1011A33BD0A0076E35F /* gameProperties.c in Sources */,
 				4CB8A1001A33BD0A0076E35F /* enemy.c in Sources */,
+				67D2D5051A38752600F10A4B /* Sound.c in Sources */,
 				4CB8A1061A33BD0A0076E35F /* tower.c in Sources */,
 				4CB8A0FF1A33BD0A0076E35F /* Display.c in Sources */,
 				4CB8A1021A33BD0A0076E35F /* Information_Window.c in Sources */,
@@ -295,6 +305,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -306,6 +317,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
