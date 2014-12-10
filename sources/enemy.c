@@ -385,6 +385,7 @@ int moveEnemy(int enemyID )
         else {
             damageHealth(e->damage);
             e->dead = 1;
+			increaseDeathCnt();
             return 0;
         }
     }

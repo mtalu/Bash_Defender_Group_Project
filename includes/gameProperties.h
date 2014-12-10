@@ -55,6 +55,10 @@ GameProperties getGame(GameProperties createdGame);
 void damageHealth(int damage);
 int addGold(int gold);
 int getCostOfNewTower();
+int getDeathCnt();
+void increaseDeathCnt();
+void setTotalWaveNo(int totalW);
+int getTotalWaveNo();
 
 void testingGameStructure();
 void CreateGameTest();
