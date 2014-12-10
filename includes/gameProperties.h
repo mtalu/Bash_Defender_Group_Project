@@ -26,7 +26,9 @@ enum upgradeStat
     speed=2,
     AOErange=3,
     AOEpower=4,
-    level=5
+    level=5,
+    INT=6,
+    CHAR=7
 };
 
 /*----------Symbolic Constants-----------*/

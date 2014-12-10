@@ -11,6 +11,7 @@
 #include "../includes/parser.h"
 #include "../includes/main.h"
 #include "../includes/enemy.h"
+#include "../includes/Sound.h"
 
 int main()
 
@@ -31,10 +32,13 @@ int main()
     clear = empty;
     addGold(100);
     int steps=0;
-        userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
+    userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
+    init_sound();
+    playBackgroundSound();
     do{
         ++steps;
         startFrame(d);
+        drawBackground();
         terminal_window(d, pass, clear,inputCommand);
 		popToTower();
         if(inputCommand)
@@ -58,11 +62,14 @@ int main()
              createEnemy();
         }
         //popToTower();
+        presentAnimation();
+        drawTowerPosition(200, 200, 100, 100);
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
     
     //while(moveEnemy(1) != 1);
     shutSDL(d);
+    shutSound();
 //    char text[128] = {'>', '>'};
 //    char empty[128] = {'>', '>'};
 //    char *pass, *clear, *inputCommand=NULL;
