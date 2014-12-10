@@ -36,10 +36,7 @@ int main()
     userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
     //init_sound();
    // playBackgroundSound();
-	while(started == 0)
-	{
-		menu_screen(d, &started);
-	}
+	menu_screen(d, &started);
     do{
         ++steps;
         startFrame(d);

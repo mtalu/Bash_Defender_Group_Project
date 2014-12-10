@@ -402,7 +402,7 @@ void updateStatsBar(char *outputString) {
 /*
 	terminal_window detects input from SDL and calls display_text
 */
-int terminal_window(Display d, char *pass, char *clear)
+int terminal_window(Display d, char *pass, char *clear, char * inputCommand)
 {
 	int done = 0;
     char *pass2;
