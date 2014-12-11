@@ -110,7 +110,9 @@ int parseMktwr(char ** commandArray)
     int towerPosition = tolower(commandArray[2][0]) - 'a' +1;
     upgradeStat twrType = getUpgradeStats(commandArray[1]);
     if(towerPosition<1 || (twrType!=INT && twrType!=CHAR) )//put in a greaterthan bound on the number of postions
+
     {
+			printf("error error\n");
         //syntax error
         return 0;
     }

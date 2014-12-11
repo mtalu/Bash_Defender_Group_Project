@@ -15,8 +15,8 @@ int SCREEN_HEIGHT_GLOBAL;
 #define SCREEN_WIDTH    800
 #define SCREEN_HEIGHT   700
 
-#define FULLSCREEN_YN SDL_WINDOW_FULLSCREEN
-//#define FULLSCREEN_YN 0
+//#define FULLSCREEN_YN SDL_WINDOW_FULLSCREEN
+#define FULLSCREEN_YN 0
 
 //Tower monitor dimensions
 #define TOWER_MONITOR_HEIGHT (SCREEN_HEIGHT_GLOBAL / 3.5)
@@ -49,8 +49,8 @@ int SCREEN_HEIGHT_GLOBAL;
 
 
 #include <SDL2/SDL.h>
-#include <SDL2_ttf/SDL_ttf.h>
-#include <SDL2_image/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include <stdlib.h>
 #include <stdlib.h>

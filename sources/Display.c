@@ -7,7 +7,6 @@
 
 #include "../includes/Display.h"
 #include "../includes/parser.h"
-#include "../includes/tower.h"
 #include <stdbool.h>
 
 #define HEALTH 80
