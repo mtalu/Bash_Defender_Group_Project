@@ -2,6 +2,7 @@
 
 /*---------- Custom Headers -----------*/
 #include "../includes/tower.h"
+#include "../includes/enemy.h"
 #include "../includes/actionQueueDataStructure.h"
 
 #define ENDOFSTRING '\0'
@@ -16,7 +17,8 @@ typedef enum property {	x = 0,
 						y = 1, 
 						total = 2, 
 						waveID = 3, 
-						enemyType = 4, 
+						enemyType = 4,
+					    numberOfEnemies = 5,	
 						dTime = 5 
 } property;
 
@@ -44,4 +46,7 @@ void createLevel();
 void printQueue();
 void makeTowerCommand(Keyword setTower);
 void setWaveTotalCommand(Keyword setWaveTotal);
+void waveCreatorCommand(Keyword waveKeyWord);
+Keyword removeLink(Keyword current);
+void initialQueueReader();
 #endif

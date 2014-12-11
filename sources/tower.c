@@ -76,6 +76,15 @@ void addTowerPosNode(int x, int y)	{
 		tPos->towerPositions[tPos->numberOfPositions] = newTower;
 }
 
+void drawAllTowerPositions()	{
+
+	TowerPos tPos = getTowerPos(NULL);
+	int t;
+	for(t = 1; t <= tPos->numberOfPositions;t++)	{
+		drawTowerPosition(tPos->towerPositions[t]->x,tPos->towerPositions[t]->y,100,100);
+	}
+
+}
 void freeAllTowerPositions()	{
 	
 	TowerPos tPos = getTowerPos(NULL);

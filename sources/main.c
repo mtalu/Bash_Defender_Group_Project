@@ -29,11 +29,11 @@ int main()
     clear = empty;
     addGold(100);
     int steps=0;
-	createTowerFromPositions(1);
-	createTowerFromPositions(2);
-    userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
-    init_sound();
-    playBackgroundSound();
+	//createTowerFromPositions(1);
+	//createTowerFromPositions(2);
+    //userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
+    //init_sound();
+    //playBackgroundSound();
     do{
         ++steps;
         startFrame(d);
@@ -58,10 +58,10 @@ int main()
         if(steps%100 == 0)
         {
         //    userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
-             createEnemy();
+        //     createEnemy();
         }
         presentAnimation();
-        drawTowerPosition(200, 200, 100, 100);
+		drawAllTowerPositions();
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
     

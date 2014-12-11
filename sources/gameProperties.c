@@ -20,6 +20,7 @@ struct gameClock	{
 
 	clock_t start_t; //! time game started.  Must be ran at startup. 
 	clock_t lastAction;
+	clock_t enemySpawned;
 };
 
 struct gameProperties {
@@ -56,6 +57,12 @@ clock_t delayGame(int delayN)	{
 int setlastAction(GameProperties Game)	{
 	Game->clock->lastAction = clock()/CLOCKS_PER_SEC;
 	return (int) Game->clock->lastAction;
+}
+
+void setEnemySpawned()	{
+
+		GameProperties game = getGame(NULL);
+		game->clock->enemySpawned = clock()/CLOCKS_PER_SEC;
 }
 
 /*
@@ -226,7 +233,7 @@ GameProperties createGame()	{
 
 	GameProperties newGame = (GameProperties) malloc(sizeof(*newGame));
 	newGame->clock = (GameClock) malloc(sizeof(*(newGame->clock)));
-	newGame->gold=0;
+	newGame->gold=1000;
 	newGame->currWaveNo=0;
 	newGame->totalWaveNo = 0;
 	newGame->health=100;

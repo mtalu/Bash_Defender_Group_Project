@@ -233,8 +233,8 @@ void createEnemy()
 }
 
 /*
-* returns the number of enemies that currently exist (dead & alive)
-*/
+ * returns the number of enemies that currently exist (dead & alive)
+ */
 int getNumberOfEnemies()
 {
     return getEnemyGroup(NULL)->numberOfEnemies;

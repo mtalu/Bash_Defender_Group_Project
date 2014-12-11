@@ -27,19 +27,14 @@ enum upgradeStat
     AOErange=3,
     AOEpower=4,
     level=5,
-<<<<<<< HEAD
 	INT=6, 
 	CHAR=7
-=======
-    INT=6,
-    CHAR=7
->>>>>>> origin/master
 };
 
 /*----------Symbolic Constants-----------*/
 
-#define ACTIONCOOLDOWN	1	//! minimum time between actions being removed from queue
-
+#define ACTIONCOOLDOWN	1		//! minimum time between actions being removed from queue
+#define ENEMYSPAWNCOOLDOWN 5 	//!minimum time between enemy spawns
 /*----------TypeDefs----------*/
 
 typedef enum commandType commandType;

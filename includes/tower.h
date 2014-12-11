@@ -60,5 +60,6 @@ void freeAllTowerPositions();
 void testTowerCreation();
 void testingTowerPositions();
 void createTowerFromPositions(int position);
+void drawAllTowerPositions();
 #endif
 

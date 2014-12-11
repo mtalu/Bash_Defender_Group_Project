@@ -111,7 +111,6 @@ ActionQueueStructure getQueue(ActionQueueStructure queue)	{
  * Pushes values to newly created node at back of queue
  */
 int pushToQueue(ActionQueueStructure queue, commandType command, upgradeStat option, int target)	{
-		printf("pushing to queue\n");
 		createNode(queue);
 		queue->current->command = command;
 		queue->current->option = option;
@@ -304,8 +303,10 @@ int popToTower()	{
 				}
 				break;
 			case mktwr:
+				printf("got request for tower\n");
 				//! request tower type ignored for now.
 				if (checkQueue(queue,Game,needed)){
+					printf("creating tower\n");
 					createTowerFromPositions(queue->start->target);
 				}
 				break;
@@ -313,14 +314,14 @@ int popToTower()	{
 
 				break;
 		}
-	} else {
-		return 0;
-	}
 	QueueNode tempStart = queue->start;
     queue->start = queue->start->nextNode;
 	free(tempStart);
 	setlastAction(Game);
 	--(queue->nItems);
+	} else {
+		return 0;
+	}
 	return 1;
 }
 
@@ -352,6 +353,7 @@ int popFromQueue(ActionQueueStructure queue, commandType *cmd, upgradeStat *stat
 
 int checkQueue(ActionQueueStructure queue, GameProperties Game, int needed)	{
 	if((checkGold(needed, Game)) && (lastAction(Game)))	{
+			printf("success!\n");
 			return 1;		
 	} 
 	return 0;	

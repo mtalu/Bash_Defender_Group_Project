@@ -19,6 +19,7 @@ struct keyword	{
 	levelCommand lCommand;
 	KeywordProp *propertiesList;	
 	int nProperties;
+	Keyword next;
 	Keyword prev;
 
 };
@@ -35,31 +36,63 @@ struct keywordQueue	{
 	int nCommands;
 };
 
-void queueReader()	{
-
+void initialQueueReader()	{
+	Keyword current;
 	KeywordQueue kQueue = getKWQueue(NULL);
-	Keyword curr = kQueue->start;
-	while(curr != NULL)	{
-		switch(curr->lCommand)	{
+	current = kQueue->start;
+	while(current != NULL)	{
+		switch(current->lCommand)	{
 			case makeTowerP:
-					makeTowerCommand(curr);				
+					makeTowerCommand(current);				
+					current = removeLink(current);
 					break;
 			case totalWaves:
-					setWaveTotalCommand(curr);
-					break;
-			case wave:
-
-					break;
-			case delay:
-
+					setWaveTotalCommand(current);
+					current = removeLink(current);
 					break;
 			default:
-
+					current = current->next;
 					break;
 		}
-		curr = curr->prev;
 	}
 }
+
+Keyword removeLink(Keyword current)	{
+	Keyword temp;
+	KeywordQueue kQueue = getKWQueue(NULL);
+	if(current == kQueue->start)	{
+		printf("freeing start \n");	
+		kQueue->start = kQueue->start->prev;
+		current = kQueue->start;
+		if(kQueue->start != NULL)	{	
+			free(kQueue->start->next);
+			kQueue->start->next = NULL;
+		}
+	} else if(current == kQueue->end) {
+		kQueue->end = current->next;
+		current->next->prev = NULL;
+		free(current);
+		current = NULL;		
+	} else {
+		temp = current->prev;
+		current->next->prev = current->prev;
+		current->prev->next = current->next;	
+		free(current);
+		current = temp;
+	}
+	return current;
+}
+
+
+
+void waveCreatorCommand(Keyword waveKeyWord)	{
+	printf("creating wave\n");
+	int enemyNum;
+   	for(enemyNum = 0; enemyNum < waveKeyWord->propertiesList[2]->propertyValue; enemyNum++)	{
+		createEnemy();	
+	}
+}
+
 
 void makeTowerCommand(Keyword setTower)	{
 	printf("setting tower position\n");
@@ -101,18 +134,20 @@ Keyword createKeyword()	{
 	Keyword newKw = (Keyword) malloc(sizeof(*newKw));
 	newKw->propertiesList = NULL;
 	newKw->prev = NULL;
+	newKw->next = NULL;
 	newKw->nProperties = 0;
 	return newKw; 
 }
 
-void addKWtoQueue(Keyword nwKW)	{
+void addKWtoQueue(Keyword newKW)	{
 
 		KeywordQueue kQueue = getKWQueue(NULL);
 		if((kQueue->start == NULL) && (kQueue->end == NULL))	{
 			printf("empty queue\n");
-			kQueue->start = kQueue->end = nwKW;
+			kQueue->start = kQueue->end = newKW;
 		} else {
-			kQueue->end->prev = nwKW;
+			newKW->next = kQueue->end;
+			kQueue->end->prev = newKW;
 			kQueue->end = kQueue->end->prev;
 		}
 		kQueue->nCommands++;
@@ -152,7 +187,7 @@ void initLevel()    {
     createGame();
     createEnemyGroup();
 	createTowerPos();
-	queueReader();
+	initialQueueReader();
 }
 
 void createLevel()	{
@@ -233,8 +268,10 @@ int checkProperty(char *token)	{
 		addProperty(total);	
 	} else if(!strcmp(token,"waveNum"))	{
 		addProperty(waveID);	
-	} else if(!strcmp(token,"enemeyType"))	{
+	} else if(!strcmp(token,"enemyType"))	{
 		addProperty(enemyType);
+	} else if(!strcmp(token,"numberOfEnemies"))	{
+		addProperty(numberOfEnemies);
 	} else if(!strcmp(token,"delayTime"))	{
 		addProperty(dTime);	
 	} else {

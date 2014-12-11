@@ -1,4 +1,4 @@
-CFLAGS = -O4 -Wall -pedantic -std=c99 -F /usr/local/lib/ -I /usr/local/include -lSDL2 -lSDL2_ttf -lSDL2_image
+CFLAGS = -O4 -Wall -pedantic -std=c99 -F /usr/local/lib/ -I /usr/local/include -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer  -lsmpeg
 #INCDIR = ../includes/
 #INCS = $(INCDIR)parser.h
 #		$(INCDIR)gameProperties.h	
@@ -8,13 +8,12 @@ CFLAGS = -O4 -Wall -pedantic -std=c99 -F /usr/local/lib/ -I /usr/local/include -
 #		$(INCDIR)terminalwindow.h\
 #		$(INCDIR)sput.h              
 TARGET =  main
-SOURCES = levelController.c Display.c Information_Window.c tower.c enemy.c  gameProperties.c actionQueueDataStructure.c parser.c $(TARGET).c
+SOURCES = levelController.c Sound.c Display.c Information_Window.c tower.c enemy.c  gameProperties.c actionQueueDataStructure.c parser.c $(TARGET).c
 #	  		sTower2.c\
 #	  		tower2.c\
 #      		enemy2.c\
 #          	terminalwindow.c\
  
-#LIBS = -framework SDL2 -lm -framework SDL2_ttf -framework SDL2_image
 LIBS = -lm
 CC =gcc 
 
