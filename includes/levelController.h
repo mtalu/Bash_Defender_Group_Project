@@ -49,4 +49,5 @@ void setWaveTotalCommand(Keyword setWaveTotal);
 void waveCreatorCommand(Keyword waveKeyWord);
 Keyword removeLink(Keyword current);
 void initialQueueReader();
+void levelQueueReader();
 #endif

@@ -37,6 +37,7 @@ int main()
     do{
         ++steps;
         startFrame(d);
+		levelQueueReader();
         drawBackground();
         terminal_window(d, pass, clear,inputCommand);
     	popToTower();

@@ -57,6 +57,29 @@ void initialQueueReader()	{
 	}
 }
 
+void levelQueueReader()	{
+
+	Keyword current;
+	KeywordQueue kQueue = getKWQueue(NULL);
+	current = kQueue->start;
+	while(current != NULL)	{
+		printf("checking\n");
+		switch(current->lCommand)	{
+			case wave:
+					printf("wave\n");
+					waveCreatorCommand(current);
+					current = removeLink(current);
+					break;
+			case delay:
+					current = removeLink(current);
+					break;
+			default:
+					break;
+		}
+	}
+
+}
+
 Keyword removeLink(Keyword current)	{
 	Keyword temp;
 	KeywordQueue kQueue = getKWQueue(NULL);
