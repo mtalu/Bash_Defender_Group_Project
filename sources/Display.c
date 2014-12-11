@@ -9,7 +9,7 @@
 #include "../includes/parser.h"
 #include <stdbool.h>
 
-#define HEALTH 80
+#define HEALTHBAR 80
 
 struct display {
     //Window objects
@@ -86,9 +86,9 @@ void initTTF(void);
 SDL_Surface *getInfoWindowTextSurface(char *outputString);
 void crash(char *message);
 void getWindowSize(int *w, int *h);
-void drawRange(Display d, double cx, double cy, double r);
 void init_pic(SDL_Renderer **rend, SDL_Surface **surface, SDL_Texture **texture, char *pic_name);
 void check_load_images(SDL_Surface *surface, char *pic_name);
+void draw_filled_range(SDL_Renderer *renderer, int cx, int cy, int r);
 void presentCircuit(Display d,SDL_Texture *text[2], int x,int y,int w, int h, int frames, int pic_width, int pic_height, int anim_speed);
 
 Display init_SDL(){
@@ -117,8 +117,6 @@ Display init_SDL(){
     if(d->statsBarFont == NULL) crash("TTF_(OpenFont)");
     d->statsBarFontColour.r = 0xFF, d->statsBarFontColour.g = 0xFF, d->statsBarFontColour.b = 0xFF;
     
-    
-
     putenv("SDL_VIDEODRIVER=dga");
     
     /*inititalize pictures (load picture to the texture)*/
@@ -145,14 +143,17 @@ Display init_SDL(){
     
     return d;
 }
+/*Tower and enemy graphics functions*/
 
 /*call fucntion in the while loop to present all the animations*/
 void presentAnimation(){
     Display d = getDisplayPointer(NULL);
-    presentCircuit(d, d->circ1_Texture,100, 100, 30, 100, 5,385, 324, 300);
+    presentCircuit(d, d->circ1_Texture,100, 100, 30, 100, 6,385, 324, 600);
     presentCircuit(d, d->circ2_Texture,300, 300, 30, 60, 7,386, 195, 350);
 }
 
+
+/*draw background image*/
 void drawBackground(){
     Display d = getDisplayPointer(NULL);
     SDL_RenderCopy(d->renderer, d->backgroundTexture, NULL, NULL);
@@ -181,35 +182,29 @@ void presentCircuit(Display d,SDL_Texture *text[2], int x,int y,int w, int h, in
     SDL_RenderCopy(d->renderer, text[1], &d->srcRect, &d->rect);
 }
 
-
+/*Initialize images and check whether they were loaded successfully*/
 void init_pic(SDL_Renderer **rend, SDL_Surface **surface, SDL_Texture **texture, char *pic_name){
     *surface = IMG_Load(pic_name);
     check_load_images(*surface, pic_name);
     *texture = SDL_CreateTextureFromSurface(*rend, *surface);
 }
 
-Display getDisplayPointer(Display d)
-{
-    
+/*Get pointer to the Display object*/
+Display getDisplayPointer(Display d){
 	static Display disp;
-    
-	if(d != NULL)	{
+	if(d != NULL) {
 		disp = d;
 	}
-    
 	return disp;
 }
 
-/**
- Prints last SDL error message to stderr, along withb message included in first parameter.
- */
+/*
+Prints last SDL error message to stderr, along withb message included in first parameter.
+*/
 void crash(char *message) {
     fprintf(stderr, "%s: %s\n", message, SDL_GetError());
     SDL_Quit();
 }
-
-
-/*Tower and enemy graphics functions*/
 
 /* fill variables with the width and height values of the screen*/
 void getWindowSize(int *w, int *h){
@@ -217,26 +212,8 @@ void getWindowSize(int *w, int *h){
     SDL_GetWindowSize(d->window, w, h);
 }
 
-/*draw the range (circle)*/
-void drawRange(Display d, double cx, double cy, double r){
-    SDL_SetRenderDrawColor(d->renderer, 255, 0, 0, 255);
-    double dx, dy;
-    dx = floor(sqrt((1.0 * r ) ));
-    SDL_RenderDrawLine(d->renderer, cx-dx, cy+r, cx+dx, cy+r);
-    SDL_RenderDrawLine(d->renderer, cx-dx, cy-r, cx+dx, cy-r);
-    for (dy = 1; dy <= r; dy += 1.0) {
-        dx = floor(sqrt((2.0 * r * dy) - (dy * dy)));
-        SDL_RenderDrawPoint(d->renderer, cx+dx, cy+r-dy);
-        SDL_RenderDrawPoint(d->renderer, cx+dx, cy-r+dy);
-        SDL_RenderDrawPoint(d->renderer, cx-dx, cy+r-dy);
-        SDL_RenderDrawPoint(d->renderer, cx-dx, cy-r+dy);
-    }
-}
-
-
-/*draw damage line from X & Y to target X Y> */
-void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target)
-{
+/*draw damage line from X & Y to target X & Y*/
+void drawLine(Display d, int X_from, int Y_from, int X_target, int Y_target){
     SDL_SetRenderDrawColor(d->renderer, 252, 1, 1, 255);
     SDL_RenderDrawLine(d->renderer, X_from, Y_from, X_target, Y_target);
 }
@@ -253,26 +230,50 @@ void drawEnemy(Display d, int x, int y, int w, int h, int pic_width, int pic_hei
     /*presenting and manipulating color and width of the health bar*/
     double color = (255*((double)currentHealth/maxHealth));
     SDL_SetRenderDrawColor(d->renderer, 0, color, 0, 255);
-    double health = ((double)(currentHealth * HEALTH)/maxHealth);
+    double health = ((double)(currentHealth * HEALTHBAR)/maxHealth);
     d->rect = (SDL_Rect) {x, y -20, health, 10};
     SDL_RenderFillRect(d->renderer, &d->rect);
 }
 
+/*Draw range with transparency*/
+void draw_filled_range(SDL_Renderer *renderer, int cx, int cy, int r)
+{
+    Uint32 ticks = SDL_GetTicks();
+    Uint32 clock = (ticks / 150)% 20;
+    //mx saturation is a max extreme to ensure saturation does not get bigger than pre-set value
+    float max_satur = 30;
+    // set initial saturation
+    float initial_saturation = 30;
+    // set variable saturation to equal initial saturation
+    static float saturation = 30;
+
+    if (clock < 10 && saturation < max_satur + initial_saturation) {
+        saturation += 0.5;
+    }
+    else if (clock >= 10 && saturation > initial_saturation){
+        saturation -= 0.5;
+    }
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 255, 50, 0, saturation);
+    for (double dy = 1; dy <= r; dy += 1.0) {
+        double dx = floor(sqrt((2.0 * r * dy) - (dy * dy)));
+        SDL_RenderDrawLine(renderer, cx-dx, cy+r-dy, cx+dx, cy+r-dy);
+        SDL_RenderDrawLine(renderer, cx-dx, cy-r+dy, cx+dx, cy-r+dy);
+    }
+}
 
 /* draws the tower at x and y coor */
 void drawTower(Display d, int x, int y, int w, int h, int range, int type){
     d->rect= (SDL_Rect) {x, y ,w, h};
     SDL_RenderCopy(d->renderer, d->towerTexture[type], NULL, &d->rect);
     SDL_SetRenderDrawColor(d->renderer, 0, 0, 0, 255);
-    drawRange(d, x + (double)w/2, y + (double)h/2, range);
+   // drawRange(d, x + (double)w/2, y + (double)h/2, range);
+    draw_filled_range(d->renderer, x + (double)w/2, y + (double)h/2, range);
 }
-
 
 
 /*clear the screen before making any drawings */
 void startFrame(Display d) {
-    //Display d = getDisplayPointer(NULL);
-    SDL_SetRenderDrawColor(d->renderer, 168, 230, 255, 255);
     SDL_RenderClear(d->renderer);
 }
 

@@ -55,7 +55,6 @@ void init_sound(){
 }
 
 void enemySound(int type){
-    SDL_Delay(20);
     static int cnt = 0;
     Sound s = getSoundPointer(NULL);
     switch (type) {
