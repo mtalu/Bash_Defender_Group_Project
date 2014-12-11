@@ -27,6 +27,7 @@ int main()
     char *pass, *clear, *inputCommand=NULL;
     pass = text;
     clear = empty;
+	int started = 0;
     addGold(100);
     int steps=0;
 	//createTowerFromPositions(1);
@@ -34,13 +35,22 @@ int main()
     //userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
     //init_sound();
     //playBackgroundSound();
+
+    //userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
+    //init_sound();
+   // playBackgroundSound();
+	while(started == 0)
+	{
+		menu_screen(d, &started);
+	}
     do{
         ++steps;
         startFrame(d);
 		levelQueueReader();
         drawBackground();
-        terminal_window(d, pass, clear,inputCommand);
-    	popToTower();
+
+        terminal_window(d, pass, clear);
+		popToTower();
         if(inputCommand)
         {
             parse(inputCommand);
@@ -64,10 +74,10 @@ int main()
         presentAnimation();
 		drawAllTowerPositions();
         endFrame(d);
-    } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
+    } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear) && started == 1);
     
     shutSDL(d);
-    shutSound();
+    //shutSound();
     freeEnemyGroup();
     freeLevelPaths();
     return 0;
