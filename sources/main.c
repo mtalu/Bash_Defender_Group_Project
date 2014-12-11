@@ -35,7 +35,7 @@ int main()
     userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
     init_sound();
     playBackgroundSound();
-    do{
+       do{
         ++steps;
         startFrame(d);
         drawBackground();
@@ -65,11 +65,15 @@ int main()
         presentAnimation();
         drawTowerPosition(200, 200, 100, 100);
         endFrame(d);
+
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear, inputCommand));
     
     //while(moveEnemy(1) != 1);
     shutSDL(d);
     shutSound();
+    
+
+    
 //    char text[128] = {'>', '>'};
 //    char empty[128] = {'>', '>'};
 //    char *pass, *clear, *inputCommand=NULL;
