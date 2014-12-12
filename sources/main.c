@@ -48,13 +48,11 @@ int main()
         drawBackground();
 
         terminal_window(d, pass, clear);
-		popToTower();
+		//popToTower();
         if(inputCommand)
         {
             parse(inputCommand);
         }
-        statsBar();
-        towerMonitor(0, NULL);
         present_enemy(d);
         present_tower(d);
 
@@ -66,11 +64,14 @@ int main()
         }
         if(steps%100 == 0)
         {
-        //    userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
+            userCreateTower(rand()% (int) (MAP_WIDTH-80), rand()% (int) (MAP_HEIGHT-80));
         //     createEnemy();
         }
         presentAnimation();
 		drawAllTowerPositions();
+        statsBar();
+        towerMonitor(0, NULL);
+        actionQueueMonitor();
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear) && started == 1);
 
