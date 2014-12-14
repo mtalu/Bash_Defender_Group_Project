@@ -56,6 +56,16 @@ struct display {
     SDL_Rect statsBarTextureRect;
     TTF_Font *statsBarFont;
     SDL_Color statsBarFontColour;
+    
+    //Action queue monitor objects
+    SDL_Surface *actionQueueSurface;
+    SDL_Texture *actionQueueTexture;
+    SDL_Surface *actionQueueTextSurface;
+    SDL_Texture *actionQueueTextTexture;
+    SDL_Rect  actionQueueRect;
+    SDL_Rect  actionQueueTextureRect;
+    TTF_Font *actionQueueFont;
+    SDL_Color actionQueueFontColour;
 
     //Tower objects
     SDL_Surface *towerSurface[2];
@@ -116,6 +126,15 @@ Display init_SDL(){
     d->statsBarFont = TTF_OpenFont("OpenSans-Regular.ttf", 10);
     if(d->statsBarFont == NULL) crash("TTF_(OpenFont)");
     d->statsBarFontColour.r = 0xFF, d->statsBarFontColour.g = 0xFF, d->statsBarFontColour.b = 0xFF;
+    
+    d->actionQueueSurface = IMG_Load("action_queue-monitor.png");
+    d->actionQueueTexture = SDL_CreateTextureFromSurface(d->renderer, d->actionQueueSurface);
+    d->actionQueueRect = (SDL_Rect){ACTION_QUEUE_X, ACTION_QUEUE_Y, ACTION_QUEUE_WIDTH, ACTION_QUEUE_HEIGHT};
+    d->actionQueueTextureRect = (SDL_Rect) {ACTION_QUEUE_X + ACTION_QUEUE_BORDER_X, ACTION_QUEUE_Y + ACTION_QUEUE_BORDER_Y, 0, 0};
+    d->actionQueueFont = TTF_OpenFont("OpenSans-Regular.ttf", 10);
+    if(d->actionQueueFont == NULL) crash("TTF_(OpenFont)");
+    d->actionQueueFontColour.r = 0x7c, d->actionQueueFontColour.g = 0xfc, d->actionQueueFontColour.b = 0x00;
+
     
     putenv("SDL_VIDEODRIVER=dga");
     
@@ -340,6 +359,17 @@ void displayStatsBar() {
 }
 
 /**
+Display empty action queue monitor at top left of screen
+*/
+void displayActionQueueMonitor() {
+    
+    Display d = getDisplayPointer(NULL);
+    
+    SDL_RenderCopy(d->renderer, d->actionQueueTexture, NULL, &(d->actionQueueRect));
+}
+
+
+/**
 Display output string in tower monitor
 */
 void updateTowerMonitor(char *outputString) {
@@ -391,6 +421,34 @@ void updateStatsBar(char *outputString) {
     SDL_FreeSurface(d->statsBarTextSurface);
     SDL_DestroyTexture(d->statsBarTextTexture);
     free(outputString);
+    
+}
+
+/**
+ Display output string in action queue monitor
+ */
+void updateActionQueueMonitor(char *outputString) {
+    Display d = getDisplayPointer(NULL);
+    
+    displayActionQueueMonitor();
+    
+    if(strlen(outputString) > 0) {
+        d->actionQueueTextSurface = TTF_RenderText_Blended_Wrapped(d->actionQueueFont, outputString, d->actionQueueFontColour, ACTION_QUEUE_WIDTH - ACTION_QUEUE_BORDER_X);
+        if(d->actionQueueTextSurface == NULL) crash("getActionQueueTextSurface()");
+        d->actionQueueTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->actionQueueTextSurface);
+        
+        //Query text dimensions so text doesn't strech to whole screen
+        int textW = 0;
+        int textH = 0;
+        SDL_QueryTexture(d->actionQueueTextTexture, NULL, NULL, &textW, &textH);
+        d->actionQueueTextureRect.w = textW;
+        d->actionQueueTextureRect.h = textH;
+        
+        SDL_RenderCopy(d->renderer, d->actionQueueTextTexture, NULL, &(d->actionQueueTextureRect));
+        
+        SDL_FreeSurface(d->actionQueueTextSurface);
+        SDL_DestroyTexture(d->actionQueueTextTexture);
+    }
     
 }
 
