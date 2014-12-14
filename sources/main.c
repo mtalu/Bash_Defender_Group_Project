@@ -46,9 +46,8 @@ int main()
         startFrame(d);
 		levelQueueReader();
         drawBackground();
-
         terminal_window(d, pass, clear);
-		//popToTower();
+		popToTower();
         if(inputCommand)
         {
             parse(inputCommand);
@@ -69,9 +68,10 @@ int main()
         }
         presentAnimation();
 		drawAllTowerPositions();
-        statsBar();
+        //statsBar();
         towerMonitor(0, NULL);
         actionQueueMonitor();
+        statsBar();
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear) && started == 1);
 
