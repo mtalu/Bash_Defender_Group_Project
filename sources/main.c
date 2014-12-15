@@ -47,7 +47,7 @@ int main()
 		levelQueueReader();
         drawBackground();
         terminal_window(d, pass, clear);
-		popToTower();
+        popToTower();
         if(inputCommand)
         {
             parse(inputCommand);
@@ -68,7 +68,6 @@ int main()
         }
         presentAnimation();
 		drawAllTowerPositions();
-        //statsBar();
         towerMonitor(0, NULL);
         actionQueueMonitor();
         statsBar();

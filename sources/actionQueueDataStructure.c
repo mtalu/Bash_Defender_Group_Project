@@ -303,6 +303,11 @@ int popToTower()	{
 					GameProperties Game = getGame(NULL);
 					upgradeTowerStat(queue->start->option,queue->start->target);
 					takeGold(Game, needed);
+                    QueueNode tempStart = queue->start;
+                    queue->start = queue->start->nextNode;
+                    free(tempStart);
+                    setlastAction(Game);
+                    --(queue->nItems);
 				}
 				break;
 			case mktwr:
@@ -317,11 +322,11 @@ int popToTower()	{
 
 				break;
 		}
-	QueueNode tempStart = queue->start;
+	/*QueueNode tempStart = queue->start;
     queue->start = queue->start->nextNode;
 	free(tempStart);
 	setlastAction(Game);
-	--(queue->nItems);
+	--(queue->nItems);*/
 	} else {
 		return 0;
 	}

@@ -33,7 +33,7 @@ enum upgradeStat
 
 /*----------Symbolic Constants-----------*/
 
-#define ACTIONCOOLDOWN	1		//! minimum time between actions being removed from queue
+#define ACTIONCOOLDOWN	10		//! minimum time between actions being removed from queue
 #define ENEMYSPAWNCOOLDOWN 5 	//!minimum time between enemy spawns
 /*----------TypeDefs----------*/
 
