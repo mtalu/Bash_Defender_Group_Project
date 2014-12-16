@@ -308,3 +308,17 @@ void TestTakeGold()	{
 	sput_fail_unless(takeGold(testGame,100) == 0,"Subtracting too much Gold");
 	free(testGame);
 }
+
+/*clock_t getCooldownTime(void) {
+    GameProperties game = getGame(NULL);
+    game->clock->cooldownTime = 0;
+    
+    
+    if(!lastAction(game)) {
+        clock_t currentTime = (double) clock() / CLOCKS_PER_SEC;
+        clock_t timeSinceLastAction = currentTime - game->clock->lastAction;
+        cooldownTime = ACTIONCOOLDOWN - timeSinceLastAction;
+    }
+    
+    return cooldownTime;
+}*/

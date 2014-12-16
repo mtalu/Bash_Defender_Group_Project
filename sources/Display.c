@@ -48,6 +48,10 @@ struct display {
 	SDL_Texture *imagetexture;
 	SDL_Color text_color;
     
+    SDL_Surface *terminalWindowTextSurface;
+    SDL_Texture *terminalWindowTextTexture;
+    SDL_Rect terminalWindowTextureRect;
+    
     //Stats bar objects
     SDL_Rect statsBarRect;
     SDL_Color statsBarColour;
@@ -134,7 +138,8 @@ Display init_SDL(){
     d->actionQueueFont = TTF_OpenFont("OpenSans-Regular.ttf", 10);
     if(d->actionQueueFont == NULL) crash("TTF_(OpenFont)");
     d->actionQueueFontColour.r = 0x7c, d->actionQueueFontColour.g = 0xfc, d->actionQueueFontColour.b = 0x00;
-
+    
+    d->terminalWindowTextureRect = (SDL_Rect) {TERMINAL_WINDOW_X + TOWER_TEXT_BORDER_X, TERMINAL_WINDOW_Y + TOWER_TEXT_BORDER_Y, TERMINAL_WINDOW_WIDTH, TERMINAL_WINDOW_HEIGHT};
     
     putenv("SDL_VIDEODRIVER=dga");
     
@@ -377,7 +382,7 @@ void updateTowerMonitor(char *outputString) {
     
     displayTowerMonitor();
     
-    d->towerMonitorTextSurface = TTF_RenderText_Blended_Wrapped(d->towerMonitorFont, outputString, d->towerMonitorFontColour, TOWER_MONITOR_WIDTH - TOWER_TEXT_BORDER_X);
+    d->towerMonitorTextSurface = TTF_RenderText_Blended_Wrapped(d->towerMonitorFont, outputString, d->towerMonitorFontColour, 150);
     if(d->towerMonitorTextSurface == NULL) crash("getInfoWindowTextSurface()");
     d->towerMonitorTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->towerMonitorTextSurface);
     
@@ -448,6 +453,32 @@ void updateActionQueueMonitor(char *outputString) {
         
         SDL_FreeSurface(d->actionQueueTextSurface);
         SDL_DestroyTexture(d->actionQueueTextTexture);
+    }
+    
+}
+
+/**
+ Display output string in terminal window
+ */
+void updateTerminalWindow(char *outputString) {
+    Display d = getDisplayPointer(NULL);
+    
+    if(outputString != NULL) {
+        d->terminalWindowTextSurface = TTF_RenderText_Blended_Wrapped(d->actionQueueFont, outputString, d->actionQueueFontColour, ACTION_QUEUE_WIDTH - ACTION_QUEUE_BORDER_X);
+        if(d->terminalWindowTextSurface == NULL) crash("getTerminalWindowTextSurface()");
+        d->terminalWindowTextTexture = SDL_CreateTextureFromSurface(d->renderer, d->terminalWindowTextSurface);
+        
+        //Query text dimensions so text doesn't strech to whole screen
+        int textW = 0;
+        int textH = 0;
+        SDL_QueryTexture(d->terminalWindowTextTexture, NULL, NULL, &textW, &textH);
+        d->terminalWindowTextureRect.w = textW;
+        d->terminalWindowTextureRect.h = textH;
+        
+        SDL_RenderCopy(d->renderer, d->terminalWindowTextTexture, NULL, &(d->terminalWindowTextureRect));
+        
+        SDL_FreeSurface(d->terminalWindowTextSurface);
+        SDL_DestroyTexture(d->terminalWindowTextTexture);
     }
     
 }

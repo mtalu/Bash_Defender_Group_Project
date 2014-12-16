@@ -20,12 +20,13 @@
 
 #define MAX_OUTPUT_STRING 200
 #define DEFAULT_SCREEN_TIME 10000
+#define DEFAULT_SCREEN_TIME2 4000
 
 
 
 /**
- If called with target tower as first parameter and second parameter set to -1, gets output string
- for that tower and sends to tower monitor. If called with first parameter set to NULL and optional
+ If called with target tower as first parameter and second parameter set to NULL, gets output string
+ for that tower and sends to tower monitor. If called with first parameter set to -1 and optional
  output string as second parameter, sends that string to tower monitor. After a certain period
  of time, default tower screen reappears.
  */
@@ -65,6 +66,28 @@ void towerMonitor(unsigned int targetTower, char *optionalOutputString) {
     
     updateTowerMonitor(outputString);
 }
+
+/**
+ update terminal window with optional output string
+ */
+void terminalWindow(char *string) {
+    int time = SDL_GetTicks();
+    static int timeOfCall = 0;
+    static char *outputString = NULL;
+    
+    if(string != NULL) {
+        outputString = malloc(MAX_OUTPUT_STRING);
+        sprintf(outputString, "\n\n\n               **********\n%s\n               **********\n\n\n", string);
+        timeOfCall = time;
+    }
+    
+    if(time - timeOfCall > DEFAULT_SCREEN_TIME2) {
+        outputString = NULL;
+    }
+    
+    updateTerminalWindow(outputString);
+}
+
 
 /**
  Creates output string for stats monitor and updates stats monitor
@@ -120,7 +143,6 @@ char *getTowerString(unsigned int targetTower) {
     
     return outputString;
 }
-
 
 /**
  Sends "upgrade" command help string to tower monitor

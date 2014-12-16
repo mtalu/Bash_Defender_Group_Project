@@ -107,6 +107,7 @@ void displayActionQueueMonitor();
 void updateTowerMonitor(char *outputString);
 void updateStatsBar(char *outputString);
 void updateActionQueueMonitor(char *outputString);
+void updateTerminalWindow(char *outputString);
 char *strdup2(char * s);
 
 

@@ -417,17 +417,6 @@ char *getActionQueueString(void) {
             case set:
                 strcat(outputString, "set");
                 break;
-            case man:
-                strcat(outputString, "man");
-                break;
-            case cat:
-                strcat(outputString, "cat");
-                break;
-            case mktwr:
-                strcat(outputString, "mktwr");
-                break;
-            case commandError:
-                continue;
         }
         
         strcat(outputString, " ");
@@ -464,5 +453,7 @@ char *getActionQueueString(void) {
         
     }
     
+    /*clock_t timeSinceLastAction = get*/
+     
     return outputString;
 }

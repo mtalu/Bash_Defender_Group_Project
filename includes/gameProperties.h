@@ -66,4 +66,6 @@ void TestGetGold();
 void TestAddGold();
 void TestTakeGold();
 
+clock_t getCooldownTime(void);
+
 #endif

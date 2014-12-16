@@ -71,6 +71,7 @@ int main()
         towerMonitor(0, NULL);
         actionQueueMonitor();
         statsBar();
+        terminalWindow(NULL);
         endFrame(d);
     } while(/*moveEnemy(1) != 1 &&*/ !terminal_window(d, pass, clear) && started == 1);
 
