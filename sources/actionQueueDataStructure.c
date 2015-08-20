@@ -17,13 +17,14 @@
 
 #include "../includes/sput.h"
 #include "../includes/actionQueueDataStructure.h"
+#include "../includes/abilities.h"
 
 /*---------- Data Types -----------*/
 
 struct queueNode {
 	
-	commandType command; //command for execution
-	upgradeStat option; //stat to change
+	cmdType command; //command for execution
+	cmdOption option; //stat to change
 	int target;	//target of command
     struct queueNode *nextNode;
 
@@ -32,7 +33,7 @@ struct queueNode {
 struct actionQueueStructure  {
 	
     struct queueNode *start;
-    struct queueNode *current;
+    struct queueNode *current; //!back of queue
     int nItems;
 
 };
@@ -40,23 +41,16 @@ struct actionQueueStructure  {
 
 /*---------- Functions ----------*/
 
-/*int main()	{
-	//testingGameStructure();
-	testingActionQueue();
-}*/
 void testingActionQueue()	{
 
 	sput_start_testing();
 	
 	sput_set_output_stream(NULL);
 
-	sput_enter_suite("testCheckGold(): gold check");
-    sput_run_test(testcheckGold);
-    sput_leave_suite();
+	sput_enter_suite("testCheckMem(): memory check");
+    sput_run_test(testCheckMem);
+  	sput_leave_suite();
 	
-	//sput_enter_suite("testPopFromQueue(): Popping from queue");
-	//sput_run_test(testPopFromQueue);
-	//sput_leave_suite();
 
 	sput_enter_suite("testPushToQueue(): Pushing to queue");
 	sput_run_test(testPushToQueue);
@@ -76,6 +70,26 @@ ActionQueueStructure createActionQueue()	{
 	getQueue(newActionQueue);
 
 	return newActionQueue;
+}
+
+void clearQueue()	{
+
+	ActionQueueStructure q = getQueue(NULL);
+	QueueNode currNode = q->start;
+	QueueNode temp;
+	while(currNode != NULL)	{
+		temp = currNode->nextNode;
+		free(currNode);
+		currNode = temp;	
+	}
+	q->start = q->current = NULL;
+}
+
+void freeActionQueue()	{
+
+		clearQueue();
+		free(getQueue(NULL));
+
 }
 
 /*
@@ -113,7 +127,7 @@ ActionQueueStructure getQueue(ActionQueueStructure queue)	{
 /*
  * Pushes values to newly created node at back of queue
  */
-int pushToQueue(ActionQueueStructure queue, commandType command, upgradeStat option, int target)	{
+int pushToQueue(ActionQueueStructure queue, cmdType command, cmdOption option, int target)	{
 		createNode(queue);
 		queue->current->command = command;
 		queue->current->option = option;
@@ -124,30 +138,32 @@ int pushToQueue(ActionQueueStructure queue, commandType command, upgradeStat opt
 
 void testPushToQueue()	{
 	
-    commandType nCommand_1=upgrade;
-    upgradeStat nStat_1=power;
+    cmdType nCommand_1=cmd_upgrade;
+    cmdOption nStat_1=upgrade_power;
     int tar_1 = 1;
 
-    commandType nCommand_2=execute;
-    upgradeStat nStat_2=range;
+    cmdType nCommand_2=cmd_upgrade;
+    cmdOption nStat_2=upgrade_range;
     int tar_2 = 2;
 
-    GameProperties newGame = createGame();
-    ActionQueueStructure newQueue = createActionQueue();
+    ActionQueueStructure newQueue = getQueue(NULL);
 
 	sput_fail_unless(pushToQueue(newQueue,nCommand_1,nStat_1,tar_1) == 1,"Valid: 1 Queue Item");
 	sput_fail_unless(pushToQueue(newQueue,nCommand_2,nStat_2,tar_2) == 2,"Valid: 2 Queue Items");
-	sput_fail_unless(getFirstCommand(newQueue) == upgrade,"Valid: Top of Queue Command");
-	sput_fail_unless(getFirstOption(newQueue) == power,"Valid: Top of Queue Option");
-	sput_fail_unless(getLastCommand(newQueue) == execute,"Valid: Last of Queue Command");
-	sput_fail_unless(getLastOption(newQueue) == range,"Valid: Last of Queue Option");
-	addGold(10);
-
+	sput_fail_unless(getFirstCommand(newQueue) == cmd_upgrade,"Valid: Top of Queue Upgrade Command");
+	sput_fail_unless(getFirstOption(newQueue) == upgrade_power,"Valid: Top of Queue Power Option");
+	sput_fail_unless(getLastCommand(newQueue) == cmd_upgrade,"Valid: Last in Queue upgrade Command");
+	sput_fail_unless(getLastOption(newQueue) == upgrade_range,"Valid: Last of Queue range Option");
+	pushToQueue(newQueue,cmd_mktwr,mktwr_int,2);
+	sput_fail_unless(getLastCommand(newQueue) == cmd_mktwr,"Valid: Last in Queue make tower command");
+	sput_fail_unless(getLastOption(newQueue) == mktwr_int,"Valid: Last option in Queue is int tower");
+	clearQueue();
 }
+
 /*
  *Returns first command in queue
  */
-commandType getFirstCommand(ActionQueueStructure queue)	{
+cmdType getFirstCommand(ActionQueueStructure queue)	{
 
 	return queue->start->command;
 }
@@ -155,7 +171,7 @@ commandType getFirstCommand(ActionQueueStructure queue)	{
 /*
  *Returns last command in queue
  */
-commandType getLastCommand(ActionQueueStructure queue)	{
+cmdType getLastCommand(ActionQueueStructure queue)	{
 
 	return queue->current->command;
 }
@@ -163,16 +179,19 @@ commandType getLastCommand(ActionQueueStructure queue)	{
 /*
  *Returns first option in queue
  */
-upgradeStat getFirstOption(ActionQueueStructure queue)	{
+cmdOption getFirstOption(ActionQueueStructure queue)	{
 
-	return queue->start->option;
+	if(queue->start != NULL)	{
+		return queue->start->option;	
+	}
 
+	return 0;
 }
 
 /*
  *Returns last option in queue
  */
-upgradeStat getLastOption(ActionQueueStructure queue)	{
+cmdOption getLastOption(ActionQueueStructure queue)	{
 
 	return queue->current->option;
 
@@ -183,7 +202,7 @@ upgradeStat getLastOption(ActionQueueStructure queue)	{
  */
 int getFirstTarget()	{
 
-	return (getQueue(NULL))->start->target;
+	return (getQueue(NULL)->start->target);
 
 }
 
@@ -192,51 +211,102 @@ int getFirstTarget()	{
  */
 int getLastTarget()	{
 
-	return (getQueue(NULL))->current->target;
+	return (getQueue(NULL)->current->target);
 
 }
 /*
  *Returns costs of command based on current tower stats
  */
-int calulateCosts(commandType cmd, upgradeStat stat, int target)    {
+int calculateCosts(cmdType cmd, cmdOption opt, int target)    {
 
-    switch(cmd) {
-        case upgrade:
-            return ((getTowerLevel(target))*getCurrentStat(stat,target));
-            break;
-        case mktwr:
+    switch(cmd)
+    {
+        case cmd_upgrade:
+        {
+            return ((getTowerLevel(target))*(2*getCurrentStat(opt,target)));
+        }
+        case cmd_mktwr:
+        {
             return getCostOfNewTower();
-            break;
+        }
+        case cmd_aptget:
+        {
+            return getCostOfAptget(opt);
+        }
         default:
 
-            break;
+        break;
     }
 
     return 0;
 }
 
+
+
+int costOfUpgradeFactoringInTheUpgradesOnTheQueue( int target, cmdOption stat)
+{
+    ActionQueueStructure q = getQueue(NULL);
+    QueueNode currentNode = q->start;
+    
+    int upgradesToThisStatAndTowerInTheQueue=0;
+    int towerUpgradesToBeCompleted = getUpgradesCompleted(target);
+    int towerLevel = getTowerLevel(target);
+
+   
+    while(currentNode != NULL)
+    {
+        if(currentNode->command == cmd_upgrade &&
+           currentNode->target == target )
+        {
+            ++towerUpgradesToBeCompleted;
+            if(towerUpgradesToBeCompleted % UPGRADES_PER_LEVEL == 0)
+            {
+                ++towerLevel;
+            }
+            if(currentNode->option == stat)
+            {
+                ++upgradesToThisStatAndTowerInTheQueue;
+            }
+        }
+        currentNode=currentNode->nextNode;
+    }
+    int costOfUpgradeWillBe = towerLevel*2*( getCurrentStat(stat,target) +
+                                            upgradesToThisStatAndTowerInTheQueue );
+    return costOfUpgradeWillBe;
+}
+
+
+int getCostOfAptget (cmdOption option)
+{
+    if(option==aptget_kill)
+    {
+        return KILL_COST;
+    }
+    else return 0;
+    
+}
 /*
  *Returns specified stat of specified tower
  */
-int getCurrentStat(upgradeStat stat,int target)	{
+int getCurrentStat(cmdOption stat,int target)	{
 
 	switch(stat)	{
-		case power:
+		case upgrade_power:
 				return getTowerDamage(target);
 				break;	
-		case range:
+		case upgrade_range:
 				return getTowerRange(target);
 				break;	
-		case speed:
+		case upgrade_speed:
 				return getTowerSpeed(target);	
 				break;	
-		case AOErange:
+		case upgrade_AOErange:
 				return getTowerAOErange(target);
 				break;	
-		case AOEpower:
+		case upgrade_AOEpower:
 				return getTowerAOEpower(target);
 				break;	
-		case level:
+		case upgrade_level:
 				return getTowerLevel(target);
 				break;	
 		default:
@@ -248,44 +318,57 @@ int getCurrentStat(upgradeStat stat,int target)	{
 /*
  *Upgrades tower stat
  */
-upgradeStat upgradeTowerStat(upgradeStat stat, int target)  {
+cmdOption upgradeTowerStat(cmdOption stat, int target)  {
 
     switch(stat)    {
-        case power:
+        case upgrade_power:
         {
             if(upgradeDmg(target))  {
-                return power;
+                return upgrade_power;
             }
+			break;
         }
-        case range:
+        case upgrade_range:
         {
             if(upgradeRange(target))    {
-                return range;
+                return upgrade_range;
             }
+			break;
         }
-        case speed:
+        case upgrade_speed:
         {
             if(upgradeSpeed(target))    {
-                return speed;
+                return upgrade_speed;
             }
+			break;
         }
-        case AOErange:
+        case upgrade_AOErange:
         {
             if(upgradeAOErange(target)) {
-                return AOErange;
+                return upgrade_AOErange;
             }
+			break;
         }
-        case AOEpower:
+        case upgrade_AOEpower:
         {
             if(upgradeAOEpower(target)) {
-                return AOEpower;
+                return upgrade_AOEpower;
             }
+			break;
         }
         default:
             fprintf(stderr,"upgradeTowerStat tower.c: unrecognised stat\n");
-            return statError;
-
+            return optionError;
     }
+	return 0;
+}
+
+int startOfQueueCalc()	{
+	ActionQueueStructure queue = getQueue(NULL);
+	if(queue->start != NULL)	{
+		return calculateCosts(queue->start->command,queue->start->option,queue->start->target);
+	}
+	return 0;
 }
 /*
  *Checks start of action Queue for command, and actions it if all criteria are met
@@ -295,52 +378,68 @@ int popToTower()	{
 	GameProperties Game = getGame(NULL);
 	int needed;
 	if(queue->start != NULL) {
-		needed = calulateCosts(queue->start->command,queue->start->option,queue->start->target);
+		needed = calculateCosts(queue->start->command,queue->start->option,queue->start->target);
 		switch(queue->start->command)	{
-			case upgrade:
-				if (checkQueue(queue, Game,needed)){
-					ActionQueueStructure queue = getQueue(NULL);
-					GameProperties Game = getGame(NULL);
+			case cmd_upgrade:
+				if (checkQueue(queue, Game,needed)) {
 					upgradeTowerStat(queue->start->option,queue->start->target);
-					takeGold(Game, needed);
-                    QueueNode tempStart = queue->start;
-                    queue->start = queue->start->nextNode;
-                    free(tempStart);
-                    setlastAction(Game);
-                    --(queue->nItems);
+					useMemory(Game, needed);
+					removeQueueItem();
 				}
 				break;
-			case mktwr:
-				printf("got request for tower\n");
-				//! request tower type ignored for now.
-				if (checkQueue(queue,Game,needed)){
-					printf("creating tower\n");
-					createTowerFromPositions(queue->start->target);
+			case cmd_mktwr:
+				if (checkQueue(queue,Game,needed)) {
+					switch(queue->start->option)	{
+						case mktwr_int:
+							createTowerTypeFromPositions(queue->start->target,INT_TYPE);	
+							break;
+						case mktwr_char:
+							createTowerTypeFromPositions(queue->start->target,CHAR_TYPE);	
+							break;
+						default:
+							fprintf(stderr,"Unrecognised tower type\n");
+					        break;
+					}
+					//createTowerFromPositions(queue->start->target);
+					useMemory(Game, needed);
+					removeQueueItem();
 				}
 				break;
+			case cmd_aptget:
+				if(checkQueue(queue,Game,needed)) {
+					unlock_ability(KILL);
+					useMemory(Game, needed);					
+					removeQueueItem();
+				}
 			default:
 
 				break;
 		}
-	/*QueueNode tempStart = queue->start;
-    queue->start = queue->start->nextNode;
-	free(tempStart);
-	setlastAction(Game);
-	--(queue->nItems);*/
 	} else {
 		return 0;
 	}
 	return 1;
 }
 
+void removeQueueItem()	{
+    ActionQueueStructure queue = getQueue(NULL);
+    GameProperties Game = getGame(NULL);
+	QueueNode tempStart = queue->start;
+    queue->start = queue->start->nextNode;
+	free(tempStart);
+	setlastAction(Game);
+	--(queue->nItems);
+}
+
 
 /*
- *Pops from front of Queue.
+ *Pops from front of Queue. : replaced with popToTower()
  */
-int popFromQueue(ActionQueueStructure queue, commandType *cmd, upgradeStat *stat, int *target)	{ 
+int popFromQueue(ActionQueueStructure queue, cmdType *cmd, cmdOption *stat, int *target)	{
     GameProperties Game = getGame(NULL);
-    int needed = calulateCosts(*cmd,*stat,*target);
-	if((queue->start != NULL) && (checkQueue(queue,Game, needed)))	{ //!	testing target, available gold, cooldown time 
+    int needed = calculateCosts(*cmd,*stat,*target);
+
+	if((queue->start != NULL) && (checkQueue(queue,Game, needed)))	{ //!	testing target, available Memory, cooldown time 
 		*cmd = queue->start->command;
 		*stat = queue->start->option;
 		*target = queue->start->target;
@@ -348,8 +447,9 @@ int popFromQueue(ActionQueueStructure queue, commandType *cmd, upgradeStat *stat
 		queue->start = queue->start->nextNode;	
 		free(tempStart);	
 		--(queue->nItems);
-		takeGold(Game, needed);	//remove gold
+		useMemory(Game, needed);	//use memory
 		setlastAction(Game);	//activate cooldown timer.
+
 		return 1;
 	}
 		return 0;
@@ -360,36 +460,38 @@ int popFromQueue(ActionQueueStructure queue, commandType *cmd, upgradeStat *stat
  */
 
 int checkQueue(ActionQueueStructure queue, GameProperties Game, int needed)	{
-	if((checkGold(needed, Game)) && (lastAction(Game)))	{
-			printf("success!\n");
+	if((checkMem(needed, Game)) && (checkClock(lastCmdAction,ACTIONCOOLDOWN)))	{
 			return 1;		
-	} 
+	}
 	return 0;	
 }
 
 /*
- *Checks required gold is less than stored gold
+ *Checks required Memory is less than the Memory available to use
  */
 
-int checkGold(int needed, GameProperties Game)	{
-	if(needed > getGold(Game)) {
+int checkMem(int needed, GameProperties Game)	{
+	if(needed > getAvailableMemory(Game)) {
 		return 0;
 	}
 		return 1;
 }
 
-void testcheckGold()	{
+void testCheckMem()	{
 
 	GameProperties testGame;
-    testGame = createGame();
-	addGold(10);
-	sput_fail_unless(checkGold(10,testGame) == 1,"boundary Testing enough gold");
-	takeGold(testGame,10);
-	sput_fail_unless(checkGold(50,testGame) == 0,"Testing not enough gold");
-	addGold(100);
-	sput_fail_unless(checkGold(10,testGame) == 1,"Testing enough gold");
-
-	free(testGame);
+    testGame = getGame(NULL);
+	setMemory(0);
+	addMemory(10);
+	sput_fail_unless(checkMem(10,testGame) == 1,"boundary Testing enough memory");
+	useMemory(testGame,10);
+	sput_fail_unless(checkMem(50,testGame) == 0,"Testing not enough memory");
+	addMemory(100);
+	sput_fail_unless(checkMem(100,testGame) == 1,"Testing enough memory");
+	setMemory(0);
+	test_KillAnEnemy();
+	sput_fail_unless(getAvailableMemory() > 0, "Valid: More memory available after killing an enemy");
+	freeAllEnemies();
 }
 
 /*
@@ -399,61 +501,70 @@ void testcheckGold()	{
 char *getActionQueueString(void) {
     
     QueueNode p = getQueue(NULL)->start;
-    char *outputString = malloc(500);
-    char *targetString = malloc(4);
-    
+    char *outputString = calloc(500,sizeof(char));
+    char *targetString = calloc(10,sizeof(char));
     for(int count = 0; p!= NULL && count < ITEMS_IN_ACTION_QUEUE; p = p->nextNode, count++) {
-        commandType command = p->command;
-        upgradeStat option = p->option;
+        cmdType command = p->command;
+        cmdOption option = p->option;
         int target = p->target;
-        
         switch(command) {
-            case upgrade:
-                strcat(outputString, "upgrade");
+            case cmd_upgrade:
+                strcat(outputString, "upgrade ");
+                switch(option) {
+                    case upgrade_power:
+                        strcat(outputString, "p ");
+                        break;
+                    case upgrade_range:
+                        strcat(outputString, "r ");
+                        break;
+                    case upgrade_speed:
+                        strcat(outputString, "s ");
+                        break;
+                    case upgrade_AOErange:
+                        strcat(outputString, "AOEr ");
+                        break;
+                    case upgrade_AOEpower:
+                        strcat(outputString, "AOEp ");
+                        break;
+                    case upgrade_level:
+                        strcat(outputString, "level ");
+					default:
+						break;
+                }
+                
+                if(target) {
+                    sprintf(targetString, " t%d", target);
+                    strcat(outputString, targetString);
+                }
                 break;
-            case execute:
-                strcat(outputString, "execute");
+            case cmd_mktwr:
+                strcat(outputString, "mktwr ");
+                switch(option) {
+                    case mktwr_int:
+                        strcat(outputString, "INT ");
+                        break;
+                    case mktwr_char:
+                        strcat(outputString, "CHAR ");
+                        break;
+					default:
+						break;
+                }
+                
+                if(target) {
+                    sprintf(targetString, "%c", 'A' + (target - 1));
+                    strcat(outputString, targetString);
+                }
+
                 break;
-            case set:
-                strcat(outputString, "set");
+            case cmd_aptget:
+                strcat(outputString, "aptget");
                 break;
-        }
-        
-        strcat(outputString, " ");
-        
-        switch(option) {
-            case power:
-                strcat(outputString, "p");
-                break;
-            case range:
-                strcat(outputString, "r");
-                break;
-            case speed:
-                strcat(outputString, "s");
-                break;
-            case AOErange:
-                strcat(outputString, "AOEr");
-                break;
-            case AOEpower:
-                strcat(outputString, "AOEp");
-                break;
-            case level:
-                strcat(outputString, "level");
-            case statError:
+            default:
                 continue;
         }
         
-        if(target) {
-            sprintf(targetString, " t%d", target);
-            strcat(outputString, targetString);
-        }
-        
-        
         strcat(outputString, "\n");
-        
     }
     
-    /*clock_t timeSinceLastAction = get*/
-     
     return outputString;
 }

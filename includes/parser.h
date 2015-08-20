@@ -11,26 +11,47 @@
 
 #include "../includes/actionQueueDataStructure.h"
 
-#define ENABLE_TESTING 0
 
-int getAction( const char * inputAction );
-char * strdup(const char * s);
+typedef struct stringList {
+    char ** stringArray;
+    int numberOfStrings;
+} stringList;
+
+typedef struct  environmentVariable {
+    char * name;
+    char * name2;
+    int value;
+    int (*updateValueFunc)(cmdType command);
+    int (*getValueFunc)();
+} envVar;
+
+typedef struct environmentVariableList {
+    envVar ** array;
+    int numberOfElements;
+} envVarList;
+
+
 int parse(char *inputString);
-void freeCommandArray(char **commandArray,int numberOfChunks);
-char ** breakUpString(const char * inputString, int *numberOfChunksPtr, const char * delimiter);
-void testCommandArray(char ** commandArray, int numberOfChunks);
-void testGetAction(enum commandType action);
-void actionUsageError();
-upgradeStat getUpgradeStats(const char * inputStringUpgradeStats);
-int parseUpgrade(char ** commandArray, int numberOfChunks);
-void testGetUpgradeStat(upgradeStat statToUpgrade);
-void upgrageStatUsageError(const char * inputStringUpgradeStats, upgradeStat statToUpgrade, const char ** validUpgradeStats, int numberOfStats);
-unsigned int getTargetTower(const char * inputStringTargeting);
-int parseCat(char * inputStringTargeting);
-int parseMan(char * inputStringCommandMan);
-int parseMktwr(char ** commandArray);
 
 
+void initialiseParser();
+stringList * intialiseCommandList();
+stringList * intialiseOptionList();
+stringList * getCommandList(stringList * commandList);
+stringList * getOptionList(stringList * optionList);
+void freeParseLists();
+
+
+envVarList * intialiseEnvVarsList();
+envVarList * getEnvsList(envVarList * envsList);
+void destroyEnvVarList();
+
+
+void testParser();
+
+
+//void testGetAction(enum cmdType action);
+//void testGetUpgradeStat(cmdOption statToUpgrade);
 
 #endif
 

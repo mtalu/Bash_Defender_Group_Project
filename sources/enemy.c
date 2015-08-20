@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../includes/sput.h"
 #include <math.h>
+#include <string.h>
 
 #include "../includes/enemy.h"
 
@@ -16,6 +17,12 @@ struct levelPaths {
 };
 
 struct enemy {
+
+    TypeOfEnemy eType;
+    int eFamily;
+    int level;
+    int enemyID;
+    
     int x, y;
     Path enemyPath;
     int pathProgress;
@@ -24,8 +31,7 @@ struct enemy {
     int armour;
     int speed;
     int damage;
-    int enemyID;
-    int level;
+    
     int slowEffect;
     int slowEffectStepsRemaining;
     int poisonEffect;
@@ -43,17 +49,12 @@ struct enemyGroup {
 };
 
 /*
-* mallocs memory and creates 2d arrays containing path coords.
-* currently number of paths is chosen within function.
+* mallocs memory for the pathList Structure
 */
 void createLevelPaths()
 {
     LevelPaths pathList = (LevelPaths) malloc(sizeof(*pathList));
     getLevelPaths(pathList);
-    int numberOfPaths = 2;
-    
-    assignMemoryForPaths(numberOfPaths);
-    layPaths(numberOfPaths);
   
 }
 
@@ -85,70 +86,100 @@ void freePath(Path p)
 /*
 * creates the specified number of path structures within the level paths structure
 */
-void layPaths(int numberOfPaths)
+
+void layPaths(int numberOfPaths, int levelNum)
 {
   
-    LevelPaths lP = getLevelPaths(NULL);
-    switch(numberOfPaths) {
-        case 1 :
-            createHorizontalPath(lP->paths[0]);
-            break;
-        case 2 :
-            createHorizontalPath(lP->paths[0]);
-            createDogLegPath(lP->paths[1]);
-            break;
-          
-        default :
-            fprintf(stderr,"****ERROR failed to read the number of required paths****\n");
-            exit(2);
+    assignMemoryForPaths(numberOfPaths);
+    
+    for(int i = 1; i <= numberOfPaths; i++) {
+      readInPath(levelNum, i);
     }
 }
 
 /*
-* creates a straight path all the way across the middle of the map
+* lays one straight, horizontal path for testing
 */
-void createHorizontalPath(Path P)
+void layTestPath()
 {
-  P->pathLength = 0;
-  P->pathCoords = (int **) malloc(sizeof(int *) * MAP_WIDTH);
-  for(int i = 0; i < MAP_WIDTH; i++) {
-    P->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
-    P->pathCoords[i][0] = i;
-    P->pathCoords[i][1] = MAP_HEIGHT/2;
-    P->pathLength++;
+    assignMemoryForPaths(1);
+    Path p = getLevelPaths(NULL)->paths[0];
+    p->pathLength = 500;
+    p->pathCoords = (int **) malloc(sizeof(int *) * p->pathLength);
+    for(int i = 0; i < 500; i++) {
+        p->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
+        p->pathCoords[i][0] = i;
+        p->pathCoords[i][1] = 100;
+    }
+}
+    
+
+void readInPath(int levelNum, int pathNum) {
+  
+  char *filePath = getFilePath(levelNum, pathNum);
+  FILE *fp = fopen(filePath, "r");
+  if(fp == NULL) {
+    fprintf(stderr,"****ERROR Unable to open path file at '%s' ****\n", filePath);
+    exit(1);
   }
+  LevelPaths lP = getLevelPaths(NULL);
+  Path P = lP->paths[pathNum-1];
+  
+  int lastRowScanned = 0;
+    int backW, backH;
+  int x, y;
+    getBackgroundDimensions(&backW, &backH);
+  if(fscanf(fp,"%d\n",&P->pathLength) != 1) {
+    fprintf(stderr,"****ERROR Unable to read path length from path file at '%s' ****\n", filePath);
+    exit(1);
+  }
+  lastRowScanned++;
+  
+  P->pathCoords = (int **) malloc(sizeof(int *) * P->pathLength);
+  for(int i = 0; i < P->pathLength; i++) {
+    
+    if(fscanf(fp,"%d,%d\n", &x, &y) != 2) {
+      fprintf(stderr,"****ERROR Unable to read path coordinates in file at '%s', last row successfully scanned was %d ****\n", filePath, lastRowScanned);
+      exit(1);
+    }
+    
+    lastRowScanned++;
+    x = (int)((double) x * ((double) SCREEN_WIDTH_GLOBAL/ (double) backW) );
+    y = (int)((double) y * ((double) SCREEN_HEIGHT_GLOBAL/ (double) backH) );
+  
+    P->pathCoords[i] = (int *)malloc(sizeof(int) * 2);
+    P->pathCoords[i][0] = x;
+    P->pathCoords[i][1] = y;
+  }
+  
+  fclose(fp);
+  
 }
 
 /*
-* creates a path that moves down a quarter of the map height when enemy is a quarter of the way along the map.
+** returns file path of .txt to be opened and read to make a path
 */
-void createDogLegPath(Path P)
-{
-  //create path that goes up from the centre and carries along a route above the middle of the screen
-    P->pathLength = 0;
-    P->pathCoords = (int **) malloc(sizeof(int *) * (MAP_WIDTH + (MAP_HEIGHT/4))); //length of path should be width and a quarter of height
-      // go right for a quarter of the map width
-    for (int i = 0; i < MAP_WIDTH/4; i++) {
-        P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
-        P->pathCoords[P->pathLength][0] = i;
-        P->pathCoords[P->pathLength][1] = MAP_HEIGHT/2;
-        P->pathLength++;
-    }
-      // go down for a quarter of the map height
-    for(int i = MAP_HEIGHT/2; i < 3*MAP_HEIGHT/4; i++) {
-        P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
-        P->pathCoords[P->pathLength][0] = P->pathCoords[P->pathLength-1][0];
-        P->pathCoords[P->pathLength][1] = i;
-        P->pathLength++;
-    }
+char *getFilePath(int levelNum, int pathNum) {
   
-      // carry on right for the rest of the map width
-    for(int i = MAP_WIDTH/4; i < MAP_WIDTH; i++) {
-        P->pathCoords[P->pathLength] = (int *)malloc(sizeof(int) * 2);
-        P->pathCoords[P->pathLength][0] = i;
-        P->pathCoords[P->pathLength][1] = P->pathCoords[P->pathLength-1][1];
-        P->pathLength++;
-    }
+  char levelNumStr[10];
+  sprintf(levelNumStr, "%d", levelNum);
+  
+  char pathNumStr[10];
+  sprintf(pathNumStr, "%d", pathNum);
+  
+  char *filePath = calloc((strlen("../data/levels/lvl_") + strlen(levelNumStr) + strlen("/paths/path_") +strlen(pathNumStr) + strlen(".txt") ), sizeof(char) );
+  if(filePath == NULL) {
+    fprintf(stderr,"Unable to calloc space for path filePath\n");
+    exit(1);
+  }
+  
+  strcat(filePath, "../data/levels/lvl_");
+  strcat(filePath, levelNumStr);
+  strcat(filePath, "/paths/path_");
+  strcat(filePath, pathNumStr);
+  strcat(filePath, ".txt");
+  
+  return filePath;
 }
 
 /*
@@ -167,6 +198,10 @@ void assignMemoryForPaths(int numberOfPaths)
       for(int i = 0; i < numberOfPaths; i++) {
           lP->paths[i] = (Path)malloc(sizeof(struct path));
       }
+}
+
+int getNumberOfPaths()	{
+	return getLevelPaths(NULL)->numberOfPaths;
 }
 
 /*
@@ -201,18 +236,27 @@ void createEnemyGroup()
 void freeEnemyGroup()
 {
     EnemyGroup enemyList =  getEnemyGroup(NULL);
-    for(int i = 0; i <= enemyList->numberOfEnemies; i++) {
+    for(int i = 1; i <= enemyList->numberOfEnemies; i++) {
         free(enemyList->enemyArray[i]);
     }
     free(enemyList->enemyArray);
     free(enemyList);
 }
 
+void freeAllEnemies()
+{
+    EnemyGroup enemyList =  getEnemyGroup(NULL);
+    for(int i = 1; i <= enemyList->numberOfEnemies; i++) {
+        free(enemyList->enemyArray[i]);
+    }
+    enemyList->numberOfEnemies = 0;
+}
+
 
 /*
 * creates a new blank enemy within the enemy list structure, updates the enemy list structure to reflect the new number of enemies and populates the enemy (currently running for standard enemy only)
 */
-void createEnemy()
+Enemy createEnemy()
 {
     EnemyGroup enemyList =  getEnemyGroup(NULL);
     ++(enemyList->numberOfEnemies);
@@ -228,13 +272,18 @@ void createEnemy()
 	      printf("****ERROR malloc in createEnemy failed****\n");
         exit(1);
     }
+    
+     // initially set health to 100. overwritten by InitialiseEnemy, but createEnemy() is used alone for testing
+    enemyList->enemyArray[enemyList->numberOfEnemies]->health = 100;
+    
+    return enemyList->enemyArray[enemyList->numberOfEnemies];
 
-    initialiseEnemy( enemyList->enemyArray[enemyList->numberOfEnemies]);
 }
 
 /*
- * returns the number of enemies that currently exist (dead & alive)
- */
+ returns the number of enemies that currently exist (dead & alive)
+*/
+
 int getNumberOfEnemies()
 {
     return getEnemyGroup(NULL)->numberOfEnemies;
@@ -245,10 +294,8 @@ int getNumberOfEnemies()
 */
 void Test_createEnemy()
 {
+    freeAllEnemies();
 
-    createLevelPaths();
-    createEnemyGroup();
-    
     createEnemy();
     sput_fail_unless(getNumberOfEnemies() == 1, "Valid: Number of enemies held in group is one.");
     
@@ -260,48 +307,59 @@ void Test_createEnemy()
 
 }
 
+
+int createSpecificEnemy(TypeOfEnemy eType, int lvl, int entranceNum) {
+
+  Enemy e = createEnemy();
+  switch (eType) {
+    case intBasic :
+      initialiseEnemy(e, lvl, INT_TYPE, eType, INT_BASIC_HEALTH, INT_BASIC_ARMOUR, INT_BASIC_SPEED, INT_BASIC_DAMAGE, INT_BASIC_HEIGHT, INT_BASIC_WIDTH);
+      break;
+    case intHeavy :
+      initialiseEnemy(e, lvl, INT_TYPE, eType, INT_HEAVY_HEALTH, INT_HEAVY_ARMOUR, INT_HEAVY_SPEED, INT_HEAVY_DAMAGE, INT_HEAVY_HEIGHT, INT_HEAVY_WIDTH);
+      break;
+    case charBasic :
+      initialiseEnemy(e, lvl, CHAR_TYPE, eType, CHAR_BASIC_HEALTH, CHAR_BASIC_ARMOUR, CHAR_BASIC_SPEED, CHAR_BASIC_DAMAGE, CHAR_BASIC_HEIGHT, CHAR_BASIC_WIDTH);
+      break;
+    case charHeavy :
+      initialiseEnemy(e, lvl, CHAR_TYPE, eType, CHAR_HEAVY_HEALTH, CHAR_HEAVY_ARMOUR, CHAR_HEAVY_SPEED, CHAR_HEAVY_DAMAGE, CHAR_HEAVY_HEIGHT, CHAR_HEAVY_WIDTH);
+      break;
+    default :
+      fprintf(stderr,"ERROR**** incorrect value for TypeOfEnemy (value = %d) passed to createSpecificEnemy() ****\n", eType);
+      exit(1);
+  }
+
+  return e->enemyID;
+}
+    
+    
+
+
 /*
 * populates relevant fields for standard enemies
 */                                            
-void initialiseEnemy(Enemy newEnemy)
+void initialiseEnemy(Enemy newEnemy, int lvl, int fam, TypeOfEnemy eType, int health, int armour, int speed, int damage, int height, int width)
 {
     LevelPaths lP = getLevelPaths(NULL);
     newEnemy->enemyPath = lP->paths[rand()%lP->numberOfPaths];
     newEnemy->pathProgress = 0;
     newEnemy->x = newEnemy->enemyPath->pathCoords[0][0];
     newEnemy->y = newEnemy->enemyPath->pathCoords[0][1];
-    newEnemy->maxHealth = 100;
+
+    newEnemy->eFamily = fam;
+    newEnemy->level = lvl;
+    newEnemy->eType = eType;
+    newEnemy->maxHealth = health*lvl;
     newEnemy->health = newEnemy->maxHealth;
-    newEnemy->armour = 0;
-    newEnemy->speed = 2;
+    newEnemy->armour = armour*lvl;
+    newEnemy->speed = speed;
+
     newEnemy->enemyID=getNumberOfEnemies();
     newEnemy->dead = 0;
 
-    newEnemy->height = 64;
-    newEnemy->width = 32;
-    newEnemy->damage = 10;
-
-}
-
-/*
-* populates relevant fields for heavy enemies
-*/   
-void initialiseHeavyEnemy(Enemy newEnemy)
-{
-    LevelPaths lP = getLevelPaths(NULL);
-    newEnemy->enemyPath = lP->paths[rand()%lP->numberOfPaths];
-    newEnemy->pathProgress = 0;
-    newEnemy->x = newEnemy->enemyPath->pathCoords[0][0];
-    newEnemy->y = newEnemy->enemyPath->pathCoords[0][1];
-    newEnemy->maxHealth = 1000;
-    newEnemy->health = newEnemy->maxHealth;
-    newEnemy->armour = 5;
-    newEnemy->speed = 1;
-    newEnemy->enemyID=getNumberOfEnemies();
-    newEnemy->dead = 0;
-    newEnemy->height = 64;
-    newEnemy->width = 32;
-    newEnemy->damage = 100;
+    newEnemy->height = height;
+    newEnemy->width = width;
+    newEnemy->damage = damage*lvl;
 
 }
 
@@ -347,7 +405,8 @@ void present_enemy(Display d)
 
         if(!isDead(i))
         {
-                drawEnemy(d, e->x, e->y, 50, 50, 2010, 121, (double) e->health, (double)e->maxHealth, 1, 15, 200);
+            drawEnemy(e->x, e->y, e->width, e->height, 2010, 121, e->eType, 15, 200);
+            drawRect(e->x, e->y -20, 0, 0, 80, 10, (double)e->health, (double)e->maxHealth);
         }
     }
 }
@@ -370,9 +429,9 @@ void freeEnemy(int enemyID)
 }
 
 /*
-* moves specified enemy along their assigned path by a set number of steps as designated by the nemy's speed characteristic
+* moves specified enemy along their assigned path by a set number of steps as designated by the enemy's speed characteristic
 */
-int moveEnemy(int enemyID )
+void moveEnemy(int enemyID)
 {
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
     if(!isDead(enemyID) ) {
@@ -380,17 +439,13 @@ int moveEnemy(int enemyID )
             e->pathProgress += e->speed;
             e->x = e->enemyPath->pathCoords[e->pathProgress][0];
             e->y = e->enemyPath->pathCoords[e->pathProgress][1];
-            return 0;
         }
         else {
-            damageHealth(e->damage);
+            damageHealth(e->damage); 
             e->dead = 1;
-			increaseDeathCnt();
-            return 0;
+			      increaseDeathCnt();
         }
     }
-    return 1;
-
 }
 
 
@@ -444,7 +499,6 @@ int inRange(int tX, int tY, int tRange, int enemyID)
 
     int distanceBetweenTowerAndEnemy = (int)sqrt( pow((double)(e->x+(e->width/2)-tX),2) +
                                               pow((double)(e->y+(e->height/2)-tY),2)    );
-
     if(distanceBetweenTowerAndEnemy<tRange){
         return 1;
     }
@@ -456,32 +510,53 @@ int inRange(int tX, int tY, int tRange, int enemyID)
 
 /*
 * Does the specified ammount of damage to the specified enemy. Reduces damage by the amount of armour the enemy has first.
-* If damage reduces health to less than 0, kills enemy and adds gold equivalent to enemy's max health.
+* If damage reduces health to less than 0, kills enemy and adds memory equivalent to enemy's max health
 */
-void damageEnemy(int damage, int enemyID)
+void damageEnemy(int damage, int enemyID, int damageType)
 {
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
-    
-    int damageToBeDone = damage - e->armour;
-    if(damageToBeDone <= 0) {
-      damageToBeDone = 0;
-    }
-    
-    e->health -= damageToBeDone;
-    if(e->health<=0)
-    {
-        e->dead=1;
+    if(!isDead(enemyID)) {
+      int damageToBeDone;
+      
+        // modify the damge based on the type of enemy and type of damage
+      if(e->eFamily == damageType) {
+        damageToBeDone = (damage*TYPE_MATCH_MODIFIER) - e->armour;
+      } else {
+        damageToBeDone = (damage/TYPE_MISMATCH_MODIFIER) - e->armour;
+      }
         
-        addGold(e->maxHealth);
-        // drawDeath(e->x, e->y);
+      if(damageToBeDone <= 0) {
+        damageToBeDone = 0;
+      }
+      
+      e->health -= damageToBeDone;
+      if(e->health<=0 && e->dead != 1)
+      {
+		  increaseDeathCnt();
+		      e->health=0;
+          e->dead=1;
+          addMemory(e->maxHealth);
+          // drawDeath(e->x, e->y);
+          //drawKillAll();
+      }
     }
+}
+
+/*
+* kills specified enemy
+*/
+void killEnemy(int enemyID)
+{
+    Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+    e->dead = 1;
+    e->health = 0;
+	increaseDeathCnt();
 }
 
 
 /*
 * calculates how far the specified enemy is from the end of their path. Used for tower target aquisition.
 */
-
 int distanceToEndOfPath(int enemyID)
 {
     Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
@@ -501,6 +576,26 @@ void towerGetTargetPos(int * towerTargetPosition, int enemyID)
 }
 
 /*
+* for a given number of moves a bullet will take to get to an enemy, sets the target coordinates to where the enemy will be when it gets there
+*/
+void getBulletTargetPos(int enemyID, int *targetCoords, int bulletMoves)
+{
+  Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+  
+    //if it's not gonna hit it, target the end of the enemy's path
+  if(distanceToEndOfPath(enemyID) <= bulletMoves*e->speed) {
+    targetCoords[0] = e->enemyPath->pathCoords[e->enemyPath->pathLength-1][0] + (e->width/2);
+    targetCoords[1] = e->enemyPath->pathCoords[e->enemyPath->pathLength-1][1] + (e->height/2);
+  } else {
+    int impactProgress = e->pathProgress + (e->speed * bulletMoves);
+    targetCoords[0] = e->enemyPath->pathCoords[impactProgress][0] + (e->width/2);
+    targetCoords[1] = e->enemyPath->pathCoords[impactProgress][1] + (e->height/2);
+  }
+}
+    
+    
+
+/*
 * function for unit testing - prints enemy stats
 */
 void printEnemy(int enemyID)
@@ -516,28 +611,115 @@ void testEnemy()
     sput_start_testing();
     sput_set_output_stream(NULL);
     
-    sput_enter_suite("Test_createEnemy(): Creating valid enemies");
+    sput_enter_suite("Test_createEnemy(): Creating valid enemies in enemy group");
     sput_run_test(Test_createEnemy);
     sput_leave_suite();
+    
+    sput_enter_suite("testInitialiseEnemy(): Creating valid initialised enemies");
+    sput_run_test(testInitialiseEnemy);
+    sput_leave_suite();
+    
+    sput_enter_suite("testEnemyMovement(): Moving an enemy");
+    sput_run_test(testEnemyMovement);
+    sput_leave_suite();
+    
     sput_finish_testing();
 }
 
+Enemy createTestEnemy()
+{
+    Enemy e = createEnemy();
+    int testEnemyLevel = 1;
+    EnemyGroup eGroup = getEnemyGroup(NULL);
+    if(eGroup == NULL) {
+        fprintf(stderr,"Unable to find enemy group in testEnemyMovement()");
+        exit(1);
+    }
+    
+    initialiseEnemy(e, testEnemyLevel, INT_TYPE, intBasic, INT_BASIC_HEALTH, INT_BASIC_ARMOUR, INT_BASIC_SPEED, INT_BASIC_DAMAGE, INT_BASIC_HEIGHT, INT_BASIC_WIDTH);
+    
+    return e;
+}
 
+void testInitialiseEnemy()
+{
+    Enemy e = createTestEnemy();
+    
+    sput_fail_unless(e->health == INT_BASIC_HEALTH, "Valid: Enemy has correct starting health");
+    sput_fail_unless(e->armour == INT_BASIC_ARMOUR, "Valid: Enemy has correct starting armour");
+    sput_fail_unless(e->speed == INT_BASIC_SPEED, "Valid: Enemy has correct starting speed");
+    sput_fail_unless(e->damage == INT_BASIC_DAMAGE, "Valid: Enemy has correct starting damage");
+    sput_fail_unless(e->height == INT_BASIC_HEIGHT, "Valid: Enemy has correct starting height");
+    sput_fail_unless(e->width == INT_BASIC_WIDTH, "Valid: Enemy has correct starting width");
+    
+    freeAllEnemies();
+    
+}
+
+void testEnemyMovement()
+{
+    Enemy e = createTestEnemy();
+    
+    sput_fail_unless(distanceToEndOfPath(getNumberOfEnemies()) == e->enemyPath->pathLength, "Valid: Enemy has the correct number of steps to the end of its path");
+    
+    
+    int enemyOriginX = e->x;
+    int enemyOriginY = e->y;
+    for(int i = 0; i < 200; i++) {
+        moveEnemy(getNumberOfEnemies());
+    }
+    sput_fail_unless(e->x != enemyOriginX, "Valid: Enemy has changed X coordinate after 200 moves");
+    sput_fail_unless(e->y != enemyOriginY, "Valid: Enemy has changed Y coordinate after 200 moves");
+    sput_fail_unless(distanceToEndOfPath(getNumberOfEnemies()) == e->enemyPath->pathLength-(200*e->speed), "Valid: Enemy has the correct number of steps to the end of its path after 200 moves");
+    
+    int startingHealth = getHealth(getGame(NULL));
+    int howFarToGo = distanceToEndOfPath(getNumberOfEnemies());
+    int howManyMovesToEnd = (howFarToGo/e->speed)+1;
+    for(int i = 0; i < howManyMovesToEnd; i++) {
+        moveEnemy(getNumberOfEnemies());
+    }
+    
+    
+    sput_fail_unless(isDead(getNumberOfEnemies()), "Valid: Enemy has died after reaching end of path");
+    sput_fail_unless(getHealth(getGame(NULL)) == startingHealth-e->damage, "Valid: Enemy has damaged health by correct amount at end of path");
+    
+}
 
 /*
-* main function for unit testing
+* puts specified enemy at start of specified path. Used in testing
 */
+void testSetEnemyPathNum(int enemyID, int pathNum)
+{
+    LevelPaths lP = getLevelPaths(NULL);
+    Enemy e = getEnemyGroup(NULL)->enemyArray[enemyID];
+    
+    e->enemyPath = lP->paths[pathNum];
+    e->pathProgress = 0;
+    e->x = e->enemyPath->pathCoords[0][0];
+    e->y = e->enemyPath->pathCoords[0][1];
+}
 
-/*int main()
+void test_KillAnEnemy()
+{
+    freeAllEnemies();
+    createTestEnemy();
+    damageEnemy(INT_BASIC_HEALTH, getNumberOfEnemies(), INT_TYPE);
+}
+    
+/*
+* main function for unit testing
+
+
+int main()
 {
     createLevelPaths();
     createEnemyGroup();
-    createEnemy();
-    createEnemy();
-    createEnemy();
+    createSpecificEnemy(charBasic, 1, 0);
+    createSpecificEnemy(charBasic, 1, 0);
+    createSpecificEnemy(charHeavy, 1, 0);
     for(int i = 0; i < 100; i++) {
       moveEnemy(3);
       printEnemy(3);
     }
-}*/
-
+}
+*/
